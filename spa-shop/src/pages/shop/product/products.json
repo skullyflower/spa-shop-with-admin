@@ -1,0 +1,19 @@
+{"products":
+  [
+    {
+      "id":"",
+      "date":"",
+      "name":"",
+      "soldout":false,
+      "price":0,
+      "img":"",
+      "desc":"",
+      "cat_desc":"",
+      "weight":0,
+      "handling":0,
+      "altimgs":[],
+      "cats":[],
+      "designs":[]
+    }
+  ]
+}

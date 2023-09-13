@@ -1,0 +1,19 @@
+:root {
+  --forground:#fafafa;
+  --background:rgb(65, 64, 71);
+} 
+
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&family=Work+Sans:wght@400;700&display=swap');
+
+html,
+body {
+  font-family: 'Varela Round', sans-serif;
+  font-size: 17px;
+  background-color: var(--background);
+  color: var(--forground);
+  line-height: 2;
+}
+a {
+  text-decoration: none;
+  color:var(--forground);
+}

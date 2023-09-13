@@ -1,0 +1,12 @@
+{
+  "categories":
+  [
+    {
+      "id":"cat_id",
+      "name":"",
+      "img":"",
+      "description":"",
+      "subcat":[]
+    }
+  ]
+}
