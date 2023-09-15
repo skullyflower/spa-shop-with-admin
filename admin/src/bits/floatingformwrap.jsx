@@ -7,7 +7,7 @@ export default function FloatingFormWrapper({ children }) {
       <Box
         className="floater"
         p={5}
-        shadow="lg"
+        shadow="xl"
         borderRadius={5}
         method="POST">
         {children}

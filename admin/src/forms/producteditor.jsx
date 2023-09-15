@@ -1,24 +1,30 @@
 import { useEffect, useState } from "react";
 import {
+  Box,
   Button,
   Checkbox,
-  Editable,
-  EditableTextarea,
-  EditablePreview,
   FormControl,
   FormLabel,
+  Image,
   Input,
+  InputGroup,
+  InputLeftAddon,
   HStack,
   Center,
   Heading,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverBody,
 } from "@chakra-ui/react";
 import FloatingFormWrapper from "../bits/floatingformwrap";
 import { useFieldArray, useForm } from "react-hook-form";
 import { convertDate } from "../bits/datetimebit";
-
+import ReactQuill from "react-quill";
 const today = new Date();
 
-const newprodId = "product-id ex: med-blue-widget";
+const newprodId = "new-prod-id";
 const newproduct = {
   id: newprodId,
   date: convertDate(today, "input"), // default to current date
@@ -50,13 +56,6 @@ export default function EditProduct({
   }
   const [wysiwygText, setWysiwygText] = useState(selectedProduct.desc);
   const [wysiwygText2, setWysiwygText2] = useState(selectedProduct.desc_long);
-  const [catIds, setCatIds] = useState([]);
-
-  useEffect(() => {
-    if (categories) {
-      setCatIds(Object.keys(categories));
-    }
-  }, [categories, setCatIds, subjects]);
 
   const {
     control,
@@ -89,17 +88,27 @@ export default function EditProduct({
     <FloatingFormWrapper>
       <HStack justifyContent="space-between">
         <Heading size="md">Add/Edit Product</Heading>
-        <Button
-          className="shopButt right"
-          onClick={toggleForm}>
-          Never mind
-        </Button>
+        <Button onClick={toggleForm}>Never mind</Button>
       </HStack>
       <FormControl p={4}>
         <HStack>
-          <FormLabel w={40}>Id:</FormLabel>
+          <FormLabel w={40}>
+            Id:
+            <Popover trigger="hover">
+              <PopoverTrigger>
+                <button>(?)</button>
+              </PopoverTrigger>
+              <PopoverContent>
+                <PopoverArrow />
+                <PopoverBody>
+                  Product ids must be unique, and should be descriptive. Ex: "med-blue-widget"
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
+          </FormLabel>
           <Input
-            className={errors.id ? "is-invalid" : ""}
+            isInvalid={errors.id ? true : false}
+            errorBorderColor="red.300"
             type="text"
             data-lpignore="true"
             {...register("id", { required: true, validate: (value) => value !== newprodId })}
@@ -110,7 +119,8 @@ export default function EditProduct({
         <HStack alignItems="center">
           <FormLabel w={40}>Date:</FormLabel>
           <Input
-            className={errors.date ? "is-invalid" : ""}
+            isInvalid={errors.date ? true : false}
+            errorBorderColor="red.300"
             type="datetime-local"
             {...register("date", { required: true })}
           />
@@ -118,9 +128,10 @@ export default function EditProduct({
       </FormControl>
       <FormControl p={4}>
         <HStack alignItems="center">
-          <FormLabel w={40}>Name:</FormLabel>
+          <FormLabel w={40}>Product Name:</FormLabel>
           <Input
-            className={errors.name ? "is-invalid" : ""}
+            isInvalid={errors.name ? true : false}
+            errorBorderColor="red.300"
             type="text"
             {...register("name", { required: true })}
           />
@@ -130,28 +141,40 @@ export default function EditProduct({
         <HStack>
           <FormLabel w={40}>Sold Out?:</FormLabel>
           <Checkbox
-            colorScheme="green"
-            type="checkbox"
+            colorScheme="gray"
             {...register("soldout")}></Checkbox>
         </HStack>
       </FormControl>
       <FormControl p={4}>
         <HStack alignItems="center">
           <FormLabel w={40}>Price:</FormLabel>
-          <Input
-            className={errors.price ? "is-invalid" : ""}
-            type="number"
-            {...register("price", { required: true, pattern: /^[0-9]{0,4}[.]?[0-9]{0,2}$/ })}
-          />
+          <InputGroup>
+            <InputLeftAddon children="$" />
+            <Input
+              isInvalid={errors.price ? true : false}
+              errorBorderColor="red.300"
+              type="number"
+              {...register("price", { required: true, pattern: /^[0-9]{0,4}[.]?[0-9]{0,2}$/ })}
+            />
+          </InputGroup>
         </HStack>
       </FormControl>
       <FormControl p={4}>
         <HStack alignItems="center">
-          <FormLabel w={40}>Image, Relative URL: /shop/</FormLabel>
-          <Input
-            className={errors.img ? "is-invalid" : ""}
-            type="text"
-            {...register("img", { required: true })}
+          <FormLabel w={40}>Product Image:</FormLabel>
+          <InputGroup>
+            <InputLeftAddon children="/shop/" />
+            <Input
+              isInvalid={errors.img ? true : false}
+              errorBorderColor="red.300"
+              type="text"
+              {...register("img", { required: true })}
+            />
+          </InputGroup>
+          <Image
+            src={selectedProduct.img}
+            boxSize="100px"
+            fallbackSrc="http://localhost:3000/images/image-loading.svg"
           />
         </HStack>
       </FormControl>
@@ -160,15 +183,17 @@ export default function EditProduct({
           <FormLabel w={40}>Alt Images:</FormLabel>
           {fields.map((field, index) => (
             <span key={field.id}>
-              <Input
-                type="text"
-                {...register(`altimgs.${index}`)}
-              />
-              <Button
-                className="shopButt"
-                onClick={() => remove(index)}>
-                X
-              </Button>
+              <InputGroup>
+                <Input
+                  type="text"
+                  {...register(`altimgs.${index}`)}
+                />
+                <Button
+                  className="shopButt"
+                  onClick={() => remove(index)}>
+                  X
+                </Button>
+              </InputGroup>
             </span>
           ))}
           <div>
@@ -181,66 +206,69 @@ export default function EditProduct({
         </HStack>
       </FormControl>
       <FormControl p={4}>
-        <HStack alignItems="center">
+        <HStack alignItems="top">
           <FormLabel w={40}>Description:</FormLabel>
-          <div className="content">
-            <Editable
-              defaultValue={wysiwygText}
-              isPreviewFocusable={true}
-              selectAllOnFocus={false}>
-              <EditableTextarea
-                bg="white"
-                border={"1px solid"}
-                onChange={handleTextChange("desc")}>
-                {wysiwygText}
-              </EditableTextarea>
-              <EditablePreview />
-            </Editable>
-
-            {/* <ReactQuill
-            id="wysi_one"
-            className={errors.desc ? "is-invalid" : ""}
-            theme="bubble"
-            value={wysiwygText}
-            onChange={handleTextChange("desc")}
-          /> */}
-          </div>
+          <Box
+            minW="80%"
+            minH={2}
+            border="1px solid gray"
+            borderRadius={5}
+            className="content">
+            <ReactQuill
+              id="wysi_one"
+              isInvalid={errors.desc ? true : false}
+              errorBorderColor="red.300"
+              theme="bubble"
+              value={wysiwygText}
+              onChange={handleTextChange("desc")}
+            />
+          </Box>
         </HStack>
       </FormControl>
-      <FormControl p={4}>
-        <HStack alignItems="center">
+      <FormControl
+        p={4}
+        isInvalid={errors.desc_long ? true : false}
+        errorBorderColor="red.300">
+        <HStack alignItems="top">
           <FormLabel w={40}>Detail:</FormLabel>
-          <div className="content">
-            <Editable
-              defaultValue={wysiwygText2}
-              onChange={handleTextChange("desc_long")}>
-              <EditableTextarea></EditableTextarea>
-            </Editable>
-            {/*           <ReactQuill
-            id="wysi_two"
-            className={errors.desc_long ? "is-invalid" : ""}
-            theme="bubble"
-          /> */}
-          </div>
+          <Box
+            minW="80%"
+            minH={2}
+            border="1px solid gray"
+            borderRadius={5}
+            className="content">
+            <ReactQuill
+              id="wysi_two"
+              value={wysiwygText2}
+              theme="bubble"
+            />
+          </Box>
         </HStack>
       </FormControl>
       <FormControl p={4}>
-        <h5>Categories:</h5>
-        {catIds.map((c, i) => {
-          return (
-            <span key={i}>
-              <span>
-                <Input
-                  type="checkbox"
-                  {...register(`cat`)}
-                  value={c}
-                />
-                <label htmlFor="cat">{categories[c].name}</label>{" "}
-              </span>
-              {" • "}
-            </span>
-          );
-        })}
+        <HStack alignItems="top">
+          <FormLabel w={40}>Categories:</FormLabel>
+          <HStack
+            width="80%"
+            borderWidth={1}
+            borderStyle="solid"
+            p={5}
+            borderRadius={5}>
+            {categories?.map((c) => {
+              return (
+                <span key={c.id}>
+                  <span>
+                    <Checkbox
+                      {...register(`cat`)}
+                      value={c.id}>
+                      {c.id}
+                    </Checkbox>
+                  </span>
+                </span>
+              );
+            })}
+          </HStack>
+        </HStack>
       </FormControl>
       <FormControl p={4}>
         <HStack alignItems="center">
@@ -255,11 +283,14 @@ export default function EditProduct({
       <FormControl p={4}>
         <HStack alignItems="center">
           <FormLabel w={40}>Extra Handling:</FormLabel>
-          <Input
-            className={errors.handling ? "is-invalid" : ""}
-            type="number"
-            {...register("handling", { pattern: /^[0-9]{0,4}[.]?[0-9]{0,2}$/ })}
-          />
+          <InputGroup>
+            <InputLeftAddon children="$" />
+            <Input
+              className={errors.handling ? "is-invalid" : ""}
+              type="number"
+              {...register("handling", { pattern: /^[0-9]{0,4}[.]?[0-9]{0,2}$/ })}
+            />
+          </InputGroup>
         </HStack>
       </FormControl>
       <Center>

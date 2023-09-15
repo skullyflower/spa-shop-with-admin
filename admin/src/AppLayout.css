@@ -68,7 +68,8 @@ iframe {
   -ms-flex-flow: row wrap;
   flex-flow: row wrap;
   justify-content: space-between;
-  padding: 27px;
+  align-items: center;
+  padding: 17px;
   #logo {
     display: block;
     max-width: 30%;

@@ -3,8 +3,7 @@ trap "kill 0" EXIT
 
 node apiserver.js &
 yarn start &
-
-cd ../spa-shop &
+cd ../spa-shop 
 npm start &
 
 wait

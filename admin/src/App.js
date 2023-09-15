@@ -1,9 +1,10 @@
 import { Suspense, lazy } from "react";
 import { Link, BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import NavBar from "./bits/NavBar";
-import "./AdminApp.scss";
 import "./AppLayout.css";
 import "./AppTheme.css";
+import "react-quill/dist/quill.bubble.css";
+import "./AdminApp.scss";
 
 const Homepage = lazy(() => import("./forms/homepage"));
 const Blog = lazy(() => import("./forms/blog"));

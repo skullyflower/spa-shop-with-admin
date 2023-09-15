@@ -35,13 +35,12 @@ function routes() {
       const catToDelete = req.params.catId;
       const shopData = fs.readFileSync(shopfilepath);
       const shop = JSON.parse(shopData);
-      if (shop.categories && shop.categories[catToDelete]) {
+      if (
+        shop.categories &&
+        shop.categories[shop.categories.findIndex((cat) => cat.id === catToDelete)]
+      ) {
         const allcategories = shop.categories;
-        const idList = Object.keys(allcategories).filter((id) => id !== catToDelete);
-        var newCategoryData = {};
-        idList.forEach((id) => {
-          newCategoryData[id] = allcategories[id];
-        });
+        var newCategoryData = allcategories.filter((cats) => cats.id !== catToDelete);
         const newShopObj = { ...shop, categories: newCategoryData };
         const newShopData = JSON.stringify(newShopObj);
         fs.writeFileSync(shopfilepath, newShopData);

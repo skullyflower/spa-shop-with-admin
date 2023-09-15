@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { Box, Button, Center, HStack, Heading, VStack } from "@chakra-ui/react";
-import EditProduct from "./editproduct";
+import { Box, Button, Center, HStack, Heading, Image } from "@chakra-ui/react";
+import EditProduct from "./producteditor";
+import arraySort from "array-sort";
 
 const getProducts = (setProducts, setMessages) => {
   setProducts([]);
@@ -8,9 +9,9 @@ const getProducts = (setProducts, setMessages) => {
     .then((data) => data.json())
     .then((json) => {
       if (Array.isArray(json)) {
-        setProducts(json);
+        setProducts(arraySort(json, "name"));
       } else {
-        setProducts({});
+        setProducts([]);
         setMessages(json.message);
       }
     })
@@ -20,22 +21,19 @@ const getProducts = (setProducts, setMessages) => {
 };
 
 const getCategories = (setCategories, setMessages) => {
-  setCategories({});
+  setCategories([]);
 
   fetch("http://localhost:4242/api/categories")
     .then((data) => data.json())
     .then((json) => {
-      const catids = Object.keys(json);
-      if (Array.isArray(catids)) {
-        const newcats = {};
-        catids.sort().forEach((cat) => {
-          if (json[cat].subcat.length === 0) {
-            newcats[cat] = json[cat];
-          }
-        });
+      if (Array.isArray(json)) {
+        // sort by name
+        // filter out the super categories
+        const categories = arraySort(json, "name");
+        const newcats = categories.filter((cat) => cat.subcat.length === 0);
         setCategories(newcats);
       } else {
-        setCategories({});
+        setCategories([]);
         setMessages(json.message);
       }
     })
@@ -146,15 +144,11 @@ const Products = () => {
   return (
     <div className="content">
       {messages && <p>{messages}</p>}
-      <Heading size="md">Add, Update, Delete Products</Heading>
-      <Center>
-        <Button
-          className="shopButt"
-          value="newcat"
-          onClick={toggleForm}>
-          {showForm ? "Never mind" : "Add a new one"}
-        </Button>
-      </Center>
+      <Heading
+        textAlign="center"
+        size="md">
+        Add, Update, Delete Products
+      </Heading>
       {showForm && (
         <div>
           <EditProduct
@@ -168,21 +162,21 @@ const Products = () => {
       )}
       <Box p={5}>
         <HStack
-          border="1px solid gray"
           borderRadius={10}
           p={5}
           m={5}
           alignItems="flex-start"
           justifyContent="center">
-          {categories &&
-            Object.keys(categories).map((cat, i) => (
+          <Heading size="ms">Filter by category</Heading>
+          {categories?.length > 0 &&
+            categories.map((cat) => (
               <Button
-                key={i}
+                key={cat.id}
                 size="sm"
                 className="shopButt"
                 onClick={doFilterProducts}
-                value={cat}>
-                {categories[cat].name}
+                value={cat.id}>
+                {cat.name}
               </Button>
             ))}
           <Button
@@ -193,66 +187,74 @@ const Products = () => {
             Show All
           </Button>
         </HStack>
-        <VStack gap={5}>
-          {filteredFroducts &&
-            filteredFroducts.map((product, i) => (
-              <HStack
-                key={i}
-                p={5}
-                border="1px solid"
-                borderRadius={5}
-                w="100%"
-                alignItems="flex-start"
-                justifyContent="space-between">
-                <div className="centered">
-                  <img
-                    src={`http://localhost:3000/shop/${product.img}`}
-                    style={{ width: "100px" }}
-                    alt={product.name}
-                  />
-                  <div>
-                    {!!product.soldout ? "Sold Out" : `$${Number(product.price).toFixed(2)}`}
-                  </div>
-                </div>
-                <div style={{ width: "60%" }}>
-                  <h3>
-                    <a
-                      href={`http://localhost:3000/productpage/${product.id}`}
-                      target="blogwindow">
-                      {product.name}
-                    </a>
-                  </h3>
-                  <div
-                    style={{ textAlign: "left", verticalAlign: "top" }}
-                    dangerouslySetInnerHTML={{ __html: product.desc }}
-                  />
-                  <div
-                    style={{ textAlign: "left", verticalAlign: "top" }}
-                    dangerouslySetInnerHTML={{ __html: product.desc_long }}
-                  />
-                </div>
-                <button
-                  className="shopButt"
-                  value={product.id}
-                  onClick={doDelete}>
-                  X
-                </button>
-                <button
-                  className="shopButt"
-                  value={product.id}
-                  onClick={toggleForm}>
-                  Edit
-                </button>
-                <button
-                  className="shopButt"
-                  name="copy"
-                  value={product.id}
-                  onClick={toggleForm}>
-                  copy
-                </button>
-              </HStack>
-            ))}
-        </VStack>
+        <div>
+          {filteredFroducts?.map((product, i) => (
+            <HStack
+              key={product.id}
+              p={5}
+              border="1px solid"
+              borderRadius={5}
+              w="100%"
+              alignItems="flex-start"
+              justifyContent="space-between">
+              <div className="centered">
+                <Image
+                  src={`http://localhost:3000/shop/${product.img}`}
+                  boxSize="100px"
+                  alt={product.name}
+                  fallbackSrc="http://localhost:3000/images/image-loading.svg"
+                />
+                <div>{!!product.soldout ? "Sold Out" : `$${Number(product.price).toFixed(2)}`}</div>
+              </div>
+              <div style={{ width: "60%" }}>
+                <h3>
+                  <a
+                    href={`http://localhost:3000/productpage/${product.id}`}
+                    target="blogwindow">
+                    {product.name}
+                  </a>
+                </h3>
+                <div
+                  style={{ textAlign: "left", verticalAlign: "top" }}
+                  dangerouslySetInnerHTML={{ __html: product.desc }}
+                />
+                <div
+                  style={{ textAlign: "left", verticalAlign: "top" }}
+                  dangerouslySetInnerHTML={{ __html: product.desc_long }}
+                />
+              </div>
+              <button
+                className="shopButt"
+                value={product.id}
+                onClick={doDelete}>
+                X
+              </button>
+              <Button
+                size="sm"
+                className="shopButt"
+                value={product.id}
+                onClick={toggleForm}>
+                Edit
+              </Button>
+              <Button
+                size="sm"
+                className="shopButt"
+                name="copy"
+                value={product.id}
+                onClick={toggleForm}>
+                copy
+              </Button>
+            </HStack>
+          ))}
+        </div>
+        <Center p={5}>
+          <Button
+            className="shopButt"
+            value="newcat"
+            onClick={toggleForm}>
+            {showForm ? "Never mind" : "Add a new one"}
+          </Button>
+        </Center>
       </Box>
     </div>
   );
