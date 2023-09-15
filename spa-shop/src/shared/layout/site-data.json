@@ -1,5 +1,7 @@
 {
   "sitetitle":"Spa-Shop Title",
   "sitedescription":"shop Description",
-  "sitelogo":"spa-shop-logo.png"
+  "sitelogo":"spa-shop-logo.png",
+  "siteurl":"http://www.example.com",
+  "page_content":"<p>Welcom to my web shop</p>"
 }

@@ -1,4 +1,4 @@
-import aboutdata from "./aboutdata.json";
+import aboutdata from "./about-data.json";
 
 export default function About() {
   const { page_title, page_content } = aboutdata;
