@@ -22,6 +22,7 @@ import FloatingFormWrapper from "../bits/floatingformwrap";
 import { useFieldArray, useForm } from "react-hook-form";
 import { convertDate } from "../bits/datetimebit";
 import ReactQuill from "react-quill";
+import { modules, formats } from "../bits/quillbits";
 const today = new Date();
 
 const newprodId = "new-prod-id";
@@ -138,14 +139,6 @@ export default function EditProduct({
         </HStack>
       </FormControl>
       <FormControl p={4}>
-        <HStack>
-          <FormLabel w={40}>Sold Out?:</FormLabel>
-          <Checkbox
-            colorScheme="gray"
-            {...register("soldout")}></Checkbox>
-        </HStack>
-      </FormControl>
-      <FormControl p={4}>
         <HStack alignItems="center">
           <FormLabel w={40}>Price:</FormLabel>
           <InputGroup>
@@ -218,7 +211,9 @@ export default function EditProduct({
               id="wysi_one"
               isInvalid={errors.desc ? true : false}
               errorBorderColor="red.300"
-              theme="bubble"
+              theme="snow"
+              modules={modules}
+              formats={formats}
               value={wysiwygText}
               onChange={handleTextChange("desc")}
             />
@@ -240,7 +235,10 @@ export default function EditProduct({
             <ReactQuill
               id="wysi_two"
               value={wysiwygText2}
-              theme="bubble"
+              theme="snow"
+              modules={modules}
+              formats={formats}
+              onChange={handleTextChange("desc_long")}
             />
           </Box>
         </HStack>
@@ -291,6 +289,14 @@ export default function EditProduct({
               {...register("handling", { pattern: /^[0-9]{0,4}[.]?[0-9]{0,2}$/ })}
             />
           </InputGroup>
+        </HStack>
+      </FormControl>
+      <FormControl p={4}>
+        <HStack>
+          <FormLabel w={40}>Sold Out?:</FormLabel>
+          <Checkbox
+            colorScheme="gray"
+            {...register("soldout")}></Checkbox>
         </HStack>
       </FormControl>
       <Center>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import ReactQuill from "react-quill";
 import { useForm } from "react-hook-form";
 import FloatingFormWrapper from "../bits/floatingformwrap";
+import { modules, formats } from "../bits/quillbits";
 
 import {
   Box,
@@ -115,7 +116,9 @@ export default function EditCategory({ catid, categories, toggleCatForm, onSubmi
             <ReactQuill
               id="wysi_one"
               className={errors.description ? "is-invalid" : ""}
-              theme="bubble"
+              theme="snow"
+              modules={modules}
+              formats={formats}
               value={wysiwygText}
               onChange={handleTextChange("description")}
             />
@@ -151,9 +154,9 @@ export default function EditCategory({ catid, categories, toggleCatForm, onSubmi
                   <span>
                     <Checkbox
                       {...register(`subcat`)}
-                      value={c.id}
-                    />
-                    <label htmlFor="subcat">{c.name}</label>{" "}
+                      value={c.id}>
+                      {c.id}
+                    </Checkbox>
                   </span>
                 </span>
               );
