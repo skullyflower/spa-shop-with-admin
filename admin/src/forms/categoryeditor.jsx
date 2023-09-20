@@ -3,6 +3,7 @@ import ReactQuill from "react-quill";
 import { useForm } from "react-hook-form";
 import FloatingFormWrapper from "../bits/floatingformwrap";
 import { modules, formats } from "../bits/quillbits";
+import UploadInput from "../bits/upload-input";
 
 import {
   Box,
@@ -12,8 +13,6 @@ import {
   FormLabel,
   Image,
   Input,
-  InputGroup,
-  InputLeftAddon,
   HStack,
   Center,
   Heading,
@@ -26,7 +25,7 @@ import {
 
 import "react-quill/dist/quill.bubble.css";
 
-const newcat = { id: "newcat", name: "", img: "", description: "", subcat: [] };
+const newcat = { id: "newcat", name: "", img: "", description: "", subcat: [], newImage: [] };
 
 export default function EditCategory({ catid, categories, toggleCatForm, onSubmit }) {
   const cat = categories[categories.findIndex((cat) => cat.id === catid)] || newcat;
@@ -88,21 +87,25 @@ export default function EditCategory({ catid, categories, toggleCatForm, onSubmi
       <FormControl p={4}>
         <HStack alignItems="center">
           <FormLabel w={40}>Category Image:</FormLabel>
-          <InputGroup>
-            <InputLeftAddon children={`/shop/group/${cat.id}/`} />
-            <Input
-              isInvalid={errors.img ? true : false}
-              errorBorderColor="red.300"
-              type="text"
-              {...register("img", { required: true })}
-            />
-          </InputGroup>
+          <Input
+            isInvalid={errors.img ? true : false}
+            errorBorderColor="red.300"
+            type="text"
+            {...register("img")}
+          />
           <Image
-            src={cat.img}
+            src={`http://localhost:3000${cat.img}`}
             boxSize="100px"
             fallbackSrc="http://localhost:3000/images/image-loading.svg"
           />
         </HStack>
+      </FormControl>
+      <FormControl>
+        <FormLabel w={40}>Upload New Image</FormLabel>
+        <UploadInput
+          name="newImage"
+          register={register}
+        />
       </FormControl>
       <FormControl p={4}>
         <HStack alignItems="top">

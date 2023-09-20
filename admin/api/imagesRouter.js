@@ -1,28 +1,23 @@
 const express = require("express");
 const multer = require("multer");
-const Jimp = require("jimp");
 const fs = require("fs");
+const processFile = require("./imageProcessor");
 
 const rawImagesPath = "./public/files/";
 const bigSourcePath = "./public/files/big/";
 const smallSourcePath = "./public/files/small/";
-const publicPath = "../skullyflower/public/";
-const buildPath = "../skullyflower/build/";
+const publicPath = "../spa-shop/public/";
 
 const getDestinationPaths = (topdir, subdir) => {
   if (subdir !== "bigger" && topdir !== "images") {
     return {
       pubPathBig: `${publicPath}${topdir}/${subdir}/bigger/`,
       pubPathSmall: `${publicPath}${topdir}/${subdir}/`,
-      buildPathBig: `${buildPath}${topdir}/${subdir}/bigger/`,
-      buildPathSmall: `${buildPath}${topdir}/${subdir}/`,
     };
   }
   return {
     pubPathBig: `${publicPath}${topdir}/${subdir}/`,
     pubPathSmall: `${publicPath}${topdir}/`,
-    buildPathBig: `${buildPath}${topdir}/${subdir}/`,
-    buildPathSmall: `${buildPath}${topdir}/`,
   };
 };
 
@@ -119,7 +114,7 @@ function routes() {
   imagesRouter.route("/folders/:toplevel").get((req, res) => {
     const topLeveDestination = req.params.toplevel;
     const dirpattern = /^[^.]*$/;
-    fs.readdir(`../skullyflower/public/${topLeveDestination}`, (err, files) => {
+    fs.readdir(`../spa-shop/public/${topLeveDestination}`, (err, files) => {
       if (err) {
         console.log(err);
         return res.json({ message: "Can't get the subirectories." });
@@ -150,29 +145,7 @@ function routes() {
       console.log(req.files);
       for (const file of req.files) {
         try {
-          if (file.filename.match(/.*[.][jpg][ienp][pgf]/)) {
-            //resize image to big
-            Jimp.read(`${file.path}`)
-              .then((image) => {
-                return image
-                  .resize(750, Jimp.AUTO) // resize
-                  .write(`${bigSourcePath}${file.filename}`); // save
-              })
-              .catch((err) => {
-                console.log(`failed to resize:  ${err}`);
-              });
-
-            //resize image to small
-            Jimp.read(`${file.path}`)
-              .then((image) => {
-                return image
-                  .resize(450, Jimp.AUTO) // resize
-                  .write(`${smallSourcePath}${file.filename}`); // save
-              })
-              .catch((err) => {
-                console.log(`failed to resize:  ${err}`);
-              });
-          }
+          processFile(file, bigSourcePath, smallSourcePath);
         } catch (err) {
           console.log("Failed: file upload");
           return res.json({

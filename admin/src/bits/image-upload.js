@@ -1,33 +1,7 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
-
-function Preview({ data }) {
-  return (
-    <div>
-      {data.map((image) => (
-        <img
-          className="image"
-          src={image}
-          alt=""
-          key={image}
-          width={150}
-          style={{ padding: "10px" }}
-        />
-      ))}
-    </div>
-  );
-}
+import UploadInput from "./upload-input";
 
 export default function ImageUpload({ hideForm, setMessages }) {
-  const [previewImages, setPreviewImages] = useState([]);
-
-  const changeMultipleFiles = (e) => {
-    if (e.target.files) {
-      const imageArray = Array.from(e.target.files).map((file) => URL.createObjectURL(file));
-      setPreviewImages((prevImages) => prevImages.concat(imageArray));
-    }
-  };
-
   const onSubmit = (data) => {
     const imagesArr = Array.from(data.images);
     var formData = new FormData();
@@ -41,7 +15,6 @@ export default function ImageUpload({ hideForm, setMessages }) {
     })
       .then((data) => {
         setMessages(data.json());
-        setPreviewImages([]);
       })
       .catch((err) => {
         setMessages("Failed to upload files.");
@@ -62,19 +35,10 @@ export default function ImageUpload({ hideForm, setMessages }) {
             Never mind
           </button>
           <h3>Upload Images</h3>
-          <div>
-            <label htmlFor="newImage">Upload Images</label>
-            <input
-              {...register("images")}
-              type="file"
-              accept="image/*"
-              multiple
-              id="images"
-              name="images"
-              onChange={changeMultipleFiles}
-            />
-          </div>
-          {previewImages.length > 0 && <Preview data={previewImages} />}
+          <UploadInput
+            register={register}
+            name="images"
+          />
           <button
             className="shopButt"
             onClick={handleSubmit(onSubmit)}>

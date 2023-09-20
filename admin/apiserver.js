@@ -1,6 +1,4 @@
 const express = require("express");
-
-const api = express();
 const aboutRouter = require("./api/aboutRouter")();
 const blogRouter = require("./api/blogRouter")();
 const categoriesRouter = require("./api/categoriesRouter")();
@@ -8,6 +6,7 @@ const homeRouter = require("./api/homeRouter")();
 const imagesRouter = require("./api/imagesRouter")();
 const productsRouter = require("./api/productsRouter")();
 const saleRouter = require("./api/saleRouter")();
+const api = express();
 
 api.use(express.urlencoded({ extended: true }));
 api.use(express.json());

@@ -1,17 +1,55 @@
 const express = require("express");
 const fs = require("fs");
+const multer = require("multer");
 const shopfilepath = "../spa-shop/src/pages/shop/categories.json";
+const processFile = require("./imageProcessor");
+
+const rawImagesPath = "./public/files/";
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, rawImagesPath);
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+const upload = multer({ storage: storage });
 
 function routes() {
   const categoriesRouter = express.Router();
   categoriesRouter
     .route("/categories")
-    .post((req, res, next) => {
-      if (req.body.categories) {
+    .post(upload.array("newImage", 1), async (req, res, next) => {
+      if (req.body.category) {
+        const category = JSON.parse(req.body.category);
+        const bigDestPath = `../spa-shop/public/shop/categories/${category.id}/`;
+        //check for path. if it doesn't exist create it.
+        const smallDestPath = `../spa-shop/public/shop/categories/smaller/${category.id}/`;
+        //check for path. if it doesn't exitst, create it.
         try {
+          if (req.files) {
+            for (const file of req.files) {
+              try {
+                processFile(file, bigDestPath, smallDestPath);
+                category.img = `${bigDestPath}${file.filename}`.replace("../spa-shop/public", "");
+              } catch (err) {
+                console.log("Failed: file upload");
+              }
+            }
+          }
           const oldShopDataString = fs.readFileSync(shopfilepath);
           const oldShopObject = JSON.parse(oldShopDataString);
-          const newShopData = { ...oldShopObject, ...req.body };
+          //categories:[]
+          let newCategories = [...oldShopObject.categories];
+          const newCatIndex = newCategories.findIndex((cat) => cat.id === category.id);
+          //updates else adds
+          if (newCatIndex !== -1) {
+            newCategories[newCatIndex] = category;
+          } else {
+            newCategories.unshift(category);
+          }
+          const newShopData = { categories: newCategories };
           fs.writeFileSync(shopfilepath, JSON.stringify(newShopData));
           return res.json({ message: "Updated Shop Categories!" });
         } catch (err) {

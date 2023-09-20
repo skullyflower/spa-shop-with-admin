@@ -28,18 +28,18 @@ const Categories = () => {
   const [activeCat, setActiveCat] = useState(null);
 
   const onSubmit = (values) => {
-    let newCategories = [...categories];
-    const newCatIndex = newCategories.findIndex((cat) => cat.id === values.id);
-    //updates else adds
-    if (newCatIndex !== -1) {
-      newCategories[newCatIndex] = values;
-    } else {
-      newCategories.unshift(values);
+    const imagesArr = Array.from(values.newImage);
+    var formData = new FormData();
+    formData.append("category", JSON.stringify(values));
+
+    formData.append("date", Date.now().toString());
+    for (var file of imagesArr) {
+      formData.append("newImage", file);
     }
+
     fetch("http://localhost:4242/api/categories", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ categories: newCategories }),
+      body: formData,
     })
       .then((data) => data.json())
       .then((json) => {
@@ -109,7 +109,7 @@ const Categories = () => {
             alignItems="flex-start"
             justifyContent="space-between">
             <Image
-              src={`http://localhost:3000/shop/GROUPS/${cat.img}`}
+              src={`http://localhost:3000${cat.img}`}
               boxSize="100px"
               alt={cat.name}
               fallbackSrc="http://localhost:3000/images/image-loading.svg"
