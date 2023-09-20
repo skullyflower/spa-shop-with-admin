@@ -32,7 +32,7 @@ function routes() {
             for (const file of req.files) {
               try {
                 processFile(file, bigDestPath, smallDestPath);
-                category.img = `${bigDestPath}${file.filename}`.replace("../spa-shop/public", "");
+                category.img = `${bigDestPath.replace("../spa-shop/public", "")}${file.filename}`;
               } catch (err) {
                 console.log("Failed: file upload");
               }

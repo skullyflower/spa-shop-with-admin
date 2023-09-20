@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
-import { Box, Button, Center, HStack, Heading, Image } from "@chakra-ui/react";
+import { Box, Button, Center, HStack, Heading, Image, Skeleton, Stack } from "@chakra-ui/react";
 
 import EditCategory from "./categoryeditor";
 import "react-quill/dist/quill.bubble.css";
 
-const getCategories = (setCategories, setMessages) => {
+const getCategories = (setCategories, setMessages, setLoading) => {
+  setLoading(true);
   setCategories([]);
   fetch("http://localhost:4242/api/categories")
     .then((data) => data.json())
@@ -15,6 +16,7 @@ const getCategories = (setCategories, setMessages) => {
         setCategories([]);
         setMessages(json.message);
       }
+      setLoading(false);
     })
     .catch((err) => {
       setMessages(err.message || "Couldn't get categories.");
@@ -26,8 +28,10 @@ const Categories = () => {
   const [messages, setMessages] = useState(null);
   const [showCatForm, setShowCatForm] = useState(false);
   const [activeCat, setActiveCat] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = (values) => {
+    setLoading(true);
     const imagesArr = Array.from(values.newImage);
     var formData = new FormData();
     formData.append("category", JSON.stringify(values));
@@ -44,7 +48,7 @@ const Categories = () => {
       .then((data) => data.json())
       .then((json) => {
         setMessages(json.message);
-        getCategories(setCategories, setMessages);
+        getCategories(setCategories, setMessages, setLoading);
         toggleCatForm();
       })
       .catch((err) => {
@@ -60,7 +64,7 @@ const Categories = () => {
         .then((data) => data.json())
         .then((json) => {
           setMessages(json.message);
-          getCategories(setCategories, setMessages);
+          getCategories(setCategories, setMessages, setLoading);
         });
     }
   }, []);
@@ -75,9 +79,9 @@ const Categories = () => {
   );
   useEffect(() => {
     if (!categories && !messages) {
-      getCategories(setCategories, setMessages);
+      getCategories(setCategories, setMessages, setLoading);
     }
-  }, [categories, messages, setCategories, setMessages]);
+  }, [categories, messages]);
 
   return (
     <div className="content">
@@ -97,56 +101,63 @@ const Categories = () => {
           />
         </div>
       )}
-      <Box p={5}>
-        {categories?.map((cat) => (
-          <HStack
-            key={cat.id}
-            p={5}
-            m={5}
-            border="1px solid"
-            borderRadius={5}
-            w="100%"
-            alignItems="flex-start"
-            justifyContent="space-between">
-            <Image
-              src={`http://localhost:3000${cat.img}`}
-              boxSize="100px"
-              alt={cat.name}
-              fallbackSrc="http://localhost:3000/images/image-loading.svg"
-            />
-            <Heading size="sm">{cat.name}</Heading>
-            <div
-              style={{
-                textAlign: "left",
-                display: "inline-block",
-                width: "60%",
-                verticalAlign: "top",
-              }}
-              dangerouslySetInnerHTML={{ __html: cat.description }}
-            />
-            <button
-              className="shopButt"
-              value={cat.id}
-              onClick={doDelete}>
-              X
-            </button>
+      {loading ? (
+        <Stack>
+          <Skeleton height="50px" />
+          <Skeleton height="50px" />
+        </Stack>
+      ) : (
+        <Box p={5}>
+          {categories?.map((cat) => (
+            <HStack
+              key={cat.id}
+              p={5}
+              m={5}
+              border="1px solid"
+              borderRadius={5}
+              w="100%"
+              alignItems="flex-start"
+              justifyContent="space-between">
+              <Image
+                src={`http://localhost:3000${cat.img}`}
+                boxSize="100px"
+                alt={cat.name}
+                fallbackSrc="http://localhost:3000/images/image-loading.svg"
+              />
+              <Heading size="sm">{cat.name}</Heading>
+              <div
+                style={{
+                  textAlign: "left",
+                  display: "inline-block",
+                  width: "60%",
+                  verticalAlign: "top",
+                }}
+                dangerouslySetInnerHTML={{ __html: cat.description }}
+              />
+              <button
+                className="shopButt"
+                value={cat.id}
+                onClick={doDelete}>
+                X
+              </button>
+              <Button
+                size="sm"
+                value={cat.id}
+                onClick={toggleCatForm}>
+                Edit
+              </Button>
+            </HStack>
+          ))}
+          <Center>
             <Button
-              size="sm"
-              value={cat.id}
+              className="shopButt"
+              value="newcat"
               onClick={toggleCatForm}>
-              Edit
+              {showCatForm ? "Never mind" : "Add a new one"}
             </Button>
-          </HStack>
-        ))}
-        <Center>
-          <Button
-            className="shopButt"
-            value="newcat"
-            onClick={toggleCatForm}>
-            {showCatForm ? "Never mind" : "Add a new one"}
-          </Button>
-        </Center>
-      </Box>
+          </Center>
+        </Box>
+      )}
     </div>
   );
 };
