@@ -85,35 +85,51 @@ export default function EditCategory({ catid, categories, toggleCatForm, onSubmi
         </HStack>
       </FormControl>
       <FormControl p={4}>
-        <HStack alignItems="center">
+        <HStack alignItems="top">
           <FormLabel w={40}>Category Image:</FormLabel>
-          <Input
-            isInvalid={errors.img ? true : false}
-            errorBorderColor="red.300"
-            type="text"
-            {...register("img")}
-          />
-          <Image
-            src={`http://localhost:3000${cat.img}`}
-            boxSize="100px"
-            fallbackSrc="http://localhost:3000/images/image-loading.svg"
-          />
+          <Box
+            flexGrow={3}
+            borderWidth={1}
+            borderStyle="solid"
+            borderRadius={4}
+            p={5}>
+            <FormControl p={4}>
+              <HStack alignItems="center">
+                <FormLabel w={40}>Image path:</FormLabel>
+                <Input
+                  isInvalid={errors.img ? true : false}
+                  errorBorderColor="red.300"
+                  type="text"
+                  {...register("img")}
+                />
+                <Image
+                  src={`http://localhost:3000${cat.img}`}
+                  boxSize="100px"
+                  fallbackSrc="http://localhost:3000/images/image-loading.svg"
+                />
+              </HStack>
+            </FormControl>
+            <FormControl>
+              <HStack alignItems="center">
+                <FormLabel w={40}>Upload New Image</FormLabel>
+                <UploadInput
+                  name="newImage"
+                  multiple={false}
+                  register={register}
+                />
+              </HStack>
+            </FormControl>
+          </Box>
         </HStack>
-      </FormControl>
-      <FormControl>
-        <FormLabel w={40}>Upload New Image</FormLabel>
-        <UploadInput
-          name="newImage"
-          register={register}
-        />
       </FormControl>
       <FormControl p={4}>
         <HStack alignItems="top">
           <FormLabel w={40}>Description:</FormLabel>
           <Box
-            minW="80%"
+            flexGrow={3}
             minH={2}
-            border="1px solid gray"
+            borderWidth={1}
+            borderStyle="solid"
             borderRadius={5}
             className="content">
             <ReactQuill

@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Box, FormControl, FormLabel, Image, Input } from "@chakra-ui/react";
+import { Box, HStack, Image, Input } from "@chakra-ui/react";
 
 function Preview({ data }) {
   return (
-    <div>
+    <>
       {data.map((image) => (
         <Image
           className="image"
@@ -14,11 +14,11 @@ function Preview({ data }) {
           style={{ padding: "10px" }}
         />
       ))}
-    </div>
+    </>
   );
 }
 
-export default function UploadInput({ name, register }) {
+export default function UploadInput({ name, register, multiple = true }) {
   const [previewImages, setPreviewImages] = useState([]);
 
   const addMultipleImages = (e) => {
@@ -30,18 +30,15 @@ export default function UploadInput({ name, register }) {
 
   return (
     <Box>
-      <FormControl>
-        <FormLabel htmlFor="newImage">Upload Images</FormLabel>
-        <Input
-          {...register(name)}
-          type="file"
-          accept="image/*"
-          multiple
-          name={name}
-          onChange={addMultipleImages}
-        />
-      </FormControl>
-      {previewImages.length > 0 && <Preview data={previewImages} />}
+      <Input
+        {...register(name)}
+        type="file"
+        accept="image/*"
+        multiple={multiple}
+        name={name}
+        onChange={addMultipleImages}
+      />
+      <HStack>{previewImages.length > 0 && <Preview data={previewImages} />}</HStack>
     </Box>
   );
 }
