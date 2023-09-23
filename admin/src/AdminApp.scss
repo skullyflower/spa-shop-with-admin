@@ -1,6 +1,9 @@
 .content h3 + button {
   margin-left: 50px;
 }
+label button{
+  vertical-align: middle;
+}
 .floater {
   position: fixed;
   max-width: 90vw;

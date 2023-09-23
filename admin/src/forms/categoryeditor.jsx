@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import FloatingFormWrapper from "../bits/floatingformwrap";
 import { modules, formats } from "../bits/quillbits";
 import UploadInput from "../bits/upload-input";
+import InfoBubble from "../bits/info-bubble";
 
 import {
   Box,
@@ -16,11 +17,6 @@ import {
   HStack,
   Center,
   Heading,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-  PopoverBody,
 } from "@chakra-ui/react";
 
 import "react-quill/dist/quill.bubble.css";
@@ -50,20 +46,10 @@ export default function EditCategory({ catid, categories, toggleCatForm, onSubmi
         <Button onClick={toggleCatForm}>Never mind</Button>
       </HStack>
       <FormControl p={4}>
-        <HStack>
+        <HStack alignItems="center">
           <FormLabel w={40}>
-            Id:
-            <Popover trigger="hover">
-              <PopoverTrigger>
-                <button>(?)</button>
-              </PopoverTrigger>
-              <PopoverContent>
-                <PopoverArrow />
-                <PopoverBody>
-                  Categor ids must be unique, and should be descriptive. Ex: "widgets"
-                </PopoverBody>
-              </PopoverContent>
-            </Popover>
+            Id:{" "}
+            <InfoBubble message='Ids must be unique, and should be descriptive. Example: "widgets"' />
           </FormLabel>
           <Input
             className={errors.id ? "is-invalid" : ""}
@@ -110,7 +96,7 @@ export default function EditCategory({ catid, categories, toggleCatForm, onSubmi
               </HStack>
             </FormControl>
             <FormControl>
-              <HStack alignItems="center">
+              <HStack alignItems="top">
                 <FormLabel w={40}>Upload New Image</FormLabel>
                 <UploadInput
                   name="newImage"
@@ -148,18 +134,10 @@ export default function EditCategory({ catid, categories, toggleCatForm, onSubmi
         <HStack alignItems="top">
           <FormLabel w={40}>
             Sub-Categories:{" "}
-            <Popover trigger="hover">
-              <PopoverTrigger>
-                <button>(?)</button>
-              </PopoverTrigger>
-              <PopoverContent>
-                <PopoverArrow />
-                <PopoverBody>
-                  Do not select anything here unless you want to make this category a container for
-                  other categories.
-                </PopoverBody>
-              </PopoverContent>
-            </Popover>
+            <InfoBubble
+              message="Do not select anything here unless you want to make this category a container for
+                  other categories."
+            />
           </FormLabel>
           <HStack
             width="80%"
