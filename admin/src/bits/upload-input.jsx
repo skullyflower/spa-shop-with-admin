@@ -24,6 +24,9 @@ export default function UploadInput({ name, register, multiple = true }) {
   const addMultipleImages = (e) => {
     if (e.target.files) {
       const imageArray = Array.from(e.target.files).map((file) => URL.createObjectURL(file));
+      if (!multiple) {
+        setPreviewImages([]);
+      }
       setPreviewImages((prevImages) => prevImages.concat(imageArray));
     }
   };

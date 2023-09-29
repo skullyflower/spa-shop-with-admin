@@ -14,9 +14,9 @@ import {
   Stack,
 } from "@chakra-ui/react";
 
-const getSiteData = (setLoading, setMessages, setPageData) => {
+const getPageData = (setLoading, setMessages, setPageData) => {
   setLoading(true);
-  fetch("http://localhost:4242/api/home")
+  fetch("http://localhost:4242/api/pages")
     .then((data) => data.json())
     .then((json) => {
       setPageData(json);
@@ -26,15 +26,14 @@ const getSiteData = (setLoading, setMessages, setPageData) => {
     });
 };
 
-export default function HomePage() {
+export default function PageContent() {
   const [messages, setMessages] = useState(null);
-  const [pageData, setPageData] = useState(null);
+  const [pageData, setPageData] = useState({});
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     if (!pageData && !messages) {
-      setLoading(true);
-      getSiteData(setLoading, setMessages, setPageData);
-      setLoading(false);
+      getPageData(setLoading, setMessages, setPageData);
     }
   }, [pageData, messages]);
 

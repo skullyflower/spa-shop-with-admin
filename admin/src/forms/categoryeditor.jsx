@@ -21,7 +21,7 @@ import {
 
 import "react-quill/dist/quill.bubble.css";
 
-const newcat = { id: "newcat", name: "", img: "", description: "", subcat: [], newImage: [] };
+const newcat = { id: "", name: "", img: "", description: "", subcat: [], newImage: [] };
 
 export default function EditCategory({ catid, categories, toggleCatForm, onSubmit }) {
   const cat = categories[categories.findIndex((cat) => cat.id === catid)] || newcat;
@@ -52,10 +52,11 @@ export default function EditCategory({ catid, categories, toggleCatForm, onSubmi
             <InfoBubble message='Ids must be unique, and should be descriptive. Example: "widgets"' />
           </FormLabel>
           <Input
-            className={errors.id ? "is-invalid" : ""}
+            isInvalid={errors.id ? true : false}
+            errorBorderColor="red.300"
             type="text"
             data-lpignore="true"
-            {...register("id", { required: true, validate: (value) => value !== "newcat" })}
+            {...register("id", { required: true, validate: (value) => value !== "" })}
           />
         </HStack>
       </FormControl>
@@ -79,9 +80,22 @@ export default function EditCategory({ catid, categories, toggleCatForm, onSubmi
             borderStyle="solid"
             borderRadius={4}
             p={5}>
+            <FormControl>
+              <HStack alignItems="top">
+                <FormLabel w={40}>Upload New Image</FormLabel>
+                <UploadInput
+                  name="newImage"
+                  multiple={false}
+                  register={register}
+                />
+              </HStack>
+            </FormControl>
             <FormControl p={4}>
               <HStack alignItems="center">
-                <FormLabel w={40}>Image path:</FormLabel>
+                <FormLabel w={40}>
+                  Or edit image url:{" "}
+                  <InfoBubble message="You can edit the image url to be a different image you have uploaded in the past. You can also use an image from a different website. (This value will be overwritten if you select an image to upload.)" />
+                </FormLabel>
                 <Input
                   isInvalid={errors.img ? true : false}
                   errorBorderColor="red.300"
@@ -92,16 +106,6 @@ export default function EditCategory({ catid, categories, toggleCatForm, onSubmi
                   src={`http://localhost:3000${cat.img}`}
                   boxSize="100px"
                   fallbackSrc="http://localhost:3000/images/image-loading.svg"
-                />
-              </HStack>
-            </FormControl>
-            <FormControl>
-              <HStack alignItems="top">
-                <FormLabel w={40}>Upload New Image</FormLabel>
-                <UploadInput
-                  name="newImage"
-                  multiple={false}
-                  register={register}
                 />
               </HStack>
             </FormControl>
@@ -136,7 +140,7 @@ export default function EditCategory({ catid, categories, toggleCatForm, onSubmi
             Sub-Categories:{" "}
             <InfoBubble
               message="Do not select anything here unless you want to make this category a container for
-                  other categories."
+                  other categories. Example: 'Stationary' might contain 'Pens' and 'Papers'."
             />
           </FormLabel>
           <HStack

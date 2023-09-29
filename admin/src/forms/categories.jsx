@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import { Box, Button, Center, HStack, Heading, Image, Skeleton, Stack } from "@chakra-ui/react";
 
 import EditCategory from "./categoryeditor";
-import "react-quill/dist/quill.bubble.css";
 
 const getCategories = (setCategories, setMessages, setLoading) => {
   setLoading(true);

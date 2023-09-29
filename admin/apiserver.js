@@ -1,5 +1,5 @@
 const express = require("express");
-const aboutRouter = require("./api/aboutRouter")();
+const aboutRouter = require("./api/contentPageRouter")();
 const blogRouter = require("./api/blogRouter")();
 const categoriesRouter = require("./api/categoriesRouter")();
 const homeRouter = require("./api/homeRouter")();

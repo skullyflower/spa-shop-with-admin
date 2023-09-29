@@ -11,7 +11,7 @@ const Homepage = lazy(() => import("./forms/homepage"));
 const Blog = lazy(() => import("./forms/blog"));
 const Products = lazy(() => import("./forms/products"));
 const Categories = lazy(() => import("./forms/categories"));
-const About = lazy(() => import("./forms/aboutpage"));
+const PageContent = lazy(() => import("./forms/contentpage"));
 const Sale = lazy(() => import("./forms/sale"));
 const Images = lazy(() => import("./forms/addimage"));
 function App() {
@@ -45,7 +45,7 @@ function App() {
                   <Route
                     exact
                     path="/about"
-                    element={<About />}
+                    element={<PageContent />}
                   />
                   <Route
                     exact
