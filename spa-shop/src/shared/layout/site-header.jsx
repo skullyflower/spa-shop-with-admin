@@ -25,7 +25,7 @@ export default function SiteHeader() {
         <img
           src={`/${siteData.sitelogo}`}
           className="App-logo"
-          alt={siteData.sitetitle}
+          alt={siteData.company_name}
         />
       </Link>
       <nav id="topnav">

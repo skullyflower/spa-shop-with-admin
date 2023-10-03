@@ -8,8 +8,7 @@ export default function FloatingFormWrapper({ children }) {
         className="floater"
         p={5}
         shadow="xl"
-        borderRadius={5}
-        method="POST">
+        borderRadius={5}>
         {children}
       </Box>
     </div>
