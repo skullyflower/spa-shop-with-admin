@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 
 export default function ImageLoader({ src, alt, ...rest }) {
@@ -32,3 +33,7 @@ export default function ImageLoader({ src, alt, ...rest }) {
     </>
   );
 }
+ImageLoader.propTypes = {
+  src: PropTypes.string,
+  alt: PropTypes.string,
+};

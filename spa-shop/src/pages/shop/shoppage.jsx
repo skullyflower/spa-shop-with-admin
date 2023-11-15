@@ -1,3 +1,8 @@
+import ProdList from "../../shared/shop/productList";
 export default function ShopPage() {
-  return <div>shop page</div>;
+  return (
+    <section>
+      <ProdList />
+    </section>
+  );
 }

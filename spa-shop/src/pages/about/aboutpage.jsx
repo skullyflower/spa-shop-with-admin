@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import About from "../../shared/about/about.jsx";
-import { updateHead } from "../../shared/layout/site-header.jsx";
+import updateHead from "../../shared/updateHead.js";
 import aboutdata from "../../shared/about/about-data.json";
 
 export default function AboutPage() {
