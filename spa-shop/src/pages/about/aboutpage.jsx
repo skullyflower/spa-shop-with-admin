@@ -5,6 +5,7 @@ import aboutdata from "../../shared/about/about-data.json";
 
 export default function AboutPage() {
   const { page_title, page_description } = aboutdata;
+
   useEffect(() => {
     updateHead(page_title, page_description);
   }, [page_title, page_description]);

@@ -149,19 +149,21 @@ export default function EditCategory({ catid, categories, toggleCatForm, onSubmi
             borderStyle="solid"
             p={5}
             borderRadius={5}>
-            {categories.map((c) => {
-              return (
-                <span key={c.id}>
-                  <span>
-                    <Checkbox
-                      {...register(`subcat`)}
-                      value={c.id}>
-                      {c.id}
-                    </Checkbox>
+            {categories
+              .filter((c) => c.id !== cat.id)
+              .map((c) => {
+                return (
+                  <span key={c.id}>
+                    <span>
+                      <Checkbox
+                        {...register(`subcat`)}
+                        value={c.id}>
+                        {c.id}
+                      </Checkbox>
+                    </span>
                   </span>
-                </span>
-              );
-            })}
+                );
+              })}
           </HStack>
         </HStack>
       </FormControl>
