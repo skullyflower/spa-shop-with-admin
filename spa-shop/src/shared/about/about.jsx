@@ -1,11 +1,14 @@
-import aboutdata from "./about-data.json";
+import { aboutData } from "../../state/pageData";
 
 export default function About() {
-  const { page_title, page_content } = aboutdata;
+  const { page_content } = aboutData;
   return (
     <section>
-      <h1>{page_title}</h1>
-      {page_content}
+      <div
+        dangerouslySetInnerHTML={{
+          __html: page_content,
+        }}
+      />
     </section>
   );
 }

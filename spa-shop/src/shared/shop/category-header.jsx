@@ -1,8 +1,8 @@
 import React from "react";
-import ImageLoader from "../bits/image-loader";
+import ImageLoader from "../image-loader";
 
 const CategoryHeader = ({ category, isDesignPage }) => {
-  const { name, img, description } = category;
+  const { name, id, img, description } = category;
   const imgBigger = img.replace("/", "/bigger/");
   return (
     <div>
@@ -15,7 +15,7 @@ const CategoryHeader = ({ category, isDesignPage }) => {
           <div className="deptImg">
             <ImageLoader
               alt={name}
-              src={"/shop/GROUPS/" + imgBigger}
+              src={`/shop/${id}/${imgBigger}`}
             />
           </div>
           <div className="shopBlurb">

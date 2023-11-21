@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import { getCartCount } from "../../data/cartData";
+import { useCartStore } from "../../state/cartData";
 
 export default function MainNavigation() {
   const activepath = "/about";
-  const cartcount = getCartCount();
+  const { cart_count } = useCartStore();
   return (
     <ul className="navbar">
       <li className={activepath === "/" ? "active" : undefined}>
@@ -25,7 +25,7 @@ export default function MainNavigation() {
         <Link
           to="/cart"
           title="Cart">
-          {cartcount}
+          {cart_count}
         </Link>
       </li>
     </ul>

@@ -59,6 +59,7 @@ iframe {
 
 #pagetop {
   position: fixed;
+  z-index:500;
   box-sizing: border-box;
   width: 100%;
   background-color: var(--offwhite);
@@ -176,11 +177,17 @@ ul.navbar > li > ul {
 
 #pagebody,
 #shop_wrap {
-  margin-top:95px;
+  margin-top:80px;
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: column wrap;
   justify-content: center;
   box-sizing: border-box;
+}
+@media all and (min-width: 250px) and (max-width: 770px) {
+  #pagebody,
+#shop_wrap {
+  margin-top:0px;
+}
 }
 #contact_wrap {
   display: -webkit-box;

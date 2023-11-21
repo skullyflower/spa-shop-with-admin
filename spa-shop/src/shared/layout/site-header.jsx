@@ -1,6 +1,5 @@
-//import { Link } from "react-router-dom";
 import { Link } from "react-router-dom";
-import siteData from "./site-data.json";
+import { siteData } from "../../state/pageData";
 import MainNavigation from "../navigation/main-nav";
 
 export default function SiteHeader() {

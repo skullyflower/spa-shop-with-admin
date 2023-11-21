@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Layout from "../layout/layout";
 import HomePage from "../../pages/home/homepage";
 import AboutPage from "../../pages/about/aboutpage";
+import ProductPage from "../../pages/shop/product-page";
 import ShopPage from "../../pages/shop/shoppage";
 import CartPage from "../../pages/cart/cartpage";
 import ContactPage from "../../pages/contact/contactpage";
@@ -20,6 +21,14 @@ export default function SiteRoutes() {
         <Route
           path="/shop"
           element={<ShopPage />}
+        />
+        <Route
+          path="/shop/:category_id"
+          element={<ShopPage />}
+        />
+        <Route
+          path="/shop/product/:prod_id"
+          element={<ProductPage />}
         />
         <Route
           path="/about"

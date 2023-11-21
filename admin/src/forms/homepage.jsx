@@ -225,13 +225,12 @@ export default function HomePage() {
       .then((data) => data.json())
       .then((json) => {
         setMessages(json.message);
-        getSiteData(setPageData, setMessages, setLoading);
       })
       .catch((err) => {
         setMessages(err.message || "There was a problem.");
       })
       .finally(() => {
-        setLoading(false);
+        getSiteData(setLoading, setMessages, setPageData);
       });
   };
 

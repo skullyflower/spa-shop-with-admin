@@ -2,7 +2,7 @@ const express = require("express");
 const fs = require("fs");
 const processRss = require("../src/bits/processBlogRSS");
 
-const blogfilepath = "../spa-shop/src/shared/blog/blog-data.json";
+const blogfilepath = "../spa-shop/public/data/blog-data.json";
 const blogRSSpath = "../spa-shop/public/blog.rss";
 
 function routes() {

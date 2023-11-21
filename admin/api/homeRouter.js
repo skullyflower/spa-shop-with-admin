@@ -1,7 +1,7 @@
 const express = require("express");
 const fs = require("fs");
 const multer = require("multer");
-const homefilepath = "../spa-shop/src/shared/layout/site-data.json";
+const homefilepath = "../spa-shop/public/data/site-data.json";
 
 const rawImagesPath = "../spa-shop/public/";
 

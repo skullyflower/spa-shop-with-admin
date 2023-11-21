@@ -178,7 +178,7 @@ ul.navbar > li > ul {
 #shop_wrap {
   margin-top:95px;
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: column wrap;
   justify-content: center;
   box-sizing: border-box;
 }
@@ -959,19 +959,6 @@ footer#pagefoot {
   #bigPopWrap img {
     margin: 2%;
   }
-  section#read_comics {
-    -webkit-flex-flow: row wrap;
-    -moz-flex-flow: row wrap;
-    -ms-flex-flow: row wrap;
-    flex-flow: row wrap;
-  }
-  /* 	.thumbs {
-  	-webkit-column-count: 3;
-  	-moz-column-count: 3;
-  	-ms-column-count: 3;
-  	column-count: 3;
-  }
-  */
   #blog_entries,
   .shopSection,
   #gallery {

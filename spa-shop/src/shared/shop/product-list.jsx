@@ -1,31 +1,32 @@
 import { useEffect, useState } from "react";
+import { useCartStore } from "../../state/cartData.js";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { filterRandomResults } from "../../data/shopData.js";
-import ListProduct from "./oneprod.jsx";
-import products from "./products.json";
-import categories from "./categories.json";
+import ListProduct from "./one-product.jsx";
+import { products, categories, filterRandomResults } from "../../state/shopData.js";
 
 const ProdList = ({ cat, multi, pId }) => {
-  const search_filter = "";
+  const { searchTerm } = useCartStore();
   const prodsort = "";
   const [filtered, setFiltered] = useState([]);
-  const category = cat ? categories.categories[cat] : categories.categories["thing"];
+  const category = categories.find((oneCat) => oneCat.id === cat) ?? categories[0];
 
   useEffect(() => {
-    const cat_id = cat ? cat : "thing";
+    const cat_id = cat;
 
-    const all_products_list = products.products;
+    const all_products_list = products;
     if (all_products_list.length !== 0) {
       const raw_prod_list = all_products_list.filter((prod) => {
         if (prod) {
-          if (search_filter !== "" && !multi) {
+          if (searchTerm !== "" && !multi) {
             return (
-              prod.name?.toLowerCase().includes(search_filter.toLowerCase()) ||
-              prod.desc?.toLowerCase().includes(search_filter.toLowerCase)
+              prod.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              prod.desc?.toLowerCase().includes(searchTerm.toLowerCase())
             );
-          } else {
+          } else if (cat_id) {
             return prod.cat?.includes(cat_id);
+          } else {
+            return all_products_list;
           }
         }
         return false;
@@ -34,8 +35,8 @@ const ProdList = ({ cat, multi, pId }) => {
       const filtered_product_list = filterRandomResults(raw_prod_list, multi, pId, prodsort);
       setFiltered(filtered_product_list);
     }
-  }, [cat, multi, pId, prodsort, search_filter]);
-  const toUrl = "/giftshop/" + cat;
+  }, [cat, multi, pId, prodsort, searchTerm]);
+  const toUrl = "/shop/" + cat;
 
   if (filtered && filtered.length) {
     return (
@@ -64,9 +65,9 @@ const ProdList = ({ cat, multi, pId }) => {
         )}
       </div>
     );
-  } else if (search_filter !== "") {
+  } else if (searchTerm !== "") {
     return (
-      <p style={{ fontSize: "1.5em" }}>No Results for search term: &quot;{search_filter}&quot;</p>
+      <p style={{ fontSize: "1.5em" }}>No Results for search term: &quot;{searchTerm}&quot;</p>
     );
   } else {
     return null;

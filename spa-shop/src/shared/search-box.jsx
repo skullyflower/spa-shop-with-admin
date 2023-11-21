@@ -1,14 +1,12 @@
-import { updateSearch } from "../data/searchSlice";
-import { useSelector, useDispatch } from "react-redux";
+import { useCartStore } from "../state/cartData";
 
-export const SearchBox = () => {
+export default function SearchBox() {
   // need to convert to useContext
-  const dispatch = useDispatch();
-  const searchTerm = useSelector((state) => state.search.search_filter);
+  const { searchTerm, updateSearch } = useCartStore();
 
   const handleChange = (e) => {
     const filter = e?.target?.value || "";
-    dispatch(updateSearch({ search_filter: filter }));
+    updateSearch(filter);
   };
 
   return (
@@ -26,4 +24,4 @@ export const SearchBox = () => {
       </span>
     </div>
   );
-};
+}

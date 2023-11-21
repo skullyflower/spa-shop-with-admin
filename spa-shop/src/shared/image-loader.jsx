@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 
 export default function ImageLoader({ src, alt, ...rest }) {
-  const placeholderImg = "rain.svg";
+  const placeholderImg = `/images/rain.svg`;
 
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -18,7 +18,7 @@ export default function ImageLoader({ src, alt, ...rest }) {
     <>
       {loading ? (
         <img
-          src={`/images/${placeholderImg}`}
+          src={placeholderImg}
           alt="loading"
           {...rest}
           className="imageloader"

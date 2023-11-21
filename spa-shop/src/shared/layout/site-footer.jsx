@@ -1,4 +1,4 @@
-import siteData from "./site-data.json";
+import { siteData } from "../../state/pageData";
 
 export default function SiteFooter() {
   return (

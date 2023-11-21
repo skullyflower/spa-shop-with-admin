@@ -11,7 +11,7 @@ function routes() {
     .route("/pages/:page")
     .get((req, res) => {
       const page = req.params.page;
-      const pagefilepath = `../spa-shop/src/pages/${page}/${page}-data.json`;
+      const pagefilepath = `../spa-shop/public/data/${page}-data.json`;
       const pageDataJson = fs.readFileSync(pagefilepath);
       const pageData = JSON.parse(pageDataJson);
       if (pageData) {
