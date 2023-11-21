@@ -1,8 +1,8 @@
 const htmlEncodeString = (string) =>
   string.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const year = new Date().getUTCFullYear();
-const sitedata = require("../../../spa-shop/src/shared/layout/site-data.json");
-const blog_data = require("../../../spa-shop/src/shared/blog/blog-data.json");
+const sitedata = require("../../../spa-shop/public/data/site-data.json");
+const blog_data = require("../../../spa-shop/public/data/blog-data.json");
 
 // TODO
 // need to Grab title from site-data.json file and inject it.
