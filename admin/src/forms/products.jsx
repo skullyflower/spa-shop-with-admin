@@ -209,7 +209,7 @@ const Products = () => {
               <div style={{ width: "60%" }}>
                 <h3>
                   <a
-                    href={`http://localhost:3000/productpage/${product.id}`}
+                    href={`http://localhost:3000/shop/productpage/${product.id}`}
                     target="blogwindow">
                     {product.name}
                   </a>

@@ -7,7 +7,9 @@ body {
   background-color: #fff;
   color:#000;
 }
-
+section {
+  overflow: hidden;
+}
 .visible {
   visibility: visible;
 }
@@ -19,7 +21,9 @@ body {
 .hide {
   display: none;
 }
-
+.clickable{
+  cursor:pointer;
+}
 .centered {
   text-align: center;
 }
@@ -178,9 +182,6 @@ ul.navbar > li > ul {
 #pagebody,
 #shop_wrap {
   margin-top:80px;
-  display: flex;
-  flex-flow: column wrap;
-  justify-content: center;
   box-sizing: border-box;
 }
 @media all and (min-width: 250px) and (max-width: 770px) {
@@ -344,14 +345,17 @@ aside#navigation .shopad ul li {
   justify-content: space-between;
   align-items: center;
   flex-direction: row;
+  padding: 0 20px;
 }
 
-#search-box {
+#search-box, #sort-box {
   display: flex;
+  flex-direction: row;
   max-width: 300px;
   justify-content: space-evenly;
 }
-#search-box label {
+#search-box label, #sort-box label {
+  text-wrap: nowrap;
   margin-right: 5px;
   line-height: 1.6;
 }
@@ -428,7 +432,7 @@ aside#navigation .shopad ul li {
 }
 #mycart #myCartContent {
   padding-top: 10px;
-  padding-bottom: 90px;
+  padding-bottom: 30px;
   width: 100%;
   overflow: auto;
 }
@@ -442,7 +446,6 @@ aside#navigation .shopad ul li {
   text-align: left;
 }
 #mycart #myCartBottom {
-  width: 94%;
   bottom: 20px;
   box-sizing: border-box;
 }

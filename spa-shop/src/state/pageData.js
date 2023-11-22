@@ -6,3 +6,4 @@ async function getPageData(page) {
 
 export const siteData = await getPageData("site");
 export const aboutData = await getPageData("about");
+export const blogData = await getPageData("blog");

@@ -1,15 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { CartPlusMinusButtons } from "./cartPlusMinusButtons";
+import ImageLoader from "../image-loader";
 
 const CartItemLine = ({ item, openCart }) => {
   return (
     <div className="cartRow">
       <div className="cartImg">
-        <img src={"/shop/" + item.img} alt={item.name} />
+        <ImageLoader
+          src={"/shop/" + item.img}
+          alt={item.name}
+          width={75}
+        />
       </div>
       <div className="cartTitle ">
-        <Link to={"/productpage/" + item.id}>{item.name}</Link>
+        <Link to={`/shop/productpage/${item.id}`}>{item.name}</Link>
         <div className="cartPrice">
           <b>Price:</b> {"$" + item.price.toFixed(2)}
         </div>
@@ -22,9 +27,9 @@ const CartItemLine = ({ item, openCart }) => {
           openCart={openCart}
         />
       </div>
-      <div style={{ display: "inline-block" }} className="totRow">
-        <b>Item Total</b>
-        <br />
+      <div
+        style={{ display: "inline-block" }}
+        className="totRow">
         {"$" + (item.qty * item.price).toFixed(2)}
       </div>
     </div>

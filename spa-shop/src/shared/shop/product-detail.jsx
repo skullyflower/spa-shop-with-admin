@@ -1,4 +1,4 @@
-import { AddToCartButton } from "./addToCartButton";
+import AddToCartButton from "./add-to-cart-button";
 import ImageLoader from "../image-loader";
 
 const prodDetail = ({ item }) => {
@@ -7,7 +7,7 @@ const prodDetail = ({ item }) => {
     <div>
       <div className="shopSection">
         <h2 className="shopHeader">Product Detail: {item.name}</h2>
-        <div className="shopDetail product">
+        <div className="shopDetail expanded product">
           <div className="deptImg product">
             <a
               rel="shadowbox[alts]"
@@ -17,26 +17,6 @@ const prodDetail = ({ item }) => {
                 alt={item.name}
               />
             </a>
-            <div className="shopAlts">
-              {item.altimgs
-                ? item.altimgs.map((alt, indx) => {
-                    const biggerAlt = alt.replace(/^(.*)[/]([^/]*)$/, "$1/bigger/$2");
-                    return (
-                      <a
-                        key={indx}
-                        rel="shadowbox[alts]"
-                        href={"/shop/" + biggerAlt}>
-                        <ImageLoader
-                          style={{ width: "120px" }}
-                          className="thmb"
-                          src={"/shop/" + biggerAlt}
-                          alt={item.name}
-                        />
-                      </a>
-                    );
-                  })
-                : ""}
-            </div>
           </div>
           <div className="shopblurb product">
             <h3>{item.name}</h3>

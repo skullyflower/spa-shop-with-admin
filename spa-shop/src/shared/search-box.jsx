@@ -1,7 +1,6 @@
 import { useCartStore } from "../state/cartData";
 
 export default function SearchBox() {
-  // need to convert to useContext
   const { searchTerm, updateSearch } = useCartStore();
 
   const handleChange = (e) => {

@@ -1,28 +1,13 @@
 import React from "react";
-import { useCartStore } from "../../state/cartData";
+import SortBox from "../sort-box";
 import SearchBox from "../Search-box";
+import ShopHorizontalNav from "./shop-nav";
 
 const ShopFilter = () => {
-  const { prodsort, updateSort } = useCartStore();
-
-  const updateSortValue = (e) => {
-    const sort_string = e.target.value;
-    dispatch(updateSort(sort_string));
-  };
-
   return (
     <div id="filterControls">
-      <div className="orderSect">
-        <b>Sort by: </b>
-        <select
-          onChange={updateSortValue}
-          value={prodsort}>
-          <option value="-date">Newest</option>
-          <option value="name">Name</option>
-          <option value="price">Least Expensive</option>
-          <option value="-price">Most Expensive</option>
-        </select>
-      </div>
+      <SortBox />
+      <ShopHorizontalNav />
       <SearchBox />
     </div>
   );

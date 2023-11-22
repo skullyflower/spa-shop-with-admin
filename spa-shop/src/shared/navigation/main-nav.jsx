@@ -3,7 +3,7 @@ import { useCartStore } from "../../state/cartData";
 
 export default function MainNavigation() {
   const activepath = "/about";
-  const { cart_count } = useCartStore();
+  const cart_count = useCartStore((state) => state.cart_count);
   return (
     <ul className="navbar">
       <li className={activepath === "/" ? "active" : undefined}>

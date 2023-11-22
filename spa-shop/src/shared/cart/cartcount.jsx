@@ -1,15 +1,15 @@
 import { Link } from "react-router-dom";
-import { getCartCount } from "../../data/cartData";
+import { useCartStore } from "../../data/cartData";
 
 const CartCount = () => {
-  const cartcount = getCartCount();
+  const { cart_count } = useCartStore();
   return (
     <div className="shopad cart">
       <div
         id="goodieBag"
-        className={cartcount > 0 ? "full" : ""}>
+        className={cart_count > 0 ? "full" : ""}>
         <Link to="/cart">
-          <span id="tally">{cartcount} </span>
+          <span id="tally">{cart_count} </span>
         </Link>
       </div>
     </div>

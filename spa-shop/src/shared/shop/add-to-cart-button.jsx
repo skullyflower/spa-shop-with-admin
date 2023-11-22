@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useCartStore } from "../../state/cartData";
 
 export default function AddToCartButton({ itemId }) {
-  const { addToCart } = useCartStore();
+  const addToCart = useCartStore((state) => state.addToCart);
   const onAdd = (itemId) => () => {
     addToCart(itemId, true);
   };

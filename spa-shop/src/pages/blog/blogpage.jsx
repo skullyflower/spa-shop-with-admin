@@ -1,4 +1,4 @@
-import blogData from "../../shared/blog/blog-data.json";
+import { blogData } from "../../state/pageData";
 import BlogEntry from "../../shared/blog/blogentrybox";
 
 export default function BlogPage() {

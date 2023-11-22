@@ -1,30 +1,33 @@
-import React from "react";
+import { useState } from "react";
 import ImageLoader from "../image-loader";
 
 const CategoryHeader = ({ category, isDesignPage }) => {
   const { name, id, img, description } = category;
+  const [expanded, setExpanded] = useState(false);
   const imgBigger = img.replace("/", "/bigger/");
   return (
-    <div>
-      <div className="content deptDesc">
-        <h2 className="shopHeader">
-          <span className="full-only">The Shop: </span>
-          {name}
-        </h2>
-        <div className="shopDetail">
-          <div className="deptImg">
-            <ImageLoader
-              alt={name}
-              src={`/shop/${id}/${imgBigger}`}
-            />
-          </div>
-          <div className="shopBlurb">
-            <div
-              className="deptTxt"
-              dangerouslySetInnerHTML={{
-                __html: description,
-              }}></div>
-          </div>
+    <div className="content deptDesc">
+      <h1 className="shopHeader">
+        {name}{" "}
+        <span
+          className="smaller clickable"
+          onClick={() => setExpanded(!expanded)}>
+          ( {expanded && "hide "} details )
+        </span>
+      </h1>
+      <div className={`shopDetail split-even ${expanded ? "expanded" : ""}`}>
+        <div className="deptImg">
+          <ImageLoader
+            alt={name}
+            src={`/shop/${id}/${imgBigger}`}
+          />
+        </div>
+        <div className="shopBlurb">
+          <div
+            className="deptTxt"
+            dangerouslySetInnerHTML={{
+              __html: description,
+            }}></div>
         </div>
       </div>
     </div>

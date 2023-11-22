@@ -3,7 +3,7 @@ import { products } from "./shopData";
 // uses localStorage
 
 const getStoredCart = () => {
-  const cartHash = localStorage.sf_cartData;
+  const cartHash = localStorage.spa_cartData;
   return cartHash ? JSON.parse(cartHash) : {};
 };
 
@@ -16,25 +16,25 @@ const getCartProds = () => {
     let cart_products = [];
     let cartcount = 0;
 
-    var cartids = Object.keys(cartHash);
-    cartids = cartids.filter(
-      //remove discontinued products and zero quantities.
-      (cid) =>
-        cid.length > 0 &&
-        products.length > 0 &&
-        cartHash[cid] > 0 &&
-        products.find((prod) => prod.cat.includes(cid)) !== undefined,
-    );
-    cartids.forEach((id) => {
-      let product = products.find((prod) => prod.id === id);
-      let prodQTY = cartHash[id];
-      let prodTot = prodQTY * product.price;
-      cartTotal += prodTot;
-      cartUSShip += product.weight > 0 ? prodTot * 0.2 + product.handling : 0;
-      cartHandle += product.handling;
-      cartcount += prodQTY;
-      cart_products.push({ ...product, qty: prodQTY });
-    });
+    const cartids = Object.keys(cartHash)
+      .filter(
+        //remove discontinued products and zero quantities.
+        (pid) =>
+          pid.length > 0 &&
+          products.length > 0 &&
+          cartHash[pid] > 0 &&
+          products.find((prod) => prod.id === pid) !== undefined,
+      )
+      .forEach((id) => {
+        let product = products.find((prod) => prod.id === id);
+        let prodQTY = cartHash[id];
+        let prodTot = prodQTY * product.price;
+        cartTotal += prodTot;
+        cartUSShip += product.weight > 0 ? prodTot * 0.2 + product.handling : 0;
+        cartHandle += product.handling;
+        cartcount += prodQTY;
+        cart_products.push({ ...product, qty: prodQTY });
+      });
     return {
       cart_products: cart_products,
       cart_total: cartTotal,
@@ -46,24 +46,15 @@ const getCartProds = () => {
   }
 };
 
-const getCartCount = (cartHash) => {
-  let vals = Object.values(cartHash);
-  return vals.length > 0
-    ? vals.reduce((total, num) => {
-        return total + num;
-      })
-    : 0;
-};
-
 const updateCartStorage = (cartHash) => {
   if (localStorage) {
-    localStorage.sf_cartData = JSON.stringify(filterCart(cartHash));
+    localStorage.spa_cartData = JSON.stringify(filterCart(cartHash));
   }
 };
 
 const filterCart = (cartHash) => {
   //getting rid of zeros.
-  let cartids = Object.keys(cartHash);
+  const cartids = Object.keys(cartHash);
   let filteredHash = {};
   for (let i = 0; i < cartids.length; i++) {
     let cid = cartids[i];
@@ -75,13 +66,17 @@ const filterCart = (cartHash) => {
 };
 
 const addToCart = (itemId, openCart) => {
-  var cartHash = getStoredCart();
+  const cartHash = getStoredCart();
   let itemcount = cartHash[itemId] || 0;
   cartHash[itemId] = itemcount + 1;
   updateCartStorage(cartHash);
   const cartprods = getCartProds(cartHash);
   return {
-    ...cartprods,
+    cart_count: cartprods.cart_count,
+    cart_products: cartprods.cart_products,
+    cart_total: cartprods.cart_total,
+    shipping: cartprods.shipping,
+    handling: cartprods.handling,
     cartopen: openCart,
   };
 };
@@ -92,7 +87,11 @@ const deleteFromCart = (itemId, openCart) => {
   updateCartStorage(cartHash);
   const cartprods = getCartProds(cartHash);
   return {
-    ...cartprods,
+    cart_count: cartprods.cart_count,
+    cart_products: cartprods.cart_products,
+    cart_total: cartprods.cart_total,
+    shipping: cartprods.shipping,
+    handling: cartprods.handling,
     cartopen: openCart,
   };
 };
@@ -101,9 +100,11 @@ const emptyCart = () => {
   const oldCart = getCartProds(getStoredCart());
   updateCartStorage({});
   return {
-    cartobj: {},
-    ...oldCart.cart_details,
     cart_count: 0,
+    cart_products: [],
+    cart_total: 0,
+    shipping: 0,
+    handling: 0,
     cartopen: false,
   };
 };
@@ -111,14 +112,18 @@ const emptyCart = () => {
 const cart_details = getCartProds();
 
 export const useCartStore = create((set) => ({
-  ...cart_details,
+  cart_count: cart_details.cart_count,
+  cart_products: cart_details.cart_products,
+  cart_total: cart_details.cart_total,
+  shipping: cart_details.shipping,
+  handling: cart_details.handling,
   cartopen: false,
   prodsort: "-date",
   updateSort: (sort) => set((state) => ({ prodshort: sort })),
   searchTerm: "",
   updateSearch: (term) => set((state) => ({ searchTerm: term })),
-  addToCart: (pid, opencart) => set((state) => addToCart(pid, opencart)),
-  deleteFromCart: (itemId, openCart) => set((state) => deleteFromCart(itemId, openCart)),
-  emptyCart: () => set((state) => emptyCart()),
+  addToCart: (pid, opencart) => set((state) => ({ ...addToCart(pid, opencart) })),
+  deleteFromCart: (itemId, openCart) => set((state) => ({ ...deleteFromCart(itemId, openCart) })),
+  emptyCart: () => set((state) => ({ ...emptyCart() })),
   closeCart: () => set((state) => ({ cartopen: false })),
 }));
