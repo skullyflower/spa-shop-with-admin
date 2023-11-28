@@ -15,7 +15,7 @@ const CategoryHeader = ({ category, isDesignPage }) => {
           ( {expanded && "hide "} details )
         </span>
       </h1>
-      <div className={`shopDetail split-even ${expanded ? "expanded" : ""}`}>
+      <div className={`shopDetail ${expanded ? "expanded" : ""}`}>
         <div className="deptImg">
           <ImageLoader
             alt={name}

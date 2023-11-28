@@ -9,7 +9,7 @@ const ListProduct = ({ item }) => {
       <Link to={"/shop/product/" + item.id}>
         <ImageLoader
           name={"img" + item.id}
-          src={`/shop/${item.img}`}
+          src={`${item.img}`}
           alt={item.name}
           className="shopImg"
         />

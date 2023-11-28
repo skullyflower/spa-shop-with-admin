@@ -8,7 +8,7 @@ import "react-quill/dist/quill.bubble.css";
 import "./AdminApp.scss";
 
 const Homepage = lazy(() => import("./forms/homepage"));
-const Blog = lazy(() => import("./forms/blog"));
+const Blog = lazy(() => import("./forms/blogentries"));
 const Products = lazy(() => import("./forms/products"));
 const Categories = lazy(() => import("./forms/categories"));
 const PageContent = lazy(() => import("./forms/contentpage"));
@@ -50,7 +50,7 @@ function App() {
                   <Route
                     exact
                     path="/blog"
-                    render={() => <Blog />}
+                    element={<Blog />}
                   />
                   <Route
                     exact

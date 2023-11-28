@@ -126,4 +126,7 @@ export const useCartStore = create((set) => ({
   deleteFromCart: (itemId, openCart) => set((state) => ({ ...deleteFromCart(itemId, openCart) })),
   emptyCart: () => set((state) => ({ ...emptyCart() })),
   closeCart: () => set((state) => ({ cartopen: false })),
+  topnavexpanded: true,
+  shopnavevisible: true,
+  changeTopNavVisible: (onoff) => set((state) => ({ topnavexpanded: onoff })),
 }));

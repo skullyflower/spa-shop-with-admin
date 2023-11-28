@@ -5,7 +5,6 @@ const shopfilepath = "../spa-shop/public/data/categories.json";
 const processFile = require("./imageProcessor");
 
 const rawImagesPath = "./public/files/";
-
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, rawImagesPath);

@@ -11,9 +11,9 @@ const prodDetail = ({ item }) => {
           <div className="deptImg product">
             <a
               rel="shadowbox[alts]"
-              href={"/shop/" + biggerImage}>
+              href={biggerImage}>
               <ImageLoader
-                src={"/shop/" + biggerImage}
+                src={biggerImage}
                 alt={item.name}
               />
             </a>

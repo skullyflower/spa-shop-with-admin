@@ -21,7 +21,6 @@ const CartPage = (props) => {
     cartopen: state.cartopen,
     cart_total: state.cart_total,
   }));
-  const cart = useCartStore((state) => state.cart);
   const totalSale = cart_total * sale;
   const reverse_products = cart_products.slice().reverse();
 
@@ -59,7 +58,7 @@ const CartPage = (props) => {
       }
     };
     getCartTogether();
-  }, [cart, cart_products, cart_total, totalSale, sale, shipping]);
+  }, [cart_products, cart_total, totalSale, sale, shipping]);
 
   const createOrder = (data, actions) => {
     return actions.order.create({
@@ -87,7 +86,9 @@ const CartPage = (props) => {
       name={name}
     />
   ) : (
-    <section id="content">
+    <section
+      id="content"
+      className="checkout">
       {cart_count > 0 ? (
         <>
           <h2 className="shopHeader">Checkout</h2>
@@ -146,7 +147,7 @@ const CartPage = (props) => {
       </div>
       <ProdList
         cart_productsort={props.productsort}
-        cat="special"
+        cat="all"
         multi={true}
       />
     </section>

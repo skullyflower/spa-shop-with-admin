@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Layout from "../layout/layout";
 import HomePage from "../../pages/home/homepage";
 import AboutPage from "../../pages/about/aboutpage";
-import ProductPage from "../../pages/shop/product-page";
+import ProductPage from "../../pages/shop/productpage";
 import ShopPage from "../../pages/shop/shoppage";
 import CartPage from "../../pages/cart/cartpage";
 import ContactPage from "../../pages/contact/contactpage";

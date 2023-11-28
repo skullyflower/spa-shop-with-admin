@@ -16,11 +16,10 @@ label button{
   overflow: auto;
 }
 #adminForm {
-  background-color: black;
   padding: 30px;
   margin: 20px;
-  border: 2px solid #583874;
-  box-shadow: 0 0 25px #583874;
+  border: 2px solid ;
+  box-shadow: 0 0 25px #333;
   border-radius: 10px;
   & > div {
     margin: 20px;
@@ -47,7 +46,6 @@ label button{
 }
 #adminList {
   & > div {
-    background-color: black;
     padding: 30px;
     margin: 20px;
     border: 2px solid #583874;

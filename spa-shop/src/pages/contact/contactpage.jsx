@@ -1,3 +1,9 @@
 export default function ContactPage() {
-  return <div>contact page</div>;
+  return (
+    <section
+      id="content"
+      className="contact">
+      contact page
+    </section>
+  );
 }
