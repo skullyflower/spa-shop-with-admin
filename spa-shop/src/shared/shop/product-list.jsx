@@ -6,8 +6,10 @@ import ListProduct from "./one-product.jsx";
 import { products, categories, filterRandomResults } from "../../state/shopData.js";
 
 const ProdList = ({ cat, multi, pId }) => {
-  const { searchTerm } = useCartStore();
-  const prodsort = "";
+  const { searchTerm, prodsort } = useCartStore((store) => ({
+    searchTerm: store.searchTerm,
+    prodsort: store.prodsort,
+  }));
   const [filtered, setFiltered] = useState([]);
   const category = categories.find((oneCat) => oneCat.id === cat) ?? categories[0];
 

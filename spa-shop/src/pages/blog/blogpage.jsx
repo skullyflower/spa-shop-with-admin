@@ -1,6 +1,6 @@
 import useUpdateHead from "../../shared/updateHead.js";
 import { blogData } from "../../state/pageData";
-import BlogEntry from "../../shared/blog/blogentrybox";
+import BlogEntryBox from "../../shared/blog/blogentrybox";
 
 export default function BlogPage() {
   const { page_title, page_description, entries } = blogData;
@@ -13,9 +13,9 @@ export default function BlogPage() {
       <div
         id="blog_entries"
         className="entries">
-        {entries > 0 ? (
+        {entries.length > 0 ? (
           entries.map((entry) => (
-            <BlogEntry
+            <BlogEntryBox
               key={entry.id}
               blogentry={entry}
             />

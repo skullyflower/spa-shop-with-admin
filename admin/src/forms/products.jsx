@@ -122,12 +122,11 @@ const Products = () => {
   );
   const toggleForm = useCallback(
     (e) => {
-      const productId =
-        e && e.target.value
-          ? e.target.name === "copy"
-            ? `${e.target.value}-copy`
-            : e.target.value
-          : null;
+      const productId = e?.target?.value
+        ? e.target.name === "copy"
+          ? `${e.target.value}-copy`
+          : e.target.value
+        : null;
       setActiveProd(productId);
       setShowForm(!!productId);
     },
@@ -197,7 +196,7 @@ const Products = () => {
               Show All
             </Button>
           </HStack>
-          <div>
+          <Stack>
             {filteredFroducts?.map((product, i) => (
               <HStack
                 key={product.id}
@@ -235,12 +234,13 @@ const Products = () => {
                     dangerouslySetInnerHTML={{ __html: product.desc_long }}
                   />
                 </div>
-                <button
+                <Button
+                  size="sm"
                   className="shopButt"
                   value={product.id}
                   onClick={doDelete}>
                   X
-                </button>
+                </Button>
                 <Button
                   size="sm"
                   className="shopButt"
@@ -258,7 +258,7 @@ const Products = () => {
                 </Button>
               </HStack>
             ))}
-          </div>
+          </Stack>
           <Center p={5}>
             <Button
               className="shopButt"

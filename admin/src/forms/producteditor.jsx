@@ -40,7 +40,7 @@ const newproduct = {
 
 export default function EditProduct({ prodId, products, categories, toggleForm, onSubmit }) {
   const selectedProduct =
-    products[products.findIndex((prod) => prod.id === prodId.replace("-copy", ""))] || newproduct;
+    products.find((prod) => prod.id === prodId.replace("-copy", "")) || newproduct;
   if (selectedProduct?.id !== newprodId) {
     const ms = Date.parse(selectedProduct.date);
     const prodAdddate = new Date(ms);

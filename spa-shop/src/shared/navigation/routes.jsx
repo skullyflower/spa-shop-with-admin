@@ -7,6 +7,7 @@ import ShopPage from "../../pages/shop/shoppage";
 import CartPage from "../../pages/cart/cartpage";
 import ContactPage from "../../pages/contact/contactpage";
 import BlogPage from "../../pages/blog/blogpage";
+import BlogEntryPage from "../../pages/blog/entry/blogentrypage";
 
 export default function SiteRoutes() {
   return (
@@ -42,6 +43,11 @@ export default function SiteRoutes() {
           path="/blog"
           element={<BlogPage />}
         />
+        <Route
+          path="/blog/entry/:blog_id"
+          element={<BlogEntryPage />}
+        />
+
         <Route
           path="/contact"
           element={<ContactPage />}

@@ -33,6 +33,16 @@ input[type="button"] {
   padding: none;
   outline: none;
 }
+.shopButt, button.shopButt {
+  display: inline-block;
+  margin: 0 auto;
+  padding: 5px 15px;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 0.9em;
+  transition: all 0.5s ease-out; 
+  text-decoration: none;
+}
 
 /* global starting small phone size */
 .content > .slick-slider {

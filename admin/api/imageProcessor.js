@@ -6,7 +6,7 @@ function processFile(file, bigDestinationPath, smallDestinationPath) {
     Jimp.read(`${file.path}`)
       .then((image) => {
         return image
-          .resize(750, Jimp.AUTO) // resize
+          .resize(850, Jimp.AUTO) // resize
           .write(`${bigDestinationPath}${file.filename}`); // save
       })
       .catch((err) => {

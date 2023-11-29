@@ -34,5 +34,5 @@ api.get("/", (req, res) => {
 });
 
 api.listen(4242, () => {
-  console.log("Express Server is running...");
+  console.log("Express Server is running on http://localhost:4242");
 });

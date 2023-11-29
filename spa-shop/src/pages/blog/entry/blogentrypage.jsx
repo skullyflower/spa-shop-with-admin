@@ -1,19 +1,55 @@
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-import BlogEntry from "../../../shared/blog/blogentrybox";
+import { useParams } from "react-router-dom";
+import { blogData } from "../../../state/pageData";
+import ImageLoader from "../../../shared/image-loader";
+import BlogEntryBox from "../../../shared/blog/blogentrybox";
 
-export default function BlogPage({ blog }) {
+export default function BlogEntryPage() {
+  const { blog_id } = useParams();
+  const entries = blogData.entries;
+  const blog = blogData.entries.find((item) => item.id === blog_id);
+  const { date, image, imagealt, imagelink, imgcaption, heading, text, title } = blog;
+  let edate = new Date(date);
   return (
-    <section id="content">
-      <div className="entries">
-        <BlogEntry blogentry={blog} />
-        <p className="center">
-          <Link to="/blog">Back to Blog</Link>
-        </p>
+    <section
+      id="content"
+      className="blog">
+      <div className="content">
+        <article className="anentry">
+          <h2 className="blog_head">
+            <time style={{ float: "right" }}> {edate.toDateString()}</time>
+            {title}
+          </h2>
+          <div className="centered">
+            <a href={imagelink}>
+              <ImageLoader
+                src={image}
+                alt={imagealt}
+              />
+            </a>
+            <div>{imgcaption}</div>
+          </div>
+          <h3>{heading}</h3>
+          <div
+            className="blogtext"
+            dangerouslySetInnerHTML={{ __html: text }}></div>
+          <br clear="all" />
+        </article>
+        {entries.length > 1 && (
+          <aside>
+            <h2>More blog posts ...</h2>
+            <div
+              id="blog_entries"
+              className="entries">
+              {entries.map((entry) => (
+                <BlogEntryBox
+                  key={entry.id}
+                  blogentry={entry}
+                />
+              ))}
+            </div>
+          </aside>
+        )}
       </div>
     </section>
   );
 }
-BlogPage.propTypes = {
-  blog: PropTypes.object,
-};

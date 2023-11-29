@@ -1,6 +1,10 @@
 const express = require("express");
 const fs = require("fs");
 const processRss = require("../src/bits/processBlogRSS");
+const processFile = require("./imageProcessor");
+const storeUploads = require("./filemover.js");
+
+const upload = storeUploads();
 
 const blogfilepath = "../spa-shop/public/data/blog-data.json";
 const blogRSSpath = "../spa-shop/public/blog.rss";
@@ -9,12 +13,12 @@ function routes() {
   const blogRouter = express.Router();
   blogRouter
     .route("/blog")
-    .post((req, res) => {
+    .post(upload.array("newImage", 1), async (req, res) => {
       const blogPostData = fs.readFileSync(blogfilepath);
       const blogEntries = JSON.parse(blogPostData);
       if (req.body.entry) {
         try {
-          const update = { ...req.body.entry };
+          const update = JSON.parse(req.body.entry);
           const updateIndex = blogEntries.entries.findIndex(
             (entry) => entry.id === update.id || entry.title === update.title,
           );
@@ -23,6 +27,21 @@ function routes() {
           } else {
             blogEntries.entries.unshift(update);
           }
+          const bigDestPath = `../spa-shop/public/images/`;
+          //check for path. if it doesn't exist create it.
+          const smallDestPath = `../spa-shop/public/images/smaller/`;
+
+          if (req.files) {
+            for (const file of req.files) {
+              try {
+                processFile(file, bigDestPath, smallDestPath);
+                update.image = `${bigDestPath.replace("../spa-shop/public", "")}${file.filename}`;
+              } catch (err) {
+                console.log("Failed: file upload");
+              }
+            }
+          }
+
           fs.writeFileSync(blogfilepath, JSON.stringify(blogEntries));
           const RSS = processRss(blogEntries);
           fs.writeFileSync(blogRSSpath, RSS);

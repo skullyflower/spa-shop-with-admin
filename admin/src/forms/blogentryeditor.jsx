@@ -15,6 +15,7 @@ import {
   HStack,
   Center,
   Heading,
+  Stack,
 } from "@chakra-ui/react";
 import FloatingFormWrapper from "../bits/floatingformwrap";
 
@@ -46,15 +47,14 @@ const newblog = {
   imgcaption: "",
   heading: "",
   text: "",
-  tags: [],
+  newImage: [],
 };
 
 const EditBlogEntry = ({ blogid, blogEntries, toggleForm, onSubmit }) => {
-  const entry = blogEntries.filter((blog) => blog.id === blogid);
-  const thisEntry = entry[0] || newblog;
+  const thisEntry = blogEntries.find((blog) => blog.id === blogid) || newblog;
   const [wysiwygText, setWysiwygText] = useState(thisEntry.text);
 
-  if (!!entry[0]) {
+  if (blogid !== "newentry" && thisEntry) {
     const ms = Date.parse(thisEntry.date);
     const entrydate = new Date(ms);
     thisEntry.date = convertDate(entrydate, "input");
@@ -66,16 +66,24 @@ const EditBlogEntry = ({ blogid, blogEntries, toggleForm, onSubmit }) => {
     setValue,
   } = useForm({ defaultValues: thisEntry, mode: "onChange" });
 
-  const handleTextChange = (newText) => {
-    setWysiwygText(newText);
+  const handleTextChange = () => (newText) => {
     setValue("text", newText);
+    setWysiwygText(newText);
   };
 
   return (
     <FloatingFormWrapper>
-      <HStack justifyContent="space-between">
-        <Heading size="md">Add/Edit Blog Entries</Heading>
-        <Button onClick={toggleForm}>Never mind</Button>
+      <Stack justifyContent="space-between">
+        <HStack
+          w="100%"
+          justifyContent="space-between">
+          <Heading
+            textAlign="center"
+            size="md">
+            Add/Edit Blog Entries
+          </Heading>
+          <Button onClick={toggleForm}>Never mind</Button>
+        </HStack>
         <FormControl p={4}>
           <HStack>
             <FormLabel w={40}>
@@ -114,7 +122,7 @@ const EditBlogEntry = ({ blogid, blogEntries, toggleForm, onSubmit }) => {
         </FormControl>
         <FormControl p={4}>
           <HStack alignItems="top">
-            <FormLabel w={40}>Product Image:</FormLabel>
+            <FormLabel w={40}>Blog Image:</FormLabel>
             <Box
               flexGrow={3}
               borderWidth={1}
@@ -138,10 +146,10 @@ const EditBlogEntry = ({ blogid, blogEntries, toggleForm, onSubmit }) => {
                     <InfoBubble message=" (This value will be overwritten if you select a new image to upload.)" />
                   </FormLabel>
                   <Input
-                    isInvalid={errors.img ? true : false}
+                    isInvalid={errors.image ? true : false}
                     errorBorderColor="red.300"
                     type="text"
-                    {...register("img")}
+                    {...register("image")}
                   />
                   <Image
                     src={`http://localhost:3000${thisEntry.image}`}
@@ -157,7 +165,8 @@ const EditBlogEntry = ({ blogid, blogEntries, toggleForm, onSubmit }) => {
           <HStack alignItems="center">
             <FormLabel w={40}>Alt Text:</FormLabel>
             <Input
-              className={errors.imagealt ? "is-invalid" : ""}
+              isInvalid={errors.imagealt ? true : false}
+              errorBorderColor="red.300"
               type="text"
               {...register("imagealt")}
             />
@@ -221,13 +230,12 @@ const EditBlogEntry = ({ blogid, blogEntries, toggleForm, onSubmit }) => {
         </div>
         <Center>
           <Button
-            className="shopButt"
             colorScheme="orange"
             onClick={handleSubmit(onSubmit)}>
             Submit Changes
           </Button>
         </Center>
-      </HStack>
+      </Stack>
     </FloatingFormWrapper>
   );
 };
