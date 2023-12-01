@@ -1,6 +1,6 @@
 import { useState } from "react";
 import ReactQuill from "react-quill";
-import { modules, formats } from "../bits/quillbits";
+import { modules } from "../bits/quillbits";
 import { useForm } from "react-hook-form";
 import { convertDate } from "../bits/datetimebit";
 import UploadInput from "../bits/upload-input";
@@ -217,7 +217,6 @@ const EditBlogEntry = ({ blogid, blogEntries, toggleForm, onSubmit }) => {
                 errorBorderColor="red.300"
                 theme="snow"
                 modules={modules}
-                formats={formats}
                 value={wysiwygText}
                 onChange={handleTextChange("text")}
               />

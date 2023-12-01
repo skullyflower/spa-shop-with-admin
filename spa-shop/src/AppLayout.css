@@ -768,6 +768,7 @@ footer#pagefoot {
 /* grid box */
 .shopItem
 {
+max-width: 45%;
 width: 24%;
 min-width: 200px;
 display: inline-block;

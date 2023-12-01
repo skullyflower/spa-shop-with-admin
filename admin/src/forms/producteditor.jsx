@@ -19,7 +19,7 @@ import FloatingFormWrapper from "../bits/floatingformwrap";
 import { useFieldArray, useForm } from "react-hook-form";
 import { convertDate } from "../bits/datetimebit";
 import ReactQuill from "react-quill";
-import { modules, formats } from "../bits/quillbits";
+import { modules } from "../bits/quillbits";
 const today = new Date();
 
 const newprodId = "new-prod-id";
@@ -218,7 +218,6 @@ export default function EditProduct({ prodId, products, categories, toggleForm, 
               errorBorderColor="red.300"
               theme="snow"
               modules={modules}
-              formats={formats}
               value={wysiwygText}
               onChange={handleTextChange("desc")}
             />
@@ -242,7 +241,6 @@ export default function EditProduct({ prodId, products, categories, toggleForm, 
               value={wysiwygText2}
               theme="snow"
               modules={modules}
-              formats={formats}
               onChange={handleTextChange("desc_long")}
             />
           </Box>
