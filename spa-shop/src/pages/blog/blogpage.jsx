@@ -3,13 +3,17 @@ import { blogData } from "../../state/pageData";
 import BlogEntryBox from "../../shared/blog/blogentrybox";
 
 export default function BlogPage() {
-  const { page_title, page_description, entries } = blogData;
+  const { page_title, page_description, page_content, entries } = blogData;
   useUpdateHead(page_title, page_description);
   return (
     <section
       id="content"
       className="blog">
       <h1>{page_title}</h1>
+      <div
+        dangerouslySetInnerHTML={{
+          __html: page_content,
+        }}></div>
       <div
         id="blog_entries"
         className="entries">

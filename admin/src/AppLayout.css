@@ -20,7 +20,7 @@ body {
   display: none;
 }
 
-.centered {
+.centered, .ql-align-center {
   text-align: center;
 }
 .right {

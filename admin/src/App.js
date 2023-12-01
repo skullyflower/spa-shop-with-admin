@@ -8,7 +8,7 @@ import "react-quill/dist/quill.bubble.css";
 import "./AdminApp.scss";
 
 const Homepage = lazy(() => import("./forms/homepage"));
-const Blog = lazy(() => import("./forms/blogentries"));
+const Blog = lazy(() => import("./forms/blogpage"));
 const Products = lazy(() => import("./forms/products"));
 const Categories = lazy(() => import("./forms/categories"));
 const PageContent = lazy(() => import("./forms/contentpage"));

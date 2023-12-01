@@ -53,10 +53,7 @@ function PageForm({ page, pageData, onSubmit }) {
       <FormControl p={4}>
         <HStack alignItems="center">
           <FormLabel w={48}>
-            Page Title:{" "}
-            <InfoBubble
-              message={`This is the SEO page title for the home ${page}. It should include the company name and info about what you offer. `}
-            />
+            Page Title: <InfoBubble message={`This is the SEO page title for the ${page} page.`} />
           </FormLabel>
           <Input
             isInvalid={errors.page_title ? true : false}
@@ -128,20 +125,17 @@ export default function PageContent() {
       getPageData(page, setLoading, setMessages, setPageData);
     }
   }, [pageData, messages]);
+
   const onSubmit = (values) => {
     setMessages(null);
     setLoading(true);
-    const imagesArr = Array.from(values.newsitelogo);
-    //const contentimages = Array.from(values.)
     var formData = new FormData();
     formData.append("values", JSON.stringify(values));
 
-    for (var file of imagesArr) {
-      formData.append("newsitelogo", file);
-    }
     fetch(`http://localhost:4242/api/pages/${page}`, {
       method: "POST",
-      body: formData,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
     })
       .then((data) => data.json())
       .then((json) => {
@@ -151,7 +145,7 @@ export default function PageContent() {
         setMessages(err.message || "There was a problem.");
       })
       .finally(() => {
-        getPageData(setLoading, setMessages, setPageData);
+        getPageData(page, setLoading, setMessages, setPageData);
       });
   };
 

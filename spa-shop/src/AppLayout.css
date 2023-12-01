@@ -22,7 +22,7 @@ section {
 .clickable{
   cursor:pointer;
 }
-.centered {
+.centered , .ql-align-center{
   text-align: center;
 }
 .right {
@@ -35,7 +35,7 @@ input[type="button"] {
   padding: none;
   outline: none;
 }
-.shopButt {
+.shopButt, button.shopButt {
   display: inline-block;
   margin: 0 auto;
   padding: 5px 15px;
@@ -188,20 +188,34 @@ ul.navbar > li > ul {
   width: inherit;
 }
 
-#minifiedMenu {
-  display: flex;
-  width:90%;
-  justify-content: space-between;
-}
-#minifiedMenu a.shopButt {
-  margin: 0 4px;
-  width: 50px;
-}
-button#menuExpander {
-  color: transparent;
-  height: 37px;
-  width: 56px;
-  background: transparent url(images/menu.svg) no-repeat center;
+@media all and (max-width: 770px) {
+  #minifiedMenu {
+    display: flex;
+    width:90%;
+    justify-content: space-between;
+  }
+  #minifiedMenu a.shopButt {
+    margin: 0 4px;
+    width: 50px;
+  }
+  button#menuExpander {
+    color: transparent;
+    height: 37px;
+    width: 56px;
+    background: transparent url(images/menu.svg) no-repeat center;
+  }
+  #topnav {
+    height: 0;
+    overflow: hidden;
+    -webkit-transition: 0.5s ease-out all;
+    -moz-transition: 0.5s ease-out all;
+    -o-transition: 0.5s ease-out all;
+    transition: 0.5s ease-out all;
+  }
+  #topnav.expanded {
+    height: auto;
+  }
+
 }
 @media all and (min-width: 771px){
   #minifiedMenu {
@@ -825,17 +839,6 @@ box-sizing: border-box;}
   }
 
 
-  #topnav {
-    height: 0;
-    overflow: hidden;
-    -webkit-transition: 0.5s ease-out all;
-    -moz-transition: 0.5s ease-out all;
-    -o-transition: 0.5s ease-out all;
-    transition: 0.5s ease-out all;
-  }
-  #topnav.expanded {
-    height: auto;
-  }
  /*  aside#navigation {
     display: flex;
     flex-wrap: wrap;

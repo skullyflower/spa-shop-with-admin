@@ -2,7 +2,7 @@ const express = require("express");
 const fs = require("fs");
 const shopfilepath = "../spa-shop/public/data/products.json";
 const processFile = require("./imageProcessor");
-const storeUploads = require("./filemover.js");
+const storeUploads = require("./filestore.js");
 
 const upload = storeUploads();
 

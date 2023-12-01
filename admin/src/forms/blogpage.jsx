@@ -1,18 +1,27 @@
 import { useCallback, useEffect, useState } from "react";
 import EditBlogEntry from "./blogentryeditor";
+import EditBlogData from "./blogdataeditor";
 import { convertDate } from "../bits/datetimebit";
 import { Alert, Box, Button, HStack, Heading, Image, Stack } from "@chakra-ui/react";
 
-const getBlogEntries = (setBlogEntries, setMessages) => {
+const getBlogEntries = (setBlogEntries, setMessages, setBlogInfo) => {
   fetch("http://localhost:4242/api/blog")
     .then((data) => data.json())
     .then((json) => {
+      const info = {
+        page_title: json.page_title,
+        page_description: json.page_description,
+        page_content: json.page_content,
+      };
       const entries = json.entries;
       if (Array.isArray(entries)) {
         setBlogEntries(entries);
       } else {
         setBlogEntries([]);
         setMessages(json.message);
+      }
+      if (info) {
+        setBlogInfo(info);
       }
     })
     .catch((err) => {
@@ -22,9 +31,32 @@ const getBlogEntries = (setBlogEntries, setMessages) => {
 
 const Blog = () => {
   const [blogEntries, setBlogEntries] = useState(null);
+  const [blogInfo, setBlogInfo] = useState(null);
   const [messages, setMessages] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [activeBlog, setActiveBlog] = useState(null);
+
+  const onUpdateInfo = (values) => {
+    setMessages(null);
+    var formData = new FormData();
+    formData.append("values", JSON.stringify(values));
+
+    fetch(`http://localhost:4242/api/blog/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
+    })
+      .then((data) => data.json())
+      .then((json) => {
+        setMessages(json.message);
+      })
+      .catch((err) => {
+        setMessages(err.message || "There was a problem.");
+      })
+      .finally(() => {
+        getBlogEntries(setBlogEntries, setMessages, setBlogInfo);
+      });
+  };
 
   const onSubmit = (values) => {
     const dateforPost = new Date(values.date);
@@ -35,8 +67,7 @@ const Blog = () => {
     for (var file of imagesArr) {
       formData.append("newImage", file);
     }
-
-    fetch("http://localhost:4242/api/blog", {
+    fetch(`http://localhost:4242/api/blog/${values.id}`, {
       method: "POST",
       body: formData,
     })
@@ -75,12 +106,18 @@ const Blog = () => {
 
   useEffect(() => {
     if (!blogEntries && !messages) {
-      getBlogEntries(setBlogEntries, setMessages);
+      getBlogEntries(setBlogEntries, setMessages, setBlogInfo);
     }
-  }, [blogEntries, messages, setBlogEntries, setMessages]);
+  }, [blogEntries, blogInfo, messages, setBlogEntries, setMessages, setBlogInfo]);
 
   return (
     <div className="content">
+      {blogInfo && (
+        <EditBlogData
+          blogInfo={blogInfo}
+          onSubmit={onUpdateInfo}
+        />
+      )}
       <HStack justifyContent="space-evenly">
         <div style={{ width: "30%" }}>{messages && <Alert>{messages}</Alert>}</div>
         <Heading
