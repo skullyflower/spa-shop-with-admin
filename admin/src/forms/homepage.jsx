@@ -35,8 +35,7 @@ const getSiteData = (setLoading, setMessages, setPageData) => {
 };
 
 function HomePageForm({ pageData, onSubmit }) {
-  const [wysiwygText, setWysiwygText] = useState(pageData.page_content?.top);
-  const [wysiwygText2, setWysiwygText2] = useState(pageData.page_content?.bottom);
+  const [wysiwygText, setWysiwygText] = useState(pageData?.page_content);
   const {
     register,
     handleSubmit,
@@ -46,11 +45,7 @@ function HomePageForm({ pageData, onSubmit }) {
 
   const handleTextChange = (formfield) => (newText) => {
     setValue(formfield, newText);
-    if (formfield === "page_content.top") {
-      setWysiwygText(newText);
-    } else {
-      setWysiwygText2(newText);
-    }
+    setWysiwygText(newText);
   };
 
   return (
@@ -177,39 +172,16 @@ function HomePageForm({ pageData, onSubmit }) {
             className="content">
             <ReactQuill
               id="homepage"
-              className={errors.page_content?.top ? "is-invalid" : "topbox"}
+              className={errors.page_content ? "is-invalid" : "topbox"}
               theme="snow"
               modules={modules}
               formats={formats}
               value={wysiwygText}
-              onChange={handleTextChange("page_content.top")}
+              onChange={handleTextChange("page_content")}
             />
           </Box>
         </HStack>
       </FormControl>
-      <FormControl p={4}>
-        <HStack alignItems="top">
-          <FormLabel w={48}>Home Page Top Content:</FormLabel>
-          <Box
-            flexGrow={3}
-            minH={2}
-            borderWidth={1}
-            borderStyle="solid"
-            borderRadius={5}
-            className="content">
-            <ReactQuill
-              id="homepage"
-              className={errors.page_content?.bottom ? "is-invalid" : "bottombox"}
-              theme="snow"
-              modules={modules}
-              formats={formats}
-              value={wysiwygText2}
-              onChange={handleTextChange("page_content.bottom")}
-            />
-          </Box>
-        </HStack>
-      </FormControl>
-
       <Center>
         <HStack gap={4}>
           <Button onClick={reset}>Never mind</Button>

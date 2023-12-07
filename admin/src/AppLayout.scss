@@ -43,6 +43,49 @@ input[type="button"] {
   transition: all 0.5s ease-out; 
   text-decoration: none;
 }
+#overlay,
+#processing {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2999;
+}
+
+#processing {
+  transition: All ease-out 0.5s;
+}
+
+#processing #processInner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 250px;
+  width: 250px;
+  transform: translate(-50%, -50%);
+}
+
+#overlay {
+  display: none;
+}
+
+.show #overlay {
+  display: block;
+}
+
+.floater {
+  position: fixed;
+  max-width: 90vw;
+  width: 970px;
+  height: 90vh;
+  top: 5vh;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3001;
+  overflow: auto;
+}
 
 /* global starting small phone size */
 .content > .slick-slider {

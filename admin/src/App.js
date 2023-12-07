@@ -1,9 +1,9 @@
 import { Suspense, lazy } from "react";
 import { Link, BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import NavBar from "./bits/NavBar";
-import "./AppLayout.css";
+import "./AppLayout.scss";
+import "./AppTheme.scss";
 import "react-quill/dist/quill.snow.css";
-//import "./AdminApp.scss";
 
 const Homepage = lazy(() => import("./forms/homepage"));
 const Blog = lazy(() => import("./forms/blogpage"));
