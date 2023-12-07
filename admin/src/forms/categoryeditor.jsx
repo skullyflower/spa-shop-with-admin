@@ -24,7 +24,7 @@ import "react-quill/dist/quill.bubble.css";
 const newcat = { id: "", name: "", img: "", description: "", subcat: [], newImage: [] };
 
 export default function EditCategory({ catid, categories, toggleCatForm, onSubmit }) {
-  const cat = categories[categories.findIndex((cat) => cat.id === catid)] || newcat;
+  const cat = categories[categories?.findIndex((cat) => cat.id === catid)] || newcat;
   const [wysiwygText, setWysiwygText] = useState(cat.description);
 
   const {

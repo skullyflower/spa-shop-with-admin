@@ -32,7 +32,7 @@ const getCategories = (setCategories, setMessages, setLoading) => {
         // sort by name
         // filter out the super categories
         const categories = arraySort(json, "name");
-        const newcats = categories.filter((cat) => cat.subcat.length === 0);
+        const newcats = categories?.filter((cat) => cat.subcat.length === 0);
         setCategories(newcats);
       } else {
         setCategories([]);

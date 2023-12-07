@@ -1,9 +1,9 @@
 export const modules = {
   toolbar: [
-    [{ header: [1, 2, 3, false] }],
+    [{ header: [1, 2, 3, false] }, { size: [] }],
     ["bold", "italic", "underline", "strike", "blockquote", { color: [] }, { background: [] }],
     [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }, { align: [] }],
-    ["link", "image"],
+    ["link", "image", "video"],
     ["clean"],
   ],
 };
