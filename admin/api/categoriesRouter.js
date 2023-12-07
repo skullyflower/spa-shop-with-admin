@@ -1,20 +1,10 @@
 const express = require("express");
 const fs = require("fs");
-const multer = require("multer");
-const shopfilepath = "../spa-shop/src/pages/shop/categories.json";
+const shopfilepath = "../spa-shop/public/data/categories.json";
 const processFile = require("./imageProcessor");
+const storeUploads = require("./filestore.js");
 
-const rawImagesPath = "./public/files/";
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, rawImagesPath);
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
-});
-const upload = multer({ storage: storage });
+const upload = storeUploads();
 
 function routes() {
   const categoriesRouter = express.Router();

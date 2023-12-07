@@ -1,17 +1,19 @@
 const express = require("express");
 const fs = require("fs");
 
+const rootdir = "../spa-shop/public/data";
+
 function routes() {
   const pageRouter = express.Router();
   pageRouter.route("/pages").get((req, res) => {
-    const files = fs.readdirSync(`../spa-shop/src/pages/`);
+    const files = fs.readdirSync(rootdir);
     return res.json({ files: files });
   });
   pageRouter
     .route("/pages/:page")
     .get((req, res) => {
       const page = req.params.page;
-      const pagefilepath = `../spa-shop/src/pages/${page}/${page}-data.json`;
+      const pagefilepath = `${rootdir}/${page}-data.json`;
       const pageDataJson = fs.readFileSync(pagefilepath);
       const pageData = JSON.parse(pageDataJson);
       if (pageData) {
@@ -20,9 +22,9 @@ function routes() {
     })
     .post((req, res) => {
       const page = req.params.page;
-      if (req.body.pagedata) {
+      const pagefilepath = `${rootdir}/${page}-data.json`;
+      if (req.body) {
         try {
-          const pagefilepath = `../spa-shop/src/pages/${page}/${page}-data.json`;
           const oldpageDataString = fs.readFileSync(pagefilepath);
           const oldpageObject = JSON.parse(oldpageDataString);
           const newpageData = { ...oldpageObject, ...req.body };

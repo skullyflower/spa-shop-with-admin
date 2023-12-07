@@ -1,22 +1,11 @@
-//import { Link } from "react-router-dom";
-import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { SiteContext } from "./app-context-wrapper";
+import { siteData } from "../../state/pageData";
 import MainNavigation from "../navigation/main-nav";
-
-// SEO for one page app
-export function updateHead(page_title, description) {
-  const pageDescription = description;
-  document.getElementsByTagName("meta")["description"].content = pageDescription?.replaceAll(
-    /<[^>]*>/g,
-    "",
-  );
-  const pageTitle = page_title;
-  document.title = `${pageTitle}`;
-}
+import MobileMenu from "../navigation/mobilemenu";
+import { useCartStore } from "../../state/cartData";
 
 export default function SiteHeader() {
-  const { siteData } = useContext(SiteContext);
+  const topnavexpanded = useCartStore((store) => store.topnavexpanded);
   return (
     <header id="pagetop">
       <Link
@@ -28,7 +17,10 @@ export default function SiteHeader() {
           alt={siteData.company_name}
         />
       </Link>
-      <nav id="topnav">
+      <MobileMenu />
+      <nav
+        id="topnav"
+        className={topnavexpanded ? "expanded" : undefined}>
         <MainNavigation />
       </nav>
     </header>

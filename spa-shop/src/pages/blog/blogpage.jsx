@@ -1,18 +1,25 @@
-import { Link } from "react-router-dom";
-import blogData from "../../shared/blog/blog-data.json";
-import ImageLoader from "../../shared/image-loader";
+import useUpdateHead from "../../shared/updateHead.js";
+import { blogData } from "../../state/pageData";
+import BlogEntryBox from "../../shared/blog/blogentrybox";
 
 export default function BlogPage() {
-  const { page_title, entries } = blogData;
+  const { page_title, page_description, page_content, entries } = blogData;
+  useUpdateHead(page_title, page_description);
   return (
-    <section>
+    <section
+      id="content"
+      className="blog">
       <h1>{page_title}</h1>
+      <div
+        dangerouslySetInnerHTML={{
+          __html: page_content,
+        }}></div>
       <div
         id="blog_entries"
         className="entries">
-        {entries > 0 ? (
+        {entries.length > 0 ? (
           entries.map((entry) => (
-            <BlogItem
+            <BlogEntryBox
               key={entry.id}
               blogentry={entry}
             />
@@ -22,41 +29,5 @@ export default function BlogPage() {
         )}
       </div>
     </section>
-  );
-}
-
-function BlogItem({ blogentry }) {
-  const { date, id, image, imagealt, imgcaption, heading, title } = blogentry;
-  let edate = new Date(date);
-
-  return (
-    <div className="shopItem">
-      <div>
-        <h2 className="blog_head">
-          <Link to={"/blogentry/" + id}>{title}</Link>
-        </h2>
-        <div className="content">
-          <div className="centered">
-            <Link to={"/blog/entry/" + id}>
-              <ImageLoader
-                src={image}
-                alt={imagealt}
-              />
-            </Link>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: imgcaption,
-              }}></div>
-          </div>
-          <h3>
-            <Link to={"/blog/entry/" + id}>{heading}</Link>
-          </h3>
-          <time>{edate.toDateString()}</time>
-        </div>
-      </div>
-      <p className="textright">
-        <Link to={"/blog/entry/" + id}>Read It</Link>
-      </p>
-    </div>
   );
 }

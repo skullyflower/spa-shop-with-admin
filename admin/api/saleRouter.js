@@ -1,6 +1,6 @@
 const express = require("express");
 const fs = require("fs");
-const shopfilepath = "../spa-shop/src/pages/shop/shop-sales.json";
+const shopfilepath = "../spa-shop/public/data/sale.json";
 
 function routes() {
   const saleRouter = express.Router();

@@ -1,18 +1,23 @@
 import { useEffect } from "react";
-import About from "../../shared/about/about.jsx";
-import { updateHead } from "../../shared/layout/site-header.jsx";
-import aboutdata from "../../shared/about/about-data.json";
+import useUpdateHead from "../../shared/updateHead.js";
+import { aboutData } from "../../state/pageData.js";
 
 export default function AboutPage() {
-  const { page_title, page_description } = aboutdata;
-
-  useEffect(() => {
-    updateHead(page_title, page_description);
-  }, [page_title, page_description]);
+  const { page_title, page_content, page_description } = aboutData;
+  useUpdateHead(page_title, page_description);
 
   return (
-    <div>
-      <About />
-    </div>
+    <section
+      id="content"
+      className="about">
+      <div className="content">
+        <h1>{page_title}</h1>
+        <div
+          dangerouslySetInnerHTML={{
+            __html: page_content,
+          }}
+        />
+      </div>
+    </section>
   );
 }

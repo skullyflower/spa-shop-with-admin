@@ -1,9 +1,9 @@
 trap "exit" INT TERM ERR
 trap "kill 0" EXIT
 
-node apiserver.js &
+node ./apiserver.js &
 yarn start &
 cd ../spa-shop 
-npm start &
+npm run dev &
 
 wait

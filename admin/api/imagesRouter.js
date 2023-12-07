@@ -37,7 +37,11 @@ function routes() {
         const files = fs.readdirSync(bigSourcePath);
         if (files) {
           const filtered = files.filter(
-            (file) => file.endsWith(".jpg") || file.endsWith(".png") || file.endsWith(".gif"),
+            (file) =>
+              file.endsWith(".jpeg") ||
+              file.endsWith(".jpg") ||
+              file.endsWith(".png") ||
+              file.endsWith(".gif"),
           );
           if (filtered.length) {
             return res.json(filtered);

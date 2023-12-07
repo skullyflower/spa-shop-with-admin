@@ -1,18 +1,17 @@
 # Simple-Spa-Shop-CMS
 
-This is an attempt to templatize some of the functionality I've build for my own little shop site in
-a reusable, themeable and somewhat user friendly package.
+This is a templatized version of the tool I've built to maintain my own little shop site.
 
-This project contains two apps. (1) The spa-shop site app and (2) the admin app for the shop site
-that is to be run locally only. **Do not publish the admin app.** It allows the data which is stored
-in json files to be updated easily without having to edit the code base of the shop app, potentially
-breaking it.
+This project contains two apps.
+
+1. The spa-shop site app and
+2. the admin app for the shop site that is meant to be run locally only.
 
 ### To make data updates to the shop site:
 
 1. Open a command line terminal window.
-2. Navigate to the admin directory: `cd /{path to spa-shop-with-admin}/admin/`
-3. Run `yarn admin`
+2. Navigate to the admin directory: `cd /{path to spa-shop-with-admin}/`
+3. Run `./startit.sh`
 
 4. This will open:
    - The admin, CMS app in a browser window [localhost:3001](http://localhost:3001)
@@ -24,7 +23,7 @@ breaking it.
 Once you've finished making your changes, you'll want to review them carefully in the staging window
 [localhost:3000](http://localhost:3000) of the site that opened along with your admin.
 
-Once satisfied that your changes are good, click the publish button??(TBD)... and the thing will be
-built. Once done you can use your hosting control panel's filemanager or your favorite ftp app to
-upload your dist directory (`/path to spa-shop-with-admin/spa-shop/dist`). Make sure to replace all
-of the files.
+Once satisfied that your changes are good, navigate to the spa-shop directory (cd
+`/path to spa-shop-with-admin/spa-shop/`) and run `npm run build`. Once that's done you can use your
+hosting control panel's filemanager or your favorite ftp app to upload your dist directory
+(`/path to spa-shop-with-admin/spa-shop/dist`). Make sure to replace all of thenfiles.

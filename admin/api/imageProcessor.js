@@ -1,12 +1,12 @@
 const Jimp = require("jimp");
 
 function processFile(file, bigDestinationPath, smallDestinationPath) {
-  if (file.filename.match(/.*[.][jpg][ienp][pgf]/)) {
+  if (file.filename.match(/.*[.][jpg][ienp][pgfe][g]+/)) {
     //resize image to big
     Jimp.read(`${file.path}`)
       .then((image) => {
         return image
-          .resize(750, Jimp.AUTO) // resize
+          .resize(850, Jimp.AUTO) // resize
           .write(`${bigDestinationPath}${file.filename}`); // save
       })
       .catch((err) => {

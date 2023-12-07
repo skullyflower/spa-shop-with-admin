@@ -1,12 +1,10 @@
-import { useContext } from "react";
-import { SiteContext } from "./app-context-wrapper";
-
+import { siteData } from "../../state/pageData";
+import MiniCart from "../cart/miniCart";
 export default function SiteFooter() {
-  const { siteData } = useContext(SiteContext);
-
   return (
     <footer id="pagefoot">
-      © {new Date().getFullYear()} {siteData.sitetitle} * All Rights Reserved.
+      © {new Date().getFullYear()} {siteData.company_name} * All Rights Reserved.
+      <MiniCart />
     </footer>
   );
 }

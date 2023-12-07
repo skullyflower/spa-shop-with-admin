@@ -2,7 +2,7 @@ import { useState } from "react";
 import ReactQuill from "react-quill";
 import { useForm } from "react-hook-form";
 import FloatingFormWrapper from "../bits/floatingformwrap";
-import { modules, formats } from "../bits/quillbits";
+import { modules } from "../bits/quillbits";
 import UploadInput from "../bits/upload-input";
 import InfoBubble from "../bits/info-bubble";
 
@@ -24,7 +24,7 @@ import "react-quill/dist/quill.bubble.css";
 const newcat = { id: "", name: "", img: "", description: "", subcat: [], newImage: [] };
 
 export default function EditCategory({ catid, categories, toggleCatForm, onSubmit }) {
-  const cat = categories[categories.findIndex((cat) => cat.id === catid)] || newcat;
+  const cat = categories[categories?.findIndex((cat) => cat.id === catid)] || newcat;
   const [wysiwygText, setWysiwygText] = useState(cat.description);
 
   const {
@@ -127,7 +127,6 @@ export default function EditCategory({ catid, categories, toggleCatForm, onSubmi
               className={errors.description ? "is-invalid" : ""}
               theme="snow"
               modules={modules}
-              formats={formats}
               value={wysiwygText}
               onChange={handleTextChange("description")}
             />

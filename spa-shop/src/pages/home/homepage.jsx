@@ -1,23 +1,27 @@
-import { useEffect } from "react";
-import About from "../../shared/about/about";
-import { updateHead } from "../../shared/layout/site-header.jsx";
-import siteData from "../../shared/layout/site-data.json";
+import useUpdateHead from "../../shared/updateHead";
+import { siteData } from "../../state/pageData";
 
 export default function HomePage() {
   const { page_title, page_description, page_content } = siteData;
-  useEffect(() => {
-    updateHead(page_title, page_description);
-  }, [page_title, page_description]);
+  useUpdateHead(page_title, page_description);
 
   return (
-    <div>
-      <h1>{page_title}</h1>
+    <section
+      id="content"
+      className="homepage">
+      <div className="topbox">
+        <div
+          dangerouslySetInnerHTML={{
+            __html: page_content.top,
+          }}
+        />
+      </div>
       <div
+        className="bottombox"
         dangerouslySetInnerHTML={{
-          __html: page_content,
+          __html: page_content.bottom,
         }}
       />
-      <About />
-    </div>
+    </section>
   );
 }

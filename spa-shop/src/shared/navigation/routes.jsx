@@ -2,10 +2,12 @@ import { Routes, Route } from "react-router-dom";
 import Layout from "../layout/layout";
 import HomePage from "../../pages/home/homepage";
 import AboutPage from "../../pages/about/aboutpage";
+import ProductPage from "../../pages/shop/productpage";
 import ShopPage from "../../pages/shop/shoppage";
 import CartPage from "../../pages/cart/cartpage";
 import ContactPage from "../../pages/contact/contactpage";
 import BlogPage from "../../pages/blog/blogpage";
+import BlogEntryPage from "../../pages/blog/entry/blogentrypage";
 
 export default function SiteRoutes() {
   return (
@@ -22,6 +24,14 @@ export default function SiteRoutes() {
           element={<ShopPage />}
         />
         <Route
+          path="/shop/:category_id"
+          element={<ShopPage />}
+        />
+        <Route
+          path="/shop/product/:prod_id"
+          element={<ProductPage />}
+        />
+        <Route
           path="/about"
           element={<AboutPage />}
         />
@@ -33,6 +43,11 @@ export default function SiteRoutes() {
           path="/blog"
           element={<BlogPage />}
         />
+        <Route
+          path="/blog/entry/:blog_id"
+          element={<BlogEntryPage />}
+        />
+
         <Route
           path="/contact"
           element={<ContactPage />}

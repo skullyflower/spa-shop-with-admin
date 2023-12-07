@@ -35,7 +35,7 @@ const getSiteData = (setLoading, setMessages, setPageData) => {
 };
 
 function HomePageForm({ pageData, onSubmit }) {
-  const [wysiwygText, setWysiwygText] = useState(pageData.page_content);
+  const [wysiwygText, setWysiwygText] = useState(pageData?.page_content);
   const {
     register,
     handleSubmit,
@@ -162,7 +162,7 @@ function HomePageForm({ pageData, onSubmit }) {
       </FormControl>
       <FormControl p={4}>
         <HStack alignItems="top">
-          <FormLabel w={48}>Home Page Content:</FormLabel>
+          <FormLabel w={48}>Home Page Top Content:</FormLabel>
           <Box
             flexGrow={3}
             minH={2}
@@ -171,8 +171,8 @@ function HomePageForm({ pageData, onSubmit }) {
             borderRadius={5}
             className="content">
             <ReactQuill
-              id="wysi_one"
-              className={errors.page_content ? "is-invalid" : ""}
+              id="homepage"
+              className={errors.page_content ? "is-invalid" : "topbox"}
               theme="snow"
               modules={modules}
               formats={formats}
@@ -225,13 +225,12 @@ export default function HomePage() {
       .then((data) => data.json())
       .then((json) => {
         setMessages(json.message);
-        getSiteData(setPageData, setMessages, setLoading);
       })
       .catch((err) => {
         setMessages(err.message || "There was a problem.");
       })
       .finally(() => {
-        setLoading(false);
+        getSiteData(setLoading, setMessages, setPageData);
       });
   };
 
