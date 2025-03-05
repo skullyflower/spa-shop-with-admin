@@ -28,13 +28,15 @@ const PageLayout = ({ messages, title, button, children }) => {
               size="lg">
               {title}
             </Heading>
-            <Button
-              variant="shopButt"
-              disabled={button.disabled}
-              value={button.value}
-              onClick={button.action}>
-              {button.text}
-            </Button>
+            {button && (
+              <Button
+                variant="shopButt"
+                disabled={button.disabled}
+                value={button.value}
+                onClick={button.action}>
+                {button.text}
+              </Button>
+            )}
           </HStack>
           {messages && <Alert>{messages}</Alert>}
         </Stack>

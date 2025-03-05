@@ -1,5 +1,6 @@
 import { Card, CardBody, CardHeader, Heading, Text } from "@chakra-ui/react";
 import { useState } from "react";
+import PageLayout from "../bits/PageLayout";
 const Welcome = () => {
   const [sitename, setSitename] = useState("Spa-Shop");
 
@@ -19,16 +20,9 @@ const Welcome = () => {
     });
 
   return (
-    <Card
-      className="content"
-      marginInline={50}>
-      <CardHeader>
-        <Heading size="md">Welcome to the {sitename} Admin</Heading>
-      </CardHeader>
-      <CardBody>
-        <Text>Use this admin to update content without having to rebuild the whole app. </Text>
-      </CardBody>
-    </Card>
+    <PageLayout title={`Welcome to the ${sitename} Admin`}>
+      <Text>Use this admin to update content without having to rebuild the whole app. </Text>
+    </PageLayout>
   );
 };
 export default Welcome;
