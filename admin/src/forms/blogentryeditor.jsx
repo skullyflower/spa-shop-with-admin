@@ -50,7 +50,7 @@ const newblog = {
   newImage: [],
 };
 
-const EditBlogEntry = ({ blogid, blogEntries, toggleForm, onSubmit }) => {
+const EditBlogEntry = ({ blogid, blogEntries, isOpen, toggleForm, onSubmit }) => {
   const thisEntry = blogEntries.find((blog) => blog.id === blogid) || newblog;
   const [wysiwygText, setWysiwygText] = useState(thisEntry.text);
 
@@ -63,16 +63,25 @@ const EditBlogEntry = ({ blogid, blogEntries, toggleForm, onSubmit }) => {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
     setValue,
+    watch,
   } = useForm({ defaultValues: thisEntry, mode: "onChange" });
+
+  const handleImageFocus = (input) => () => {
+    if (!getValues(input)) setValue(input, "https://www.skullyflower.com/...");
+  };
 
   const handleTextChange = () => (newText) => {
     setValue("text", newText);
     setWysiwygText(newText);
   };
 
+  const thumb = watch("image");
   return (
-    <FloatingFormWrapper>
+    <FloatingFormWrapper
+      isOpen={isOpen}
+      onClose={toggleForm}>
       <Stack justifyContent="space-between">
         <HStack
           w="100%"
@@ -93,7 +102,6 @@ const EditBlogEntry = ({ blogid, blogEntries, toggleForm, onSubmit }) => {
               isInvalid={errors.id ? true : false}
               errorBorderColor="red.300"
               type="text"
-              data-lpignore="true"
               {...register("id")}
             />
           </HStack>
@@ -131,7 +139,12 @@ const EditBlogEntry = ({ blogid, blogEntries, toggleForm, onSubmit }) => {
               p={5}>
               <FormControl>
                 <HStack alignItems="top">
-                  <FormLabel w={40}>Upload New Image</FormLabel>
+                  <FormLabel w={40}>
+                    Upload New Image{" "}
+                    <InfoBubble
+                      message={`This Image will need to be uploaded to the server. All blog entries require absolute urls.`}
+                    />
+                  </FormLabel>
                   <UploadInput
                     name="newImage"
                     multiple={false}
@@ -148,11 +161,13 @@ const EditBlogEntry = ({ blogid, blogEntries, toggleForm, onSubmit }) => {
                   <Input
                     isInvalid={errors.image ? true : false}
                     errorBorderColor="red.300"
+                    placeholder="https://www.skullyflower.com/images/..."
+                    onFocus={handleImageFocus("image")}
                     type="text"
                     {...register("image")}
                   />
                   <Image
-                    src={`http://localhost:3000${thisEntry.image}`}
+                    src={`${thumb}`}
                     boxSize="100px"
                     fallbackSrc="http://localhost:3000/images/image-loading.svg"
                   />
@@ -178,6 +193,7 @@ const EditBlogEntry = ({ blogid, blogEntries, toggleForm, onSubmit }) => {
             <Input
               className={errors.imagelink ? "is-invalid" : ""}
               type="url"
+              onFocus={handleImageFocus("imagelink")}
               {...register("imagelink")}
             />
           </HStack>
@@ -206,7 +222,7 @@ const EditBlogEntry = ({ blogid, blogEntries, toggleForm, onSubmit }) => {
           <HStack alignItems="top">
             <FormLabel w={40}>Blog Content:</FormLabel>
             <Box
-              minW="80%"
+              width="100%"
               minH={2}
               border="1px solid gray"
               borderRadius={5}
@@ -229,7 +245,7 @@ const EditBlogEntry = ({ blogid, blogEntries, toggleForm, onSubmit }) => {
         </div>
         <Center>
           <Button
-            colorScheme="orange"
+            variant="shopButt"
             onClick={handleSubmit(onSubmit)}>
             Submit Changes
           </Button>

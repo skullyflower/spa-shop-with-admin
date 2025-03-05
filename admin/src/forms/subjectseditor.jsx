@@ -3,16 +3,13 @@ import ReactQuill from "react-quill";
 import { useForm } from "react-hook-form";
 import FloatingFormWrapper from "../bits/floatingformwrap";
 import { modules } from "../bits/quillbits";
-import UploadInput from "../bits/upload-input";
 import InfoBubble from "../bits/info-bubble";
 
 import {
   Box,
   Button,
-  Checkbox,
   FormControl,
   FormLabel,
-  Image,
   Input,
   HStack,
   Center,
@@ -23,8 +20,8 @@ import "react-quill/dist/quill.bubble.css";
 
 const newcat = { id: "", name: "", img: "", description: "", subcat: [], newImage: [] };
 
-export default function EditCategory({ catid, categories, isOpen, toggleCatForm, onSubmit }) {
-  const cat = categories[categories?.findIndex((cat) => cat.id === catid)] || newcat;
+export default function EditSubject({ catid, subjects, isOpen, toggleCatForm, onSubmit }) {
+  const cat = subjects[subjects?.findIndex((cat) => cat.id === catid)] || newcat;
   const [wysiwygText, setWysiwygText] = useState(cat.description);
 
   const {
@@ -44,7 +41,7 @@ export default function EditCategory({ catid, categories, isOpen, toggleCatForm,
       isOpen={isOpen}
       onClose={toggleCatForm}>
       <HStack justifyContent="space-between">
-        <Heading size="md">Add/Edit Product Categories</Heading>
+        <Heading size="md">Add/Edit Product Subjects</Heading>
         <Button onClick={toggleCatForm}>Never mind</Button>
       </HStack>
       <FormControl p={4}>
@@ -72,7 +69,7 @@ export default function EditCategory({ catid, categories, isOpen, toggleCatForm,
           />
         </HStack>
       </FormControl>
-      <FormControl p={4}>
+      {/* <FormControl p={4}>
         <HStack alignItems="top">
           <FormLabel w={40}>Category Image:</FormLabel>
           <Box
@@ -104,7 +101,7 @@ export default function EditCategory({ catid, categories, isOpen, toggleCatForm,
                   {...register("img")}
                 />
                 <Image
-                  src={`http://localhost:3000/shop/GROUPS/${cat.img}`}
+                  src={`http://localhost:3000${cat.img}`}
                   boxSize="100px"
                   fallbackSrc="http://localhost:3000/images/image-loading.svg"
                 />
@@ -112,7 +109,7 @@ export default function EditCategory({ catid, categories, isOpen, toggleCatForm,
             </FormControl>
           </Box>
         </HStack>
-      </FormControl>
+      </FormControl> */}
       <FormControl p={4}>
         <HStack alignItems="top">
           <FormLabel w={40}>Description:</FormLabel>
@@ -132,42 +129,6 @@ export default function EditCategory({ catid, categories, isOpen, toggleCatForm,
               onChange={handleTextChange("description")}
             />
           </Box>
-        </HStack>
-      </FormControl>
-      <FormControl p={4}>
-        <HStack alignItems="top">
-          <FormLabel w={40}>
-            Sub-Categories:{" "}
-            <InfoBubble
-              message="Do not select anything here unless you want to make this category a container for
-                  other categories. Example: 'Stationary' might contain 'Pens' and 'Papers'."
-            />
-          </FormLabel>
-          <HStack
-            width="80%"
-            borderWidth={1}
-            borderStyle="solid"
-            p={5}
-            borderRadius={5}
-            wrap="wrap">
-            {categories
-              .filter((c) => c.id !== cat.id)
-              .map((c) => {
-                return (
-                  <Box
-                    key={c.id}
-                    p={2}>
-                    <span>
-                      <Checkbox
-                        {...register(`subcat`)}
-                        value={c.id}>
-                        {c.id}
-                      </Checkbox>
-                    </span>
-                  </Box>
-                );
-              })}
-          </HStack>
         </HStack>
       </FormControl>
       <Center>

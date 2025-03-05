@@ -1,6 +1,10 @@
 const express = require("express");
 const fs = require("fs");
-const shopfilepath = "../spa-shop/public/data/products.json";
+const getConfig = require("./pathData");
+
+const { pathToPublic } = getConfig();
+
+const shopfilepath = `${pathToPublic}/data/products.json`;
 const processFile = require("./imageProcessor");
 const storeUploads = require("./filestore.js");
 
@@ -15,14 +19,34 @@ function routes() {
         try {
           const product = JSON.parse(req.body.product);
           const categoryId = product.cat[0];
-          const bigDestPath = `../spa-shop/public/shop/${categoryId}/`;
-          const smallDestPath = `../spa-shop/public/shop/smaller/${categoryId}/`;
+
+          const smallDestPath = `${pathToPublic}/shop/${categoryId}/`;
+          const bigDestPath = `${pathToPublic}/shop/smaller/${categoryId}/`;
 
           if (req.files) {
             for (const file of req.files) {
               try {
-                processFile(file, bigDestPath, smallDestPath);
-                product.img = `${bigDestPath.replace("../spa-shop/public", "")}${file.filename}`;
+                processFile(file, 850, bigDestPath);
+                processFile(file, 450, smallDestPath);
+                fs.copyFileSync(
+                  `${smallDestPath}${file.filename}`,
+                  `${smallDestPath.replace("public", "build")}`,
+                );
+                fs.linkSync(
+                  `${smallDestPath}${file.filename}`,
+                  `${smallDestPath.replace("skullyflower", "skullyflowerTS")}${file.filename}`,
+                );
+                fs.copyFileSync(
+                  `${bigDestPath}${file.filename}`,
+                  `${bigDestPath.replace("public", "build")}`,
+                );
+                fs.linkSync(
+                  `${bigDestPath}${file.filename}`,
+                  `${bigDestPath.replace("skullyflower", "skullyflowerTS")}${file.filename}`,
+                );
+                product.img = `${bigDestPath.replace("../skullyflower/public", "")}${
+                  file.filename
+                }`;
               } catch (err) {
                 console.log("Failed: file upload");
               }
@@ -39,8 +63,8 @@ function routes() {
           }
 
           const newShopData = { products: productArray };
-
           fs.writeFileSync(shopfilepath, JSON.stringify(newShopData));
+          fs.writeFileSync(shopfilepath.replace("public", "build"), JSON.stringify(newShopData));
           return res.json({ message: "Updated Products!" });
         } catch (err) {
           console.log(err);
@@ -69,6 +93,7 @@ function routes() {
         const newShopObj = { ...shop, products: allproducts };
         const newShopData = JSON.stringify(newShopObj);
         fs.writeFileSync(shopfilepath, newShopData);
+        fs.writeFileSync(shopfilepath.replace("public", "build"), JSON.stringify(newShopData));
         return res.json({ message: `Successfully deleted ${prodToDelete}` });
       }
       res.json({ message: `Couldn't find ${req.params.prodId} in the list.` });

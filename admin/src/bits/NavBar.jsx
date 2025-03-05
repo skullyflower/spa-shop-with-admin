@@ -1,31 +1,78 @@
 import React from "react";
+import { Button, HStack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-
+const NavButton = ({ path, activepath, children }) => {
+  return (
+    <Button
+      size={"xs"}
+      as={Link}
+      to={path}
+      className={activepath === path ? "active" : undefined}>
+      {children}
+    </Button>
+  );
+};
 const NavBar = ({ activepath }) => {
   return (
-    <ul className="navbar">
-      <li className={activepath === "home" ? "active" : undefined}>
-        <Link to="/">Home</Link>
-      </li>
-      <li className={activepath === "about" ? "active" : undefined}>
-        <Link to="/about">About</Link>
-      </li>
-      <li className={activepath === "blog" ? "active" : undefined}>
-        <Link to="/blog">Blog</Link>
-      </li>
-      <li className={activepath === "images" ? "active" : undefined}>
-        <Link to="/images">Image Upload</Link>
-      </li>
-      <li className={activepath === "products" ? "active" : undefined}>
-        <Link to="/products">Products</Link>
-      </li>
-      <li className={activepath === "categories" ? "active" : undefined}>
-        <Link to="/categories">Categories</Link>
-      </li>
-      <li className={activepath === "sale" ? "active" : undefined}>
-        <Link to="/sale">Sale</Link>
-      </li>
-    </ul>
+    <HStack
+      className="navbar"
+      justifyContent={"center"}
+      gap={2}
+      wrap={"wrap"}>
+      <NavButton
+        path="/home"
+        activepath={activepath}>
+        Home
+      </NavButton>
+      <NavButton
+        size={"sm"}
+        activepath={activepath}
+        path="/blog">
+        Blog
+      </NavButton>
+      <NavButton
+        size={"sm"}
+        activepath={activepath}
+        path="/gallery">
+        Galleries
+      </NavButton>
+      <NavButton
+        size={"sm"}
+        activepath={activepath}
+        path="/images">
+        Image Upload
+      </NavButton>
+      <NavButton
+        size={"sm"}
+        activepath={activepath}
+        path="/products">
+        Products
+      </NavButton>
+      <NavButton
+        size={"sm"}
+        activepath={activepath}
+        path="/categories">
+        Categories
+      </NavButton>
+      <NavButton
+        size={"sm"}
+        activepath={activepath}
+        path="/subjects">
+        Subjects
+      </NavButton>
+      <NavButton
+        size={"sm"}
+        activepath={activepath}
+        path="/sale">
+        Sale
+      </NavButton>
+      <NavButton
+        size={"sm"}
+        activepath={activepath}
+        path="/config">
+        Config
+      </NavButton>
+    </HStack>
   );
 };
 

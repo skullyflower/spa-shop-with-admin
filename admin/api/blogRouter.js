@@ -3,11 +3,15 @@ const fs = require("fs");
 const processRss = require("../src/bits/processBlogRSS");
 const processFile = require("./imageProcessor");
 const storeUploads = require("./filestore.js");
+const getConfig = require("./pathData");
 
+const { pathToPublic, pathToBuild, siteURl } = getConfig();
 const upload = storeUploads();
 
-const blogfilepath = "../spa-shop/public/data/blog-data.json";
-const blogRSSpath = "../spa-shop/public/blog.rss";
+const blogfilepath = `${pathToPublic}/data/blog-data.json`;
+const blogfilepath_build = `${pathToBuild}/data/blog-data.json`;
+const blogRSSpath = `${pathToPublic}/data/blog.rss`;
+const blogRSSpath_build = `${pathToBuild}/data/blog.rss`;
 
 function routes() {
   const blogRouter = express.Router();
@@ -34,6 +38,7 @@ function routes() {
           const oldpageObject = JSON.parse(oldpageDataString);
           const newpageData = { ...oldpageObject, ...req.body };
           fs.writeFileSync(blogfilepath, JSON.stringify(newpageData));
+          fs.copyFileSync(blogfilepath, blogfilepath_build);
           return res.json({ message: "Updated Blog page!" });
         } catch (err) {
           console.log(err);
@@ -59,15 +64,33 @@ function routes() {
           } else {
             blogEntries.entries.unshift(update);
           }
-          const bigDestPath = `../spa-shop/public/images/`;
+          const bigDestPath = `${pathToPublic}/images/blog/`;
           //check for path. if it doesn't exist create it.
-          const smallDestPath = `../spa-shop/public/images/smaller/`;
+          const smallDestPath = `${pathToPublic}/images/blog/smaller/`;
 
           if (req.files) {
             for (const file of req.files) {
               try {
-                processFile(file, bigDestPath, smallDestPath);
-                update.image = `${bigDestPath.replace("../spa-shop/public", "")}${file.filename}`;
+                processFile(file, 850, bigDestPath);
+                processFile(file, 450, smallDestPath);
+                fs.copyFileSync(
+                  `${smallDestPath}${file.filename}`,
+                  `${smallDestPath.replace("public", "build")}`,
+                );
+                fs.linkSync(
+                  `${smallDestPath}${file.filename}`,
+                  `${smallDestPath.replace("skullyflower", "skullyflowerTS")}${file.filename}`,
+                );
+
+                fs.copyFileSync(
+                  `${bigDestPath}${file.filename}`,
+                  `${bigDestPath.replace("public", "build")}`,
+                );
+                fs.linkSync(
+                  `${bigDestPath}${file.filename}`,
+                  `${bigDestPath.replace("skullyflower", "skullyflowerTS")}${file.filename}`,
+                );
+                update.image = `${bigDestPath.replace(pathToPublic, siteURl)}${file.filename}`;
               } catch (err) {
                 console.log("Failed: file upload");
               }
@@ -75,8 +98,11 @@ function routes() {
           }
 
           fs.writeFileSync(blogfilepath, JSON.stringify(blogEntries));
+          fs.writeFileSync(blogfilepath_build, JSON.stringify(blogEntries));
+
           const RSS = processRss(blogEntries);
           fs.writeFileSync(blogRSSpath, RSS);
+          fs.writeFileSync(blogRSSpath_build, RSS);
           return res.json({ message: "Updated Blog!" });
         } catch (error) {
           console.log(error);

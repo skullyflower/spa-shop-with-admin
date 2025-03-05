@@ -2,10 +2,14 @@ const express = require("express");
 const aboutRouter = require("./api/contentPageRouter")();
 const blogRouter = require("./api/blogRouter")();
 const categoriesRouter = require("./api/categoriesRouter")();
+const configRouter = require("./api/configRouter")();
+const galleryRouter = require("./api/galleryRouter")();
 const homeRouter = require("./api/homeRouter")();
 const imagesRouter = require("./api/imagesRouter")();
 const productsRouter = require("./api/productsRouter")();
 const saleRouter = require("./api/saleRouter")();
+const subjectssRouter = require("./api/subjectsRouter")();
+
 const api = express();
 
 api.use(express.urlencoded({ extended: true }));
@@ -23,6 +27,9 @@ api.use(
   aboutRouter,
   blogRouter,
   categoriesRouter,
+  configRouter,
+  subjectssRouter,
+  galleryRouter,
   homeRouter,
   imagesRouter,
   productsRouter,

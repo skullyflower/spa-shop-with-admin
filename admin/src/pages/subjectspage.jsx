@@ -1,29 +1,38 @@
 import { useCallback, useEffect, useState } from "react";
-import { Box, Button, Center, HStack, Heading, Image, Skeleton, Stack } from "@chakra-ui/react";
+import { Box, Button, Center, HStack, Heading, Skeleton, Stack } from "@chakra-ui/react";
 
-import EditCategory from "./categoryeditor";
+import EditSubject from "../forms/subjectseditor";
+import PageLayout from "../bits/PageLayout";
 
-const getCategories = (setCategories, setMessages, setLoading) => {
+const getSubjects = (setSubjects, setMessages, setLoading) => {
   setLoading(true);
-  setCategories([]);
-  fetch("http://localhost:4242/api/categories")
+  setSubjects([]);
+  fetch("http://localhost:4242/api/subjects")
     .then((data) => data.json())
     .then((json) => {
       if (Array.isArray(json)) {
-        setCategories(json);
+        let keys = [];
+        const unique = json.filter((cat) => {
+          if (!cat.id || keys.includes(cat.id)) return false;
+          else {
+            keys.push(cat.id);
+            return true;
+          }
+        });
+        setSubjects(unique);
       } else {
-        setCategories([]);
+        setSubjects([]);
         setMessages(json.message);
       }
       setLoading(false);
     })
     .catch((err) => {
-      setMessages(err.message || "Couldn't get categories.");
+      setMessages(err.message || "Couldn't get subjects.");
     });
 };
 
-const Categories = () => {
-  const [categories, setCategories] = useState(null);
+const Subjects = () => {
+  const [subjects, setSubjects] = useState(null);
   const [messages, setMessages] = useState(null);
   const [showCatForm, setShowCatForm] = useState(false);
   const [activeCat, setActiveCat] = useState(null);
@@ -40,30 +49,31 @@ const Categories = () => {
       formData.append("newImage", file);
     }
 
-    fetch("http://localhost:4242/api/categories", {
+    fetch("http://localhost:4242/api/subjects", {
       method: "POST",
       body: formData,
     })
       .then((data) => data.json())
       .then((json) => {
         setMessages(json.message);
-        getCategories(setCategories, setMessages, setLoading);
+        getSubjects(setSubjects, setMessages, setLoading);
         toggleCatForm();
       })
       .catch((err) => {
         setMessages(err.message || "there was a problem.");
       });
   };
+
   const doDelete = useCallback((e) => {
     if (window.confirm("Are you sure you want to do this?")) {
       const category = e.target.value;
-      fetch(`http://localhost:4242/api/categories/${category}`, {
+      fetch(`http://localhost:4242/api/subjects/${category}`, {
         method: "DELETE",
       })
         .then((data) => data.json())
         .then((json) => {
           setMessages(json.message);
-          getCategories(setCategories, setMessages, setLoading);
+          getSubjects(setSubjects, setMessages, setLoading);
         });
     }
   }, []);
@@ -76,30 +86,18 @@ const Categories = () => {
     },
     [setActiveCat, setShowCatForm],
   );
+
   useEffect(() => {
-    if (!categories && !messages) {
-      getCategories(setCategories, setMessages, setLoading);
+    if (!subjects && !messages) {
+      getSubjects(setSubjects, setMessages, setLoading);
     }
-  }, [categories, messages]);
+  }, [subjects, messages]);
 
   return (
-    <div className="content">
-      {messages && <p>{messages}</p>}
-      <Heading
-        textAlign="center"
-        size="md">
-        Add, Update, Delete Categories
-      </Heading>
-      {showCatForm && (
-        <div>
-          <EditCategory
-            catid={activeCat}
-            categories={categories}
-            toggleCatForm={toggleCatForm}
-            onSubmit={onSubmit}
-          />
-        </div>
-      )}
+    <PageLayout
+      title="Add, Update, Delete Subjects"
+      messages={messages}
+      button={{ action: toggleCatForm, text: "Add a new one", value: "newcat" }}>
       {loading ? (
         <Stack>
           <Skeleton height="50px" />
@@ -107,7 +105,17 @@ const Categories = () => {
         </Stack>
       ) : (
         <Box p={5}>
-          {categories?.map((cat) => (
+          {showCatForm && (
+            <EditSubject
+              isOpen={showCatForm}
+              catid={activeCat}
+              subjects={subjects}
+              toggleCatForm={toggleCatForm}
+              onSubmit={onSubmit}
+            />
+          )}
+
+          {subjects?.map((cat) => (
             <HStack
               key={cat.id}
               p={5}
@@ -115,15 +123,13 @@ const Categories = () => {
               border="1px solid"
               borderRadius={5}
               w="100%"
-              alignItems="flex-start"
+              alignItems="start"
               justifyContent="space-between">
-              <Image
-                src={`http://localhost:3000${cat.img}`}
-                boxSize="100px"
-                alt={cat.name}
-                fallbackSrc="http://localhost:3000/images/image-loading.svg"
-              />
-              <Heading size="sm">{cat.name}</Heading>
+              <Heading
+                size="sm"
+                lineHeight={2}>
+                {cat.name}
+              </Heading>
               <div
                 style={{
                   textAlign: "left",
@@ -133,23 +139,27 @@ const Categories = () => {
                 }}
                 dangerouslySetInnerHTML={{ __html: cat.description }}
               />
-              <button
-                className="shopButt"
-                value={cat.id}
-                onClick={doDelete}>
-                X
-              </button>
-              <Button
-                size="sm"
-                value={cat.id}
-                onClick={toggleCatForm}>
-                Edit
-              </Button>
+              <HStack gap={4}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  value={cat.id}
+                  onClick={doDelete}>
+                  X
+                </Button>
+                <Button
+                  variant="shopButt"
+                  size="sm"
+                  value={cat.id}
+                  onClick={toggleCatForm}>
+                  Edit
+                </Button>
+              </HStack>
             </HStack>
           ))}
           <Center>
             <Button
-              className="shopButt"
+              variant="shopButt"
               value="newcat"
               onClick={toggleCatForm}>
               {showCatForm ? "Never mind" : "Add a new one"}
@@ -157,7 +167,7 @@ const Categories = () => {
           </Center>
         </Box>
       )}
-    </div>
+    </PageLayout>
   );
 };
-export default Categories;
+export default Subjects;

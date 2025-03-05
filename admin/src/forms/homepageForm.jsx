@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Box,
@@ -9,33 +9,19 @@ import {
   Input,
   HStack,
   Center,
-  Heading,
-  Skeleton,
-  Stack,
+  //Select,
+  Textarea,
 } from "@chakra-ui/react";
 import ReactQuill from "react-quill";
 import { modules, formats } from "../bits/quillbits";
 import InfoBubble from "../bits/info-bubble";
 import UploadInput from "../bits/upload-input";
 
-const getSiteData = (setLoading, setMessages, setPageData) => {
-  setLoading(true);
-  fetch("http://localhost:4242/api/home")
-    .then((data) => data.json())
-    .then((json) => {
-      setPageData(json);
-      setLoading(false);
-    })
-    .catch((err) => {
-      setMessages(err.message || "Couldn't get page data.");
-    })
-    .finally(() => {
-      setLoading(false);
-    });
-};
-
 function HomePageForm({ pageData, onSubmit }) {
   const [wysiwygText, setWysiwygText] = useState(pageData?.page_content);
+  // const [showNewTheme, setShowNewTheme] = useState(false);
+  // const [newTheme, setNewTheme] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -45,14 +31,15 @@ function HomePageForm({ pageData, onSubmit }) {
 
   const handleTextChange = (formfield) => (newText) => {
     setValue(formfield, newText);
+    // if (formfield === "site_theme") {
+    //   setNewTheme(newText);
+    // } else {
     setWysiwygText(newText);
+    // }
   };
 
   return (
     <Box p={5}>
-      <HStack justifyContent="space-between">
-        <Heading size="md">Edit Site and Home Page</Heading>
-      </HStack>
       <FormControl p={4}>
         <HStack alignItems="center">
           <FormLabel w={48}>
@@ -63,55 +50,53 @@ function HomePageForm({ pageData, onSubmit }) {
             isInvalid={errors.page_title ? true : false}
             errorBorderColor="red.300"
             type="text"
-            data-lpignore="true"
             {...register("page_title", { required: true, validate: (value) => value !== "" })}
           />
         </HStack>
       </FormControl>
-      <FormControl p={4}>
-        <HStack alignItems="center">
-          <FormLabel w={48}>
-            Company Name:{" "}
-            <InfoBubble message="This is the simple, short name of your site or shop. " />
-          </FormLabel>
-          <Input
-            isInvalid={errors.company_name ? true : false}
-            errorBorderColor="red.300"
-            type="text"
-            data-lpignore="true"
-            {...register("company_name", { required: true, validate: (value) => value !== "" })}
-          />
-        </HStack>
-      </FormControl>
-      <FormControl p={4}>
-        <HStack alignItems="center">
-          <FormLabel w={48}>
-            Live Url:{" "}
-            <InfoBubble message="You know, that domain name you baught. example: https://www.yoursitename.com " />
-          </FormLabel>
-          <Input
-            isInvalid={errors.live_site_url ? true : false}
-            errorBorderColor="red.300"
-            type="url"
-            data-lpignore="true"
-            {...register("live_site_url", {
-              required: true,
-              validate: (value) => value !== "",
-            })}
-          />
-        </HStack>
-      </FormControl>
+      <HStack>
+        <FormControl p={4}>
+          <HStack alignItems="center">
+            <FormLabel w={48}>
+              Company Name:{" "}
+              <InfoBubble message="This is the simple, short name of your site or shop. " />
+            </FormLabel>
+            <Input
+              isInvalid={errors.company_name ? true : false}
+              errorBorderColor="red.300"
+              type="text"
+              {...register("company_name", { required: true, validate: (value) => value !== "" })}
+            />
+          </HStack>
+        </FormControl>
+        <FormControl p={4}>
+          <HStack alignItems="center">
+            <FormLabel w={48}>
+              Live Url:{" "}
+              <InfoBubble message="You know, that domain name you baught. example: https://www.yoursitename.com " />
+            </FormLabel>
+            <Input
+              isInvalid={errors.live_site_url ? true : false}
+              errorBorderColor="red.300"
+              type="url"
+              {...register("live_site_url", {
+                required: true,
+                validate: (value) => value !== "",
+              })}
+            />
+          </HStack>
+        </FormControl>
+      </HStack>
       <FormControl p={4}>
         <HStack alignItems="center">
           <FormLabel w={48}>
             Homepage SEO Page Description:{" "}
             <InfoBubble message="Short description that will show in Google searches. " />
           </FormLabel>
-          <Input
+          <Textarea
             isInvalid={errors.page_description ? true : false}
             errorBorderColor="red.300"
             type="text"
-            data-lpignore="true"
             {...register("page_description", {
               required: true,
               validate: (value) => value !== "" && value.length <= 500,
@@ -160,6 +145,34 @@ function HomePageForm({ pageData, onSubmit }) {
           </Box>
         </HStack>
       </FormControl>
+      {/* <FormControl p={4}>
+        <HStack alignItems="center">
+          <FormLabel w={48}>Default Theme: </FormLabel>
+          {showNewTheme ? (
+            <Input
+              isInvalid={errors.site_them ? true : false}
+              errorBorderColor="red.300"
+              value={newTheme}
+            />
+          ) : (
+            <Select
+              placeholder="Select Theme"
+              isInvalid={errors.site_them ? true : false}
+              errorBorderColor="red.300"
+              {...register("site_theme")}>
+              <option value="skullyflower">SkullyFlower</option>
+              <option value="halloween">Halloween</option>
+              <option
+                value=""
+                onSelect={() => {
+                  setShowNewTheme(true);
+                }}>
+                Add a New One
+              </option>
+            </Select>
+          )}
+        </HStack>
+      </FormControl> */}
       <FormControl p={4}>
         <HStack alignItems="top">
           <FormLabel w={48}>Home Page Top Content:</FormLabel>
@@ -184,9 +197,13 @@ function HomePageForm({ pageData, onSubmit }) {
       </FormControl>
       <Center>
         <HStack gap={4}>
-          <Button onClick={reset}>Never mind</Button>
           <Button
-            className="shopButt"
+            variant="shopButt"
+            onClick={reset}>
+            Never mind
+          </Button>
+          <Button
+            variant="shopButt"
             onClick={handleSubmit(onSubmit)}>
             Submit Changes
           </Button>
@@ -195,64 +212,4 @@ function HomePageForm({ pageData, onSubmit }) {
     </Box>
   );
 }
-
-export default function HomePage() {
-  const [messages, setMessages] = useState(null);
-  const [pageData, setPageData] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (!pageData && !messages) {
-      getSiteData(setLoading, setMessages, setPageData);
-    }
-  }, [pageData, messages]);
-
-  const onSubmit = (values) => {
-    setMessages(null);
-    setLoading(true);
-    const imagesArr = Array.from(values.newsitelogo);
-    //const contentimages = Array.from(values.)
-    var formData = new FormData();
-    formData.append("values", JSON.stringify(values));
-
-    for (var file of imagesArr) {
-      formData.append("newsitelogo", file);
-    }
-    fetch("http://localhost:4242/api/home", {
-      method: "POST",
-      body: formData,
-    })
-      .then((data) => data.json())
-      .then((json) => {
-        setMessages(json.message);
-      })
-      .catch((err) => {
-        setMessages(err.message || "There was a problem.");
-      })
-      .finally(() => {
-        getSiteData(setLoading, setMessages, setPageData);
-      });
-  };
-
-  return (
-    <div className="content">
-      {messages && <p>{messages}</p>}
-      <Heading
-        textAlign="center"
-        size="md">
-        Manage Site Data and Homepage
-      </Heading>
-      {loading ? (
-        <Stack>
-          <Skeleton height="50px" />
-          <Skeleton height="50px" />
-        </Stack>
-      ) : (
-        <HomePageForm
-          pageData={pageData}
-          onSubmit={onSubmit}
-        />
-      )}
-    </div>
-  );
-}
+export default HomePageForm;

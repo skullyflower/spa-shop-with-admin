@@ -1,6 +1,10 @@
 const express = require("express");
 const fs = require("fs");
-const shopfilepath = "../spa-shop/public/data/sale.json";
+const getConfig = require("./pathData");
+
+const { pathToPublic } = getConfig();
+
+const shopfilepath = `${pathToPublic}/data/sale.json`;
 
 function routes() {
   const saleRouter = express.Router();

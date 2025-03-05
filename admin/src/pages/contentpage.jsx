@@ -59,7 +59,6 @@ function PageForm({ page, pageData, onSubmit }) {
             isInvalid={errors.page_title ? true : false}
             errorBorderColor="red.300"
             type="text"
-            data-lpignore="true"
             {...register("page_title", { required: true, validate: (value) => value !== "" })}
           />
         </HStack>
@@ -74,7 +73,6 @@ function PageForm({ page, pageData, onSubmit }) {
             isInvalid={errors.page_description ? true : false}
             errorBorderColor="red.300"
             type="text"
-            data-lpignore="true"
             {...register("page_description", {
               required: true,
               validate: (value) => value !== "" && value.length <= 500,
@@ -104,7 +102,7 @@ function PageForm({ page, pageData, onSubmit }) {
         <HStack gap={4}>
           <Button onClick={reset}>Never mind</Button>
           <Button
-            className="shopButt"
+            variant="shopButt"
             onClick={handleSubmit(onSubmit)}>
             Submit Changes
           </Button>

@@ -1,9 +1,13 @@
 const express = require("express");
 const fs = require("fs");
 const multer = require("multer");
-const homefilepath = "../spa-shop/public/data/site-data.json";
+const getConfig = require("./pathData");
 
-const rawImagesPath = "../spa-shop/public/";
+const { pathToPublic } = getConfig();
+
+const homefilepath = `${pathToPublic}/data/site-data.json`;
+
+const rawImagesPath = `${pathToPublic}`;
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {

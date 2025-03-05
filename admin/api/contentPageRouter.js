@@ -1,7 +1,9 @@
 const express = require("express");
 const fs = require("fs");
+const getConfig = require("./pathData");
 
-const rootdir = "../spa-shop/public/data";
+const { pathToPublic } = getConfig();
+const rootdir = `${pathToPublic}/data`;
 
 function routes() {
   const pageRouter = express.Router();
@@ -42,3 +44,4 @@ function routes() {
   return pageRouter;
 }
 module.exports = routes;
+//TODO get list of pages, create pages, delete pages as well as get and set page. I think this could be easily achieved with a pages subdirectory in data/

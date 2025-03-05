@@ -38,7 +38,15 @@ const newproduct = {
   newImage: [],
 };
 
-export default function EditProduct({ prodId, products, categories, toggleForm, onSubmit }) {
+export default function EditProduct({
+  isOpen,
+  prodId,
+  products,
+  categories,
+  subjects,
+  toggleForm,
+  onSubmit,
+}) {
   const selectedProduct =
     products.find((prod) => prod.id === prodId.replace("-copy", "")) || newproduct;
   if (selectedProduct?.id !== newprodId) {
@@ -54,11 +62,12 @@ export default function EditProduct({ prodId, products, categories, toggleForm, 
     register,
     handleSubmit,
     formState: { errors },
+    watch,
     setValue,
   } = useForm({ defaultValues: selectedProduct, mode: "onChange" });
 
   const { fields, append, remove } = useFieldArray({ control, name: "altimgs" });
-
+  const thumb = watch("img");
   const handleTextChange = (formfield) => (newText) => {
     setValue(formfield, newText);
     if (formfield === "desc") {
@@ -77,10 +86,16 @@ export default function EditProduct({ prodId, products, categories, toggleForm, 
   }, [prodId, setValue]);
 
   return (
-    <FloatingFormWrapper>
+    <FloatingFormWrapper
+      isOpen={isOpen}
+      onClose={toggleForm}>
       <HStack justifyContent="space-between">
         <Heading size="md">Add/Edit Product</Heading>
-        <Button onClick={toggleForm}>Never mind</Button>
+        <Button
+          variant="shopButt"
+          onClick={toggleForm}>
+          Never mind
+        </Button>
       </HStack>
       <FormControl p={4}>
         <HStack>
@@ -94,7 +109,6 @@ export default function EditProduct({ prodId, products, categories, toggleForm, 
             isInvalid={errors.id ? true : false}
             errorBorderColor="red.300"
             type="text"
-            data-lpignore="true"
             {...register("id", { required: true, validate: (value) => value !== newprodId })}
           />
         </HStack>
@@ -167,7 +181,7 @@ export default function EditProduct({ prodId, products, categories, toggleForm, 
                   {...register("img")}
                 />
                 <Image
-                  src={`http://localhost:3000${selectedProduct.img}`}
+                  src={`http://localhost:3000/shop/${thumb}`}
                   boxSize="100px"
                   fallbackSrc="http://localhost:3000/images/image-loading.svg"
                 />
@@ -187,7 +201,7 @@ export default function EditProduct({ prodId, products, categories, toggleForm, 
                   {...register(`altimgs.${index}`)}
                 />
                 <Button
-                  className="shopButt"
+                  variant="shopButt"
                   onClick={() => remove(index)}>
                   X
                 </Button>
@@ -196,7 +210,7 @@ export default function EditProduct({ prodId, products, categories, toggleForm, 
           ))}
           <div>
             <Button
-              className="shopButt"
+              variant="shopButt"
               onClick={() => append("")}>
               Add
             </Button>
@@ -247,6 +261,18 @@ export default function EditProduct({ prodId, products, categories, toggleForm, 
         </HStack>
       </FormControl>
       <FormControl p={4}>
+        <HStack alignItems="center">
+          <FormLabel w={40}>
+            External Link?: <InfoBubble message={`Used for T-Shirts and other external Products`} />
+          </FormLabel>
+          <Input
+            className={errors.imagelink ? "is-invalid" : ""}
+            type="url"
+            {...register("externalLink")}
+          />
+        </HStack>
+      </FormControl>
+      <FormControl p={4}>
         <HStack alignItems="top">
           <FormLabel w={40}>Categories:</FormLabel>
           <HStack
@@ -254,10 +280,13 @@ export default function EditProduct({ prodId, products, categories, toggleForm, 
             borderWidth={1}
             borderStyle="solid"
             p={5}
-            borderRadius={5}>
+            borderRadius={5}
+            wrap="wrap">
             {categories?.map((c) => {
               return (
-                <span key={c.id}>
+                <Box
+                  key={c.id}
+                  p={2}>
                   <span>
                     <Checkbox
                       {...register(`cat`)}
@@ -265,12 +294,41 @@ export default function EditProduct({ prodId, products, categories, toggleForm, 
                       {c.id}
                     </Checkbox>
                   </span>
-                </span>
+                </Box>
               );
             })}
           </HStack>
         </HStack>
       </FormControl>
+      <FormControl p={4}>
+        <HStack alignItems="top">
+          <FormLabel w={40}>subjects:</FormLabel>
+          <HStack
+            width="80%"
+            borderWidth={1}
+            borderStyle="solid"
+            p={5}
+            borderRadius={5}
+            wrap="wrap">
+            {subjects?.map((c) => {
+              return (
+                <Box
+                  key={c.id}
+                  p={2}>
+                  <span>
+                    <Checkbox
+                      {...register(`design`)}
+                      value={c.id}>
+                      {c.name}
+                    </Checkbox>
+                  </span>
+                </Box>
+              );
+            })}
+          </HStack>
+        </HStack>
+      </FormControl>
+
       <FormControl p={4}>
         <HStack alignItems="center">
           <FormLabel w={40}>Weight (oz):</FormLabel>
@@ -304,8 +362,7 @@ export default function EditProduct({ prodId, products, categories, toggleForm, 
       </FormControl>
       <Center>
         <Button
-          className="shopButt"
-          colorScheme="orange"
+          variant="shopButt"
           onClick={handleSubmit(onSubmit)}>
           Submit Changes
         </Button>

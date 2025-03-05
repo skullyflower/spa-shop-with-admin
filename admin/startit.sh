@@ -3,7 +3,7 @@ trap "kill 0" EXIT
 
 node ./apiserver.js &
 yarn start &
-cd ../spa-shop 
+cd ../skullyflower 
 npm run dev &
 
 wait

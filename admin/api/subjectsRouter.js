@@ -3,22 +3,23 @@ const fs = require("fs");
 const getConfig = require("./pathData");
 
 const { pathToPublic } = getConfig();
-const shopfilepath = `${pathToPublic}/data/categories.json`;
-const processFile = require("./imageProcessor");
+
+const shopfilepath = `${pathToPublic}/data/subjects.json`;
+const processFile = require("./imageProcessor.js");
 const storeUploads = require("./filestore.js");
 
 const upload = storeUploads();
 
 function routes() {
-  const categoriesRouter = express.Router();
-  categoriesRouter
-    .route("/categories")
+  const subjectssRouter = express.Router();
+  subjectssRouter
+    .route("/subjects")
     .post(upload.array("newImage", 1), async (req, res, next) => {
-      if (req.body.category) {
-        const category = JSON.parse(req.body.category);
-        const bigDestPath = `${pathToPublic}/shop/categories/${category.id}/`;
+      if (req.body.subject) {
+        const subject = JSON.parse(req.body.subject);
+        const bigDestPath = `${pathToPublic}/shop/subjects/${subject.id}/`;
         //check for path. if it doesn't exist create it.
-        const smallDestPath = `${pathToPublic}/shop/categories/smaller/${category.id}/`;
+        const smallDestPath = `${pathToPublic}/shop/subjects/smaller/${subject.id}/`;
         //check for path. if it doesn't exitst, create it.
         try {
           if (req.files) {
@@ -35,8 +36,9 @@ function routes() {
                   `${bigDestPath}${file.filename}`,
                   `${bigDestPath.replace("public", "build")}`,
                 );
-
-                category.img = `${bigDestPath.replace(pathToPublic, "")}${file.filename}`;
+                subject.img = `${bigDestPath.replace("../skullyflower/public", "")}${
+                  file.filename
+                }`;
               } catch (err) {
                 console.log("Failed: file upload");
               }
@@ -44,22 +46,23 @@ function routes() {
           }
           const oldShopDataString = fs.readFileSync(shopfilepath);
           const oldShopObject = JSON.parse(oldShopDataString);
-          //categories:[]
-          let newCategories = [...oldShopObject.categories];
-          const newCatIndex = newCategories.findIndex((cat) => cat.id === category.id);
+          //subjects:[]
+          let newsubjects = [...oldShopObject.subjects];
+          const newCatIndex = newsubjects.findIndex((cat) => cat.id === subject.id);
           //updates else adds
           if (newCatIndex !== -1) {
-            newCategories[newCatIndex] = category;
+            newsubjects[newCatIndex] = subject;
           } else {
-            newCategories.unshift(category);
+            newsubjects.unshift(subject);
           }
-          const newShopData = { categories: newCategories };
+          const newShopData = { subjects: newsubjects };
           fs.writeFileSync(shopfilepath, JSON.stringify(newShopData));
           fs.writeFileSync(shopfilepath.replace("public", "build"), JSON.stringify(newShopData));
-          return res.json({ message: "Updated Shop Categories!" });
+
+          return res.json({ message: "Updated Shop Subjects!" });
         } catch (err) {
           console.log(err);
-          return res.json({ message: "Categories update failed." });
+          return res.json({ message: "Subjects update failed." });
         }
       } else {
         return res.json({ message: "You must fill out all fields." });
@@ -68,23 +71,23 @@ function routes() {
     .get((req, res) => {
       const shopData = fs.readFileSync(shopfilepath);
       const shop = JSON.parse(shopData);
-      if (shop.categories) {
-        return res.json(shop.categories);
+      if (shop.subjects) {
+        return res.json(shop.subjects);
       }
     });
-  // TODO: add check for prods with the category
-  categoriesRouter.route("/categories/:catId").delete((req, res) => {
+  // TODO: add check for prods with the subject
+  subjectssRouter.route("/subjects/:catId").delete((req, res) => {
     try {
       const catToDelete = req.params.catId;
       const shopData = fs.readFileSync(shopfilepath);
       const shop = JSON.parse(shopData);
       if (
-        shop.categories &&
-        shop.categories[shop.categories.findIndex((cat) => cat.id === catToDelete)]
+        shop.subjects &&
+        shop.subjects[shop.subjects.findIndex((cat) => cat.id === catToDelete)]
       ) {
-        const allcategories = shop.categories;
-        var newCategoryData = allcategories.filter((cats) => cats.id !== catToDelete);
-        const newShopObj = { ...shop, categories: newCategoryData };
+        const allsubjects = shop.subjects;
+        var newsubjectData = allsubjects.filter((cats) => cats.id !== catToDelete);
+        const newShopObj = { ...shop, subjects: newsubjectData };
         const newShopData = JSON.stringify(newShopObj);
         fs.writeFileSync(shopfilepath, newShopData);
         return res.json({ message: `Successfully deleted ${catToDelete}` });
@@ -95,6 +98,6 @@ function routes() {
       res.json({ message: `Failed to delete ${req.params.catId}` });
     }
   });
-  return categoriesRouter;
+  return subjectssRouter;
 }
 module.exports = routes;
