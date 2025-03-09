@@ -1,4 +1,4 @@
-import { Card, CardBody, CardHeader, Heading, Text } from "@chakra-ui/react";
+import { Text } from "@chakra-ui/react";
 import { useState } from "react";
 import PageLayout from "../bits/PageLayout";
 const Welcome = () => {

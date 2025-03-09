@@ -12,11 +12,7 @@ export default function AboutPage() {
       className="about">
       <div className="content">
         <h1>{page_title}</h1>
-        <div
-          dangerouslySetInnerHTML={{
-            __html: page_content,
-          }}
-        />
+        <SemiSafeContent rawContent={page_content} />
       </div>
     </section>
   );

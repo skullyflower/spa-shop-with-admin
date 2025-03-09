@@ -1,0 +1,6 @@
+.homepageContent{
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 25px;
+  background-color: var(--forground);
+}

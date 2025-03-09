@@ -1,5 +1,8 @@
+import { use } from "react";
 import useUpdateHead from "../../shared/updateHead";
-import { siteData } from "../../state/pageData";
+import SemiSafeContent from "../../shared/utilities/SemiSafeContent";
+import { usePageStore } from "../../state/pageData";
+import s from "./homepage.module.css";
 
 export default function HomePage() {
   const { page_title, page_description, page_content } = siteData;
@@ -9,19 +12,9 @@ export default function HomePage() {
     <section
       id="content"
       className="homepage">
-      <div className="topbox">
-        <div
-          dangerouslySetInnerHTML={{
-            __html: page_content.top,
-          }}
-        />
+      <div className={s.homepageContent}>
+        <SemiSafeContent rawContent={page_content} />
       </div>
-      <div
-        className="bottombox"
-        dangerouslySetInnerHTML={{
-          __html: page_content.bottom,
-        }}
-      />
     </section>
   );
 }
