@@ -4,6 +4,9 @@ const getConfig = require("./pathData");
 
 const { pathToPublic } = getConfig();
 const galleries_json = `${pathToPublic}/data/galleries_list.json`;
+if (!fs.existsSync(galleries_json)) {
+  fs.writeFileSync(galleries_json, JSON.stringify({ galleries: [] }));
+}
 
 function getGalleries() {
   const gallerData = fs.readFileSync(galleries_json);
@@ -23,7 +26,14 @@ function getImages(path) {
 function resetImages(gallery) {
   const { json_path, path, isStory } = gallery;
   const public_file = `${pathToPublic}${json_path}`;
-  const build_file = public_file.replace("public", "build");
+  if (!fs.existsSync(public_file)) {
+    fs.writeFileSync(public_file, JSON.stringify({}));
+  }
+  const build_file = public_file.replace("public", "dist");
+  if (!fs.existsSync(build_file)) {
+    fs.writeFileSync(build_file, JSON.stringify({}));
+  }
+
   const img_files = {};
   const all_files = getImages(path);
   if (Array.isArray(all_files) && all_files.length) {
