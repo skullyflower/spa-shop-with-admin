@@ -81,19 +81,26 @@ function routes() {
     })
     .post((req, res) => {
       if (req.body.gallery) {
-        const galleries = getGalleries();
+        const all = getGalleries();
+        var galleries = all.galleries;
+        if (!Array.isArray(galleries)) {
+          throw new Error("Cannot Get Galleries");
+        }
         const gallery = req.body.gallery;
         const { id, title, json_path, path } = gallery;
-        if (!!title && !!json_path && !!path) {
+        if (!!id && !!title && !!json_path && !!path) {
           const gall_index = galleries.findIndex((g) => g.id === id);
-          if (gall_index !== -1) galleries[gall_index] = gallery; //replace
+          if (gall_index !== -1) {
+            galleries[gall_index] = gallery; //replace
+          } else {
+            galleries.push(gallery); //add
+            fs.writeFileSync(`${pathToPublic}${json_path}`, JSON.stringify({}));
+          }
+          fs.writeFileSync(`${galleries_json}`, JSON.stringify({ galleries: galleries }));
+          return res.json({ message: `Updated gallery; ${gallery.title}!` });
         } else {
-          galleries.push(gallery); //add
+          return res.json({ message: "You must fill out all required fields." });
         }
-        fs.writeFileSync(`${pathToPublic}${json_path}`, JSON.stringify(galleries));
-        return res.json({ message: `Updated gallery; ${gallery.name}!` });
-      } else {
-        return res.json({ message: "You must fill out all required fields." });
       }
     });
 

@@ -8,6 +8,12 @@ const { pathToPublic, pathToBuild } = getConfig();
 
 const upload = storeUploads();
 
+const checkPath = (path) => {
+  if (!fs.existsSync(path)) {
+    fs.mkdirSync(path, { recursive: true });
+  }
+};
+
 // path from skullyflower/admin/
 const bigSourcePath = "./public/files/big/";
 const smallSourcePath = "./public/files/small/";
@@ -242,6 +248,7 @@ function routes() {
       }
       const bigDestPath = destPaths?.pubPathBig ?? bigSourcePath;
       const smallDestPath = destPaths?.pubPathSmall ?? smallSourcePath;
+
       for (const file of req.files) {
         try {
           try {
@@ -252,11 +259,13 @@ function routes() {
           }
           if (destPaths) {
             try {
+              checkPath(bigDestPath);
               fs.copyFileSync(`${bigSourcePath}${file.filename}`, `${bigDestPath}${file.filename}`);
             } catch (err) {
               messages.push(`Could not copy big file:${file.filename} to ${bigDestPath}:${err}`);
             }
             try {
+              checkPath(smallDestPath);
               fs.copyFileSync(
                 `${smallSourcePath}${file.filename}`,
                 `${smallDestPath}${file.filename}`,
@@ -267,6 +276,7 @@ function routes() {
               );
             }
             try {
+              checkPath(smallDestPath.replace("public/", "build/"));
               fs.copyFileSync(
                 `${smallSourcePath}${file.filename}`,
                 `${smallDestPath.replace("public/", "build/")}${file.filename}`,
@@ -275,6 +285,7 @@ function routes() {
               messages.push(`Could not copy small file:${file.filename} to build:${err}`);
             }
             try {
+              checkPath(bigDestPath.replace("public/", "build/"));
               fs.copyFileSync(
                 `${bigSourcePath}${file.filename}`,
                 `${bigDestPath.replace("public/", "build/")}${file.filename}`,
@@ -283,6 +294,7 @@ function routes() {
               messages.push(`Could not copy big file:${file.filename} to build:${err}`);
             }
             try {
+              checkPath(bigDestPath.replace("skullyflower", "skullyflowerTS"));
               fs.linkSync(
                 `${bigDestPath}${file.filename}`,
                 `${bigDestPath.replace("skullyflower", "skullyflowerTS")}${file.filename}`,
@@ -291,6 +303,7 @@ function routes() {
               messages.push(`Could not link big file:${file.filename} to TS:${err}`);
             }
             try {
+              checkPath(smallDestPath.replace("skullyflower", "skullyflowerTS"));
               fs.linkSync(
                 `${smallDestPath}${file.filename}`,
                 `${smallDestPath.replace("skullyflower", "skullyflowerTS")}${file.filename}`,

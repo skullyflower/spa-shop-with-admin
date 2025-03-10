@@ -16,24 +16,9 @@ import FloatingFormWrapper from "../bits/floatingformwrap";
 import { useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import { modules, formats } from "../bits/quillbits";
+import { newGalleryId } from "../pages/galleriespage";
 
-const newGalleryId = "new-gallery";
-const newgallery = {
-  id: newGalleryId,
-  title: "",
-  path: "",
-  json_path: "",
-  content: "",
-  linked_prod: "",
-  isStory: "",
-};
-
-export default function EditGallery({
-  selectedGallery = newgallery,
-  isOpen,
-  toggleForm,
-  onSubmit,
-}) {
+export default function EditGallery({ selectedGallery, isOpen, toggleForm }) {
   const [wysiwygText, setWysiwygText] = useState(selectedGallery.content);
 
   const {
@@ -47,7 +32,24 @@ export default function EditGallery({
     setValue("content", newText);
     setWysiwygText(newText);
   };
-
+  const onSubmit = (data) => {
+    fetch("http://localhost:4242/api/galleries", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ gallery: data }),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.status === 200) {
+          toggleForm();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <FloatingFormWrapper
       isOpen={isOpen}
@@ -104,6 +106,7 @@ export default function EditGallery({
               Path to Images Json File: <InfoBubble message={`Relative to public/data/`} />
             </FormLabel>
             <Input
+              placeholder="data/{galleryKey}.json"
               isInvalid={errors.json_path ? true : false}
               errorBorderColor="red.300"
               type="text"

@@ -16,6 +16,8 @@ import GalleryGrid from "../bits/galleryGrid";
 import EditGallery from "../forms/galleryeditor";
 import PageLayout from "../bits/PageLayout";
 
+export const newGalleryId = "new-gallery";
+
 const getGalleries = (setGalleries, setMessages) => {
   fetch("http://localhost:4242/api/galleries")
     .then((data) => data.json())
@@ -44,10 +46,20 @@ const getGallery = async (gallery_id, setter) => {
     });
 };
 
+const newgallery = {
+  id: newGalleryId,
+  title: "",
+  path: "",
+  json_path: "",
+  content: "",
+  linked_prod: "",
+  isStory: "",
+};
+
 const Gallery = () => {
   const [messages, setMessages] = useState(null);
   const [galleries, setGalleries] = useState(null);
-  const [activeGallery, setActiveGallery] = useState({});
+  const [activeGallery, setActiveGallery] = useState(null);
   const [images, setImages] = useState([]);
   const [showUpload, setShowUpload] = useState(false);
   const [showAddEdit, setShowAddEdit] = useState(false);
@@ -91,7 +103,6 @@ const Gallery = () => {
 
     var formData = new FormData();
     formData.append("dest", activeGallery.path);
-
     for (var file of imagesArr) {
       formData.append("images", file);
     }
@@ -164,7 +175,10 @@ const Gallery = () => {
       messages={messages}
       button={{
         text: showAddEdit ? "Never mind" : "Add new Gallery",
-        action: toggleShowAdd,
+        action: () => {
+          setActiveGallery(newgallery);
+          toggleShowAdd();
+        },
         value: "new-gallery",
       }}>
       <Stack className="content">
@@ -174,7 +188,8 @@ const Gallery = () => {
               <HStack>
                 <FormLabel w={40}>Select a gallery:</FormLabel>
                 <Select
-                  {...register("dest")}
+                  name="dest"
+                  value={activeGallery?.id || ""}
                   placeholder="Select a gallery"
                   onChange={(e) => onSelect(e.target.value)}>
                   {galleries.map((gallery) => (
@@ -196,12 +211,14 @@ const Gallery = () => {
                   <Button onClick={doResetGallery(activeGallery)}>Reset Json File</Button>
                   <Button onClick={toggleShowAdd}>Edit Gallery</Button>
                 </HStack>
-                <GalleryGrid
-                  gallery={activeGallery}
-                  images={images}
-                  deleteImage={deleteImage}
-                  updateImage={updateImage}
-                />
+                {!!images?.length && (
+                  <GalleryGrid
+                    gallery={activeGallery}
+                    images={images}
+                    deleteImage={deleteImage}
+                    updateImage={updateImage}
+                  />
+                )}
               </Stack>
             )}
             <FloatingFormWrapper
@@ -238,7 +255,10 @@ const Gallery = () => {
             {activeGallery && (
               <EditGallery
                 selectedGallery={activeGallery}
-                toggleForm={toggleShowAdd}
+                toggleForm={() => {
+                  setActiveGallery(null);
+                  toggleShowAdd();
+                }}
                 isOpen={showAddEdit}
               />
             )}
