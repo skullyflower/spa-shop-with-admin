@@ -11,7 +11,7 @@ const ProductList: React.FC<ProductListProps> = ({ cat, multi }) => {
   const allProducts = useSiteStore((state) => state.products);
 
   const products = cat
-    ? allProducts.filter((product) => product.cat.includes(cat.id))
+    ? allProducts.filter((product) => product.cats.includes(cat.id))
     : allProducts;
   return (
     <div className="product-list">

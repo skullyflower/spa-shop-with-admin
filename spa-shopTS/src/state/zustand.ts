@@ -50,6 +50,7 @@ const emptyPage = {
   page_description: '',
   page_content: ''
 }
+
 const useSiteStore = create<StoreState>((set, get) => ({
   siteData: emptySite,
   aboutData: emptyPage,
@@ -66,6 +67,7 @@ const useSiteStore = create<StoreState>((set, get) => ({
   prodsort: "-date",
   searchTerm: "",
   galleries: undefined,
+
   createStoreFromData: async () => {
     const get_cart_details = getCartProds();
     const get_siteData = getSiteData();
@@ -76,7 +78,7 @@ const useSiteStore = create<StoreState>((set, get) => ({
     const get_subjects = getAllSubjects();
     const get_galleries = setgalleries();
 
-    const allData = await Promise.all([
+    const allData = await Promise.allSettled([
       get_cart_details,
       get_siteData,
       get_aboutData,
@@ -85,27 +87,40 @@ const useSiteStore = create<StoreState>((set, get) => ({
       get_categories,
       get_subjects,
       get_galleries
-    ]);
-
-    enum keys {
-      cart = 0,
-      site = 1,
-      about = 2,
-      blog = 3,
-      prod = 4,
-      cat = 5,
-      sub = 6,
-      gall = 7
+    ])
+    const hasError = allData.some(result => result.status === 'rejected');
+    if (hasError) {
+      console.error("Error fetching data", ...allData);
+      return;
     }
+    const [
+      cartDetailsResult,
+      siteDataResult,
+      aboutDataResult,
+      blogDataResult,
+      productsResult,
+      categoriesResult,
+      subjectsResult,
+      galleriesResult
+    ] = allData;
 
     set(() => ({
-      siteData: allData[keys.site], cart_count: allData[keys.cart].cart_count || 0, cart_products: allData[keys.cart].cart_products || [], cart_total: allData[keys.cart].cart_total,
-      shipping: allData[keys.cart].shipping,
-      handling: allData[keys.cart].handling,
-      aboutData: allData[keys.about],
-      blogData: allData[keys.blog], products: allData[keys.prod], categories: allData[keys.cat], subjects: allData[keys.sub], galleries: allData[keys.gall]
-    }))
+      siteData: siteDataResult.status === 'fulfilled' ? siteDataResult.value : emptySite,
+      cart_count: cartDetailsResult.status === 'fulfilled' ? cartDetailsResult.value.cart_count : 0,
+      cart_products: cartDetailsResult.status === 'fulfilled' ? cartDetailsResult.value.cart_products : [],
+      cart_total: cartDetailsResult.status === 'fulfilled' ? cartDetailsResult.value.cart_total : 0,
+      shipping: cartDetailsResult.status === 'fulfilled' ? cartDetailsResult.value.shipping : 0,
+      handling: cartDetailsResult.status === 'fulfilled' ? cartDetailsResult.value.handling : 0,
+      aboutData: aboutDataResult.status === 'fulfilled' ? aboutDataResult.value : emptyPage,
+      blogData: blogDataResult.status === 'fulfilled' ? blogDataResult.value : undefined,
+      products: productsResult.status === 'fulfilled' ? productsResult.value : [],
+      categories: categoriesResult.status === 'fulfilled' ? categoriesResult.value : [],
+      subjects: subjectsResult.status === 'fulfilled' ? subjectsResult.value : [],
+      galleries: galleriesResult.status === 'fulfilled' ? galleriesResult.value : {}
+    }));
+
   },
+
   updateSort: (sort: string) => set(() => ({ prodsort: sort })),
   updateSearch: (term: string) => set(() => ({ searchTerm: term })),
   addToCart: async (pid: string, opencart: boolean) => {

@@ -1,4 +1,4 @@
-import useSiteStore from "@/store/zustand";
+import useSiteStore from "@/state/zustand";
 
 interface CartPlusMinusButtonsProps {
   itemId: string;

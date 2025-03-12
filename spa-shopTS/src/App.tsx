@@ -1,9 +1,8 @@
-import SiteRoutes from "@/components/Routes";
-import "@/scss/flexstyle.scss";
-import "@/scss/skullyflower.scss";
-import "@/scss/xtrahalloween.scss";
+import SiteRoutes from "@/components/navigation/Routes";
 import useSiteStore from "@/state/zustand";
 import { useEffect } from "react";
+import "./AppLayout.css";
+import "./AppTheme.css";
 
 function App() {
   const createStoreFromData = useSiteStore((store) => store.createStoreFromData);
@@ -11,11 +10,7 @@ function App() {
     createStoreFromData();
   }, []);
   //const site_theme = useSiteStore((store) => store.siteData.site_theme);
-  return (
-    <div>
-      <SiteRoutes />
-    </div>
-  );
+  return <SiteRoutes />;
 }
 
 export default App;

@@ -67,7 +67,7 @@ export type blog = {
   entries: entry[]
 }
 export async function getBlogData(): Promise<blog> {
-  const response = await fetch(`/data/blog_data.json`);
+  const response = await fetch(`/data/blog-data.json`);
   if (response.ok) {
     const blogData: blog = await response.json();
     return blogData;

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import CartPlusMinusButtons from "./CartPlusMinusButtons";
-import { productType } from "@/store/shopData";
+import { productType } from "@/state/shopData";
 
 const CartItemRow = ({ item, openCart }: { item: productType; openCart: boolean }) => {
   return (
@@ -21,7 +21,7 @@ const CartItemRow = ({ item, openCart }: { item: productType; openCart: boolean 
         <b>QTY:</b> {item.qty}
         <CartPlusMinusButtons
           itemId={item.id}
-          hidePlus={item.cat.indexOf("original_art") !== -1}
+          hidePlus={item.cats.indexOf("original_art") !== -1}
           openCart={openCart}
         />
       </div>

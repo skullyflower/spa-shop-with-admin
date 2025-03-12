@@ -11,17 +11,24 @@ export type GalleryObject = {
 } | undefined
 
 export const setgalleries = async (): Promise<GalleryObject> => {
-  const response = await fetch("/data/galleries_list.json");
-  const galleriesObj: GalleryObject = {};
-  if (response.ok) {
-    const galleries = await response.json();
-    if (Array.isArray(galleries.galleries)) {
-      galleries.galleries.forEach((gal: Gallery) => {
-        galleriesObj[gal.id] = gal;
-      });
+  try {
+    const response = await fetch("/data/galleries_list.json");
+    const galleriesObj: GalleryObject = {};
+    if (response.ok) {
+      const rawGalleries: { galleries: Gallery[] } = await response.json();
+      const galleries = rawGalleries.galleries || [];
+      if (Array.isArray(galleries)) {
+        galleries.forEach((gal: Gallery) => {
+          galleriesObj[gal.id] = gal;
+        });
+      }
     }
+    return galleriesObj;
+
+  } catch (error) {
+    console.error("Error fetching galleries list:", error);
+    return {};
   }
-  return galleriesObj;
 
 };
 

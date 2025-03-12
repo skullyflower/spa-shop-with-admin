@@ -9,7 +9,7 @@ export default function Layout() {
       <main id="pagebody">
         <Outlet />
       </main>
-      <Footer copyright="" />
+      <Footer />
     </div>
   );
 }

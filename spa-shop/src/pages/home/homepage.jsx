@@ -1,8 +1,8 @@
 import { use } from "react";
 import useUpdateHead from "../../shared/updateHead";
 import SemiSafeContent from "../../shared/utilities/SemiSafeContent";
-import { usePageStore } from "../../state/pageData";
 import s from "./homepage.module.css";
+import { siteData } from "../../state/pageData";
 
 export default function HomePage() {
   const { page_title, page_description, page_content } = siteData;

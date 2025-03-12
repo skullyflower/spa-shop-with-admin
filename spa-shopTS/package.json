@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 3002 --open",
     "generate-build-version": "echo {\\\"version\\\":\\\"$( git rev-parse HEAD)\\\"} > public/data/version.json;cp public/data/version.json src/assets",
     "prebuild": "npm run generate-build-version",
     "build": "tsc && vite build",

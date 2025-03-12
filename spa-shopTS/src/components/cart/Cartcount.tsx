@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import useSiteStore from "@/store/zustand";
+import useSiteStore from "@/state/zustand";
 
 const CartCount = () => {
   const cartcount = useSiteStore((state) => state.cart_count);

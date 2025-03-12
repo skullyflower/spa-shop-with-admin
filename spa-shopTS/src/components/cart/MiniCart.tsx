@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
-import useSiteStore from "../../store/zustand";
+import useSiteStore from "@/state/zustand";
 import CartItemLine from "./CartItemRow";
 
 const MiniCart = () => {
-  const { cart_count, cart_total, cart_products, cartopen, closeCart, siteData } = useSiteStore(
+  const { cart_count, cart_total, cart_products, cartopen, closeCart } = useSiteStore(
     (store) => store,
   );
-  const theme = siteData.site_theme;
-  const variation = theme === "halloween" ? theme : "";
+  //const theme = siteData.site_theme;
+  // const variation = theme === "halloween" ? theme : "";
 
   const reverse_products = cart_products?.reverse();
 
@@ -20,14 +20,14 @@ const MiniCart = () => {
         <div id="mycartinner">
           <div id="myCartTop">
             <h1>
-              <img
+              {/* <img
                 alt="the Goodie Bag"
                 src={
                   cart_count > 0
                     ? `/images/${variation}GoodieBagFull.png`
                     : `/images/${variation}GoodieBagEmpty.png`
                 }
-              />
+              /> */}
               <span>
                 {cart_count} Goodie{cart_count !== 1 && "s"} in Your Bag
               </span>

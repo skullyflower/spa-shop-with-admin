@@ -1,28 +1,19 @@
-import React from "react";
-import { Header } from "../components/layout/Header";
-import { Footer } from "../components/layout/Footer";
-import { ProductList } from "../components/ProductList";
-import { useCartStore } from "../state/cartData";
-import { products } from "../state/shopDataold";
+import useUpdateHead from "@/utilities/UpdateHead";
+import useSiteStore from "@/state/zustand";
+import SemiSafeContent from "@/components/SemiSafeContent";
 
 const Home: React.FC = () => {
-  const { cart_products } = useCartStore();
+  const { page_title, page_description, page_content } = useSiteStore((state) => state.siteData);
+  useUpdateHead(page_title, page_description);
 
   return (
-    <div>
-      <Header title="Welcome to the Spa Shop" />
-      <main>
-        <h1>Featured Products</h1>
-        <ProductList products={products} />
-        {cart_products.length > 0 && (
-          <div>
-            <h2>Your Cart</h2>
-            <ProductList products={cart_products} />
-          </div>
-        )}
-      </main>
-      <Footer copyright="© 2023 Spa Shop" />
-    </div>
+    <section
+      id="content"
+      className="homepage">
+      <div>
+        <SemiSafeContent rawContent={page_content} />
+      </div>
+    </section>
   );
 };
 
