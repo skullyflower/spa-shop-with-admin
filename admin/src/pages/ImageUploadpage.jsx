@@ -30,6 +30,15 @@ const getImages = (setFilesToMove, setMessages) => {
     });
 };
 
+const getDirectories = (setSecondLevel, setMessages) => {
+  fetch(`http://localhost:4242/api/folders`)
+    .then((data) => data.json())
+    .then((json) => setSecondLevel(json))
+    .catch((err) => {
+      setMessages(err.message || "Couldn't get subdiractories.");
+    });
+};
+
 const getSubdirectories = (toplevel, setSecondLevel, setMessages) => {
   fetch(`http://localhost:4242/api/folders/${toplevel}`)
     .then((data) => data.json())
@@ -38,6 +47,7 @@ const getSubdirectories = (toplevel, setSecondLevel, setMessages) => {
       setMessages(err.message || "Couldn't get subdiractories.");
     });
 };
+
 const defaultValues = { toplevel: "", filesToMove: [], secondLevels: "" };
 
 const Images = () => {
@@ -62,7 +72,8 @@ const Images = () => {
   const [showForm, setShowForm] = useState(false);
   const [filesToMove, setFilesToMove] = useState(null);
   const [messages, setMessages] = useState(null);
-  const toplevels = ["artwork", "sfcomics", "images", "shop", "sketches"];
+  // read from api based on gallery/shop/etc files. standardize image loacations.
+  const [toplevels, setTopLevels] = useState([]);
   const [secondLevel, setSecondLevel] = useState([]);
 
   const checkForImages = useCallback(
@@ -75,10 +86,13 @@ const Images = () => {
   );
 
   useEffect(() => {
+    if (!toplevels.length) {
+      getDirectories(setTopLevels, setMessages);
+    }
     if (!filesToMove && !messages) {
       getImages(setFilesToMove, setMessages);
     }
-  }, [filesToMove, setFilesToMove, messages, setMessages]);
+  }, [filesToMove, setFilesToMove, messages, setMessages, toplevels]);
 
   const onSelectDir = useCallback(
     (e) => {

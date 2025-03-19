@@ -119,9 +119,9 @@ const Categories = () => {
               justifyContent="space-between">
               <Stack>
                 <Image
-                  src={`http://localhost:3000/shop/GROUPS/${cat.img}`}
+                  src={`http://localhost:3000/${cat.img}`}
                   boxSize="75px"
-                  alt={cat.name}
+                  alt={`${cat.name} - http://localhost:3000/${cat.img}`}
                   fallbackSrc="http://localhost:3001/images/image-loading.svg"
                 />
                 <Heading

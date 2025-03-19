@@ -4,36 +4,27 @@ const processFile = require("./imageProcessor");
 const storeUploads = require("./filestore.js");
 const getConfig = require("./pathData");
 
-const { pathToPublic, pathToBuild } = getConfig();
+const { pathToPublic, checkPath } = getConfig();
 
 const upload = storeUploads();
 
-const checkPath = (path) => {
-  if (!fs.existsSync(path)) {
-    fs.mkdirSync(path, { recursive: true });
-  }
-};
-
-// path from skullyflower/admin/
 const bigSourcePath = "./public/files/big/";
 const smallSourcePath = "./public/files/small/";
-const publicPath = `${pathToPublic}/`;
-const buildPath = `${pathToBuild}/`;
+const publicPath = `${pathToPublic}`;
+const galleriesFile = `${pathToPublic}/data/galleries_list.json`;
+const categoriesFile = `${pathToPublic}/data/categories.json`;
 
-const getDestinationPaths = (topdir, subdir = "bigger") => {
-  if (subdir !== "bigger" && topdir !== "images") {
+const getDestinationPaths = (topdir, subdir = "smaller") => {
+  if (subdir !== "smaller") {
+    // for shop images that go inside the category folder
     return {
-      pubPathBig: `${publicPath}${topdir}/${subdir}/bigger/`,
-      pubPathSmall: `${publicPath}${topdir}/${subdir}/`,
-      buildPathBig: `${buildPath}${topdir}/${subdir}/bigger/`,
-      buildPathSmall: `${buildPath}${topdir}/${subdir}/`,
+      pubPathBig: `${publicPath}/${topdir}/${subdir}/`,
+      pubPathSmall: `${publicPath}/${topdir}/${subdir}/smaller/`,
     };
   }
   return {
-    pubPathBig: `${publicPath}${topdir}/${subdir}/`,
-    pubPathSmall: `${publicPath}${topdir}/`,
-    buildPathBig: `${buildPath}${topdir}/${subdir}/`,
-    buildPathSmall: `${buildPath}${topdir}/`,
+    pubPathBig: `${publicPath}/${topdir}/`,
+    pubPathSmall: `${publicPath}/${topdir}/${subdir}/`,
   };
 };
 
@@ -85,8 +76,8 @@ function routes() {
         const destPaths = getDestinationPaths(req.body.toplevel, req.body.secondLevels);
         const bigDestPath = destPaths.pubPathBig;
         const smallDestPath = destPaths.pubPathSmall;
-        const bigDestPath_build = destPaths.buildPathBig;
-        const smallDestPath_build = destPaths.buildPathSmall;
+        checkPath(bigDestPath);
+        checkPath(smallDestPath);
         var message = "";
         var smallfiles = [];
         try {
@@ -95,37 +86,15 @@ function routes() {
         filearray.forEach((file) => {
           try {
             /** copy to public */
-            fs.copyFileSync(`${bigSourcePath}${file}`, `${bigDestPath}${file}`);
-            fs.linkSync(
-              `${bigDestPath}${file}`,
-              `${bigDestPath.replace("skullyflower", "skullyflowerTS")}${file}`,
-            );
+            fs.renameSync(`${bigSourcePath}${file}`, `${bigDestPath}${file}`);
           } catch (err) {
-            message += `Failed to copy big ${bigSourcePath}${file} to  ${bigDestPath}${file}\n`;
-          }
-          try {
-            /** move to build */
-            fs.renameSync(`${bigSourcePath}${file}`, `${bigDestPath_build}${file}`);
-          } catch (err) {
-            message += `Failed to move big ${bigSourcePath}${file} to ${bigDestPath_build}${file} file\n`;
+            message += `Failed to move big ${bigSourcePath}${file} to  ${bigDestPath}${file}\n`;
           }
           if (smallfiles.includes(file)) {
             try {
               /** copy to public */
-              fs.copyFileSync(`${smallSourcePath}${file}`, `${smallDestPath}${file}`);
-              fs.linkSync(
-                `${smallDestPath}${file}`,
-                `${smallDestPath.replace("skullyflower", "skullyflowerTS")}${file}`,
-              );
+              fs.renameSync(`${smallSourcePath}${file}`, `${smallDestPath}${file}`);
             } catch (err) {
-              console.log(err, `Failed to copy small ${file} file\n`);
-              message += `Failed to copy small ${file} file\n`;
-            }
-            try {
-              /** move to build */
-              fs.renameSync(`${smallSourcePath}${file}`, `${smallDestPath_build}${file}`);
-            } catch (err) {
-              console.log(err, `Failed to move small ${file} file`);
               message += `Failed to move small ${file} file\n`;
             }
           }
@@ -158,32 +127,6 @@ function routes() {
               req.body.newname
             }`,
           );
-          fs.renameSync(
-            `${buildPath}${relativePath}`,
-            `${buildPath}${relativePath.substring(0, relativePath.lastIndexOf("/"))}/${
-              req.body.newname
-            }`,
-          );
-          fs.renameSync(
-            `${buildPath}${biggerRelativePath}`,
-            `${buildPath}${biggerRelativePath.substring(0, biggerRelativePath.lastIndexOf("/"))}/${
-              req.body.newname
-            }`,
-          );
-          fs.renameSync(
-            `${publicPath.replace("skullyflower", "skullyflowerTS")}${relativePath}`,
-            `${publicPath.replace("skullyflower", "skullyflowerTS")}${relativePath.substring(
-              0,
-              relativePath.lastIndexOf("/"),
-            )}/${req.body.newname}`,
-          );
-          fs.renameSync(
-            `${publicPath.replace("skullyflower", "skullyflowerTS")}${biggerRelativePath}`,
-            `${publicPath.replace("skullyflower", "skullyflowerTS")}${biggerRelativePath.substring(
-              0,
-              biggerRelativePath.lastIndexOf("/"),
-            )}/${req.body.newname}`,
-          );
           return res.json({ message: `Successfully renamed ${req.body.imageurl}` });
         } catch (error) {
           return res.json({ message: `Failed to rename ${req.body.imageurl}` });
@@ -205,12 +148,6 @@ function routes() {
           } else {
             fs.rmSync(`${publicPath}/${relativePath}`);
             fs.rmSync(`${publicPath}${biggerRelativePath}`);
-            fs.rmSync(`${buildPath}/${relativePath}`);
-            fs.rmSync(`${buildPath}${biggerRelativePath}`);
-            fs.rmSync(`${publicPath.replace("skullyflower", "skullyflowerTS")}/${relativePath}`);
-            fs.rmSync(
-              `${publicPath.replace("skullyflower", "skullyflowerTS")}${biggerRelativePath}`,
-            );
           }
           return res.json({ message: `Successfully removed ${req.body.imageurl}` });
         } catch (error) {
@@ -219,13 +156,43 @@ function routes() {
       }
     });
 
+  imagesRouter.route("/folders").get((req, res) => {
+    const toplevels = ["images"];
+    const galleryData = fs.readFileSync(galleriesFile);
+    const galleries = JSON.parse(galleryData);
+    const galleryKeys = Object.keys(galleries);
+    if (galleryKeys.length) {
+      checkPath(`${pathToPublic}/galleries`);
+      toplevels.push("galleries");
+
+      galleryKeys.forEach((gallery) => {
+        if (galleries[gallery].path) {
+          checkPath(`${pathToPublic}/${galleries[gallery].path}`);
+        }
+      });
+    }
+    const shopData = fs.readFileSync(categoriesFile);
+    const shop = JSON.parse(shopData);
+    if (shop.categories) {
+      checkPath(`${pathToPublic}/shop`);
+      toplevels.push("shop");
+      shop.categories
+        .filter((cat) => !!cat.id)
+        .forEach((cat) => {
+          checkPath(`${pathToPublic}/shop/${cat.id}`); //check for path. if it doesn't exist create it.
+        });
+    }
+    return res.json(toplevels);
+  });
+
   imagesRouter.route("/folders/:toplevel").get((req, res) => {
     const topLeveDestination = req.params.toplevel;
     const dirpattern = /^[^.]*$/;
-    fs.readdir(`${pathToBuild}/${topLeveDestination}`, (err, files) => {
+    fs.readdir(`${pathToPublic}/${topLeveDestination}`, (err, files) => {
       if (err) {
         console.log(err);
-        return res.json({ message: "Can't get the subirectories." });
+        checkPath(`${pathToPublic}/${topLeveDestination}/smaller`);
+        return res.json(["smaller"]);
       }
       if (files) {
         const filtered = files.filter((file) => dirpattern.test(file));
@@ -243,7 +210,7 @@ function routes() {
       if (req.body.dest) {
         const pathBits = req.body.dest.includes("/") ? req.body.dest.split("/") : false;
         const topdir = pathBits ? pathBits[0] : req.body.dest;
-        const subdir = pathBits ? pathBits[1] : "bigger";
+        const subdir = pathBits ? pathBits[1] : "smaller";
         destPaths = getDestinationPaths(topdir, subdir);
       }
       const bigDestPath = destPaths?.pubPathBig ?? bigSourcePath;
@@ -260,56 +227,20 @@ function routes() {
           if (destPaths) {
             try {
               checkPath(bigDestPath);
-              fs.copyFileSync(`${bigSourcePath}${file.filename}`, `${bigDestPath}${file.filename}`);
+              fs.readFileSync(`${bigSourcePath}${file.filename}`, `${bigDestPath}${file.filename}`);
             } catch (err) {
-              messages.push(`Could not copy big file:${file.filename} to ${bigDestPath}:${err}`);
+              messages.push(`Could not move big file:${file.filename} to ${bigDestPath}:${err}`);
             }
             try {
               checkPath(smallDestPath);
-              fs.copyFileSync(
+              fs.renameSync(
                 `${smallSourcePath}${file.filename}`,
                 `${smallDestPath}${file.filename}`,
               );
             } catch (err) {
               messages.push(
-                `Could not copy small file:${file.filename} to ${smallDestPath}:${err}`,
+                `Could not move small file:${file.filename} to ${smallDestPath}:${err}`,
               );
-            }
-            try {
-              checkPath(smallDestPath.replace("public/", "build/"));
-              fs.copyFileSync(
-                `${smallSourcePath}${file.filename}`,
-                `${smallDestPath.replace("public/", "build/")}${file.filename}`,
-              );
-            } catch (err) {
-              messages.push(`Could not copy small file:${file.filename} to build:${err}`);
-            }
-            try {
-              checkPath(bigDestPath.replace("public/", "build/"));
-              fs.copyFileSync(
-                `${bigSourcePath}${file.filename}`,
-                `${bigDestPath.replace("public/", "build/")}${file.filename}`,
-              );
-            } catch (err) {
-              messages.push(`Could not copy big file:${file.filename} to build:${err}`);
-            }
-            try {
-              checkPath(bigDestPath.replace("skullyflower", "skullyflowerTS"));
-              fs.linkSync(
-                `${bigDestPath}${file.filename}`,
-                `${bigDestPath.replace("skullyflower", "skullyflowerTS")}${file.filename}`,
-              );
-            } catch (err) {
-              messages.push(`Could not link big file:${file.filename} to TS:${err}`);
-            }
-            try {
-              checkPath(smallDestPath.replace("skullyflower", "skullyflowerTS"));
-              fs.linkSync(
-                `${smallDestPath}${file.filename}`,
-                `${smallDestPath.replace("skullyflower", "skullyflowerTS")}${file.filename}`,
-              );
-            } catch (err) {
-              messages.push(`Could not link small file:${file.filename} to TS:${err}`);
             }
           }
           try {

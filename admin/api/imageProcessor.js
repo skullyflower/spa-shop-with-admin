@@ -1,7 +1,8 @@
 const Jimp = require("jimp");
 const fs = require("fs");
-
+const checkPath = require("./pathData");
 async function processFile(file, size, DestinationPath, newName = "") {
+  checkPath(DestinationPath);
   if (file.filename.match(/.*[.][jpg][ienp][pgfe][g]{0,1}/)) {
     return Jimp.read(`${file.path}`)
       .then((image) => {

@@ -104,7 +104,8 @@ export default function EditCategory({ catid, categories, isOpen, toggleCatForm,
                   {...register("img")}
                 />
                 <Image
-                  src={`http://localhost:3000/shop/GROUPS/${cat.img}`}
+                  src={`http://localhost:3000/${cat.img}`}
+                  alt={`http://localhost:3000/${cat.img}`}
                   boxSize="100px"
                   fallbackSrc="http://localhost:3000/images/image-loading.svg"
                 />

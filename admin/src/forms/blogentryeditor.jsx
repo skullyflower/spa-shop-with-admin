@@ -19,22 +19,6 @@ import {
 } from "@chakra-ui/react";
 import FloatingFormWrapper from "../bits/floatingformwrap";
 
-/* const getSiteData = (setLoading, setMessages, setPageData) => {
-  setLoading(true);
-  fetch("http://localhost:4242/api/home")
-    .then((data) => data.json())
-    .then((json) => {
-      setPageData(json);
-      setLoading(false);
-    })
-    .catch((err) => {
-      setMessages(err.message || "Couldn't get page data.");
-    })
-    .finally(() => {
-      setLoading(false);
-    });
-}; */
-
 const today = new Date();
 
 const newblog = {
@@ -53,12 +37,23 @@ const newblog = {
 const EditBlogEntry = ({ blogid, blogEntries, isOpen, toggleForm, onSubmit }) => {
   const thisEntry = blogEntries.find((blog) => blog.id === blogid) || newblog;
   const [wysiwygText, setWysiwygText] = useState(thisEntry.text);
+  const [pageData, setPageData] = useState(null);
+
+  fetch("http://localhost:4242/api/home")
+    .then((data) => data.json())
+    .then((json) => {
+      setPageData(json);
+    })
+    .catch((err) => {
+      console.log(err.message || "Couldn't get page data.");
+    });
 
   if (blogid !== "newentry" && thisEntry) {
     const ms = Date.parse(thisEntry.date);
     const entrydate = new Date(ms);
     thisEntry.date = convertDate(entrydate, "input");
   }
+
   const {
     register,
     handleSubmit,
@@ -69,7 +64,7 @@ const EditBlogEntry = ({ blogid, blogEntries, isOpen, toggleForm, onSubmit }) =>
   } = useForm({ defaultValues: thisEntry, mode: "onChange" });
 
   const handleImageFocus = (input) => () => {
-    if (!getValues(input)) setValue(input, "https://www.skullyflower.com/...");
+    if (!getValues(input)) setValue(input, `${pageData?.live_site_url}/...`);
   };
 
   const handleTextChange = () => (newText) => {
@@ -78,6 +73,7 @@ const EditBlogEntry = ({ blogid, blogEntries, isOpen, toggleForm, onSubmit }) =>
   };
 
   const thumb = watch("image");
+
   return (
     <FloatingFormWrapper
       isOpen={isOpen}
@@ -161,7 +157,7 @@ const EditBlogEntry = ({ blogid, blogEntries, isOpen, toggleForm, onSubmit }) =>
                   <Input
                     isInvalid={errors.image ? true : false}
                     errorBorderColor="red.300"
-                    placeholder="https://www.skullyflower.com/images/..."
+                    placeholder={`${pageData?.live_site_url}/images/...`}
                     onFocus={handleImageFocus("image")}
                     type="text"
                     {...register("image")}

@@ -181,7 +181,8 @@ export default function EditProduct({
                   {...register("img")}
                 />
                 <Image
-                  src={`http://localhost:3000/shop/${thumb}`}
+                  src={`http://localhost:3000/${thumb}`}
+                  alt={`http://localhost:3000/${thumb}`}
                   boxSize="100px"
                   fallbackSrc="http://localhost:3000/images/image-loading.svg"
                 />

@@ -27,18 +27,7 @@ function routes() {
               try {
                 processFile(file, 850, bigDestPath);
                 processFile(file, 450, smallDestPath);
-                // skullyflower only for copying to the local build
-                fs.copyFileSync(
-                  `${smallDestPath}${file.filename}`,
-                  `${smallDestPath.replace("public", "build")}`,
-                );
-                fs.copyFileSync(
-                  `${bigDestPath}${file.filename}`,
-                  `${bigDestPath.replace("public", "build")}`,
-                );
-                subject.img = `${bigDestPath.replace("../skullyflower/public", "")}${
-                  file.filename
-                }`;
+                subject.img = `${bigDestPath.replace(pathToPublic, "")}${file.filename}`;
               } catch (err) {
                 console.log("Failed: file upload");
               }
@@ -57,7 +46,6 @@ function routes() {
           }
           const newShopData = { subjects: newsubjects };
           fs.writeFileSync(shopfilepath, JSON.stringify(newShopData));
-          fs.writeFileSync(shopfilepath.replace("public", "build"), JSON.stringify(newShopData));
 
           return res.json({ message: "Updated Shop Subjects!" });
         } catch (err) {

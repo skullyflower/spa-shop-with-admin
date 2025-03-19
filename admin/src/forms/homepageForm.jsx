@@ -145,34 +145,6 @@ function HomePageForm({ pageData, onSubmit }) {
           </Box>
         </HStack>
       </FormControl>
-      {/* <FormControl p={4}>
-        <HStack alignItems="center">
-          <FormLabel w={48}>Default Theme: </FormLabel>
-          {showNewTheme ? (
-            <Input
-              isInvalid={errors.site_them ? true : false}
-              errorBorderColor="red.300"
-              value={newTheme}
-            />
-          ) : (
-            <Select
-              placeholder="Select Theme"
-              isInvalid={errors.site_them ? true : false}
-              errorBorderColor="red.300"
-              {...register("site_theme")}>
-              <option value="skullyflower">SkullyFlower</option>
-              <option value="halloween">Halloween</option>
-              <option
-                value=""
-                onSelect={() => {
-                  setShowNewTheme(true);
-                }}>
-                Add a New One
-              </option>
-            </Select>
-          )}
-        </HStack>
-      </FormControl> */}
       <FormControl p={4}>
         <HStack alignItems="top">
           <FormLabel w={48}>Home Page Top Content:</FormLabel>

@@ -29,11 +29,6 @@ function resetImages(gallery) {
   if (!fs.existsSync(public_file)) {
     fs.writeFileSync(public_file, JSON.stringify({}));
   }
-  const build_file = public_file.replace("public", "dist");
-  if (!fs.existsSync(build_file)) {
-    fs.writeFileSync(build_file, JSON.stringify({}));
-  }
-
   const img_files = {};
   const all_files = getImages(path);
   if (Array.isArray(all_files) && all_files.length) {
@@ -69,7 +64,6 @@ function resetImages(gallery) {
     });
 
     fs.writeFileSync(public_file, JSON.stringify(img_files));
-    fs.writeFileSync(build_file, JSON.stringify(img_files));
     return JSON.stringify(img_files);
   }
   console.log(`Failed reset for ${public_file}`);

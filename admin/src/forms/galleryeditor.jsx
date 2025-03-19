@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InfoBubble from "../bits/info-bubble";
 import {
   Box,
@@ -25,6 +25,7 @@ export default function EditGallery({ selectedGallery, isOpen, toggleForm }) {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
     setValue,
   } = useForm({ defaultValues: selectedGallery, mode: "onChange" });
 
@@ -32,6 +33,14 @@ export default function EditGallery({ selectedGallery, isOpen, toggleForm }) {
     setValue("content", newText);
     setWysiwygText(newText);
   };
+
+  const path = watch("path");
+  useEffect(() => {
+    if (path) {
+      setValue("json_path", `/data/${path}.json`);
+    }
+  }, [path, setValue]);
+
   const onSubmit = (data) => {
     fetch("http://localhost:4242/api/galleries", {
       method: "POST",
@@ -41,15 +50,14 @@ export default function EditGallery({ selectedGallery, isOpen, toggleForm }) {
       body: JSON.stringify({ gallery: data }),
     })
       .then((res) => res.json())
-      .then((json) => {
-        if (json.status === 200) {
-          toggleForm();
-        }
+      .then(() => {
+        toggleForm();
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
   return (
     <FloatingFormWrapper
       isOpen={isOpen}
@@ -106,7 +114,7 @@ export default function EditGallery({ selectedGallery, isOpen, toggleForm }) {
               Path to Images Json File: <InfoBubble message={`Relative to public/data/`} />
             </FormLabel>
             <Input
-              placeholder="data/{galleryKey}.json"
+              placeholder="/data/{galleryKey}.json"
               isInvalid={errors.json_path ? true : false}
               errorBorderColor="red.300"
               type="text"

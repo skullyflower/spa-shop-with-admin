@@ -2,7 +2,7 @@ const express = require("express");
 const fs = require("fs");
 const getConfig = require("./pathData");
 
-const { pathToPublic } = getConfig();
+const { pathToPublic, checkPath } = getConfig();
 const shopfilepath = `${pathToPublic}/data/categories.json`;
 const processFile = require("./imageProcessor");
 const storeUploads = require("./filestore.js");
@@ -20,22 +20,15 @@ function routes() {
         //check for path. if it doesn't exist create it.
         const smallDestPath = `${pathToPublic}/shop/categories/smaller/${category.id}/`;
         //check for path. if it doesn't exitst, create it.
+        checkPath(bigDestPath);
+        checkPath(smallDestPath);
+
         try {
           if (req.files) {
             for (const file of req.files) {
               try {
                 processFile(file, 850, bigDestPath);
                 processFile(file, 450, smallDestPath);
-                // skullyflower only for copying to the local build
-                fs.copyFileSync(
-                  `${smallDestPath}${file.filename}`,
-                  `${smallDestPath.replace("public", "build")}`,
-                );
-                fs.copyFileSync(
-                  `${bigDestPath}${file.filename}`,
-                  `${bigDestPath.replace("public", "build")}`,
-                );
-
                 category.img = `${bigDestPath.replace(pathToPublic, "")}${file.filename}`;
               } catch (err) {
                 console.log("Failed: file upload");
@@ -55,7 +48,6 @@ function routes() {
           }
           const newShopData = { categories: newCategories };
           fs.writeFileSync(shopfilepath, JSON.stringify(newShopData));
-          fs.writeFileSync(shopfilepath.replace("public", "build"), JSON.stringify(newShopData));
           return res.json({ message: "Updated Shop Categories!" });
         } catch (err) {
           console.log(err);

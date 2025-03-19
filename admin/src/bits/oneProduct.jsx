@@ -17,9 +17,10 @@ const OneProduct = ({ product, toggleForm, doDelete }) => {
         align={"center"}
         gap={2}>
         <Image
-          src={`http://localhost:3000/shop/${product.img}`}
+          src={`http://localhost:3000/${product.img}`}
           boxSize="100px"
-          alt={product.name}
+          title={`${product.name} - http://localhost:3000/${product.img}`}
+          alt={`${product.name} - http://localhost:3000/${product.img}`}
           fallbackSrc="/images/image-loading.svg"
         />
         <div>{!!product.soldout ? "Sold Out" : `$${Number(product.price).toFixed(2)}`}</div>
