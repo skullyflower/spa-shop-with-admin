@@ -115,14 +115,14 @@ img[src="/images/rain.svg"]{
     background-color:rgb(94,3,3);
   }
 }
-#content.shop, #content.checkout, #content.product{
+/* #content.shop, #content.checkout, #content.product{
   background-color: #000;
   color:#fff;
 }
 .shopSection a{
   color:#fff;
 
-}
+} */
 .shopDetail{
   margin: 0 50px;
 }

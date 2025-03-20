@@ -26,7 +26,7 @@ const CartItemLine = ({ item, openCart }) => {
           <b>QTY:</b> {item.qty}
           <CartPlusMinusButtons
             itemId={item.id}
-            hidePlus={item.cat.indexOf("original_art") !== -1}
+            hidePlus={item.cats.indexOf("original_art") !== -1}
             openCart={openCart}
           />
         </div>

@@ -1,8 +1,10 @@
-import { useEffect } from "react";
 import useUpdateHead from "../../shared/updateHead.js";
 import { aboutData } from "../../state/pageData.js";
+import SemiSafeContent from "../../shared/utilities/SemiSafeContent.jsx";
 
 export default function AboutPage() {
+  if (!aboutData) return <div>No About Page, yet.</div>;
+
   const { page_title, page_content, page_description } = aboutData;
   useUpdateHead(page_title, page_description);
 

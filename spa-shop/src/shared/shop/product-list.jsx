@@ -26,7 +26,7 @@ const ProdList = ({ cat, multi, pId }) => {
               prod.desc?.toLowerCase().includes(searchTerm.toLowerCase())
             );
           } else if (cat_id) {
-            return prod.cat?.includes(cat_id);
+            return prod.cats?.includes(cat_id);
           } else {
             return all_products_list;
           }
