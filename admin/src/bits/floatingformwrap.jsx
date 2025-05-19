@@ -15,7 +15,8 @@ export default function FloatingFormWrapper({ isOpen, onClose, children }) {
         borderWidth={2}
         borderStyle="solid"
         borderColor="slate.500"
-        bg="chakra-body-bg"
+        backgroundColor="gray.800"
+        color="slate.100"
         maxH={"88vh"}
         overflow={"auto"}
         className="content">

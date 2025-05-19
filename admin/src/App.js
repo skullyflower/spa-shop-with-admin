@@ -13,7 +13,7 @@ const Blog = lazy(() => import("./pages/blogpage"));
 const Products = lazy(() => import("./pages/productspage"));
 const Categories = lazy(() => import("./pages/categoriespage"));
 const Subjects = lazy(() => import("./pages/subjectspage"));
-//const PageContent = lazy(() => import("./forms/contentpage"));
+const PageContent = lazy(() => import("./pages/contentpage"));
 const Sale = lazy(() => import("./pages/salepage"));
 const Images = lazy(() => import("./pages/ImageUploadpage"));
 const Gallery = lazy(() => import("./pages/galleriespage"));
@@ -67,6 +67,11 @@ function App() {
                   exact
                   path="/home"
                   element={<Homepage />}
+                />
+                <Route
+                  exact
+                  path="/content"
+                  element={<PageContent />}
                 />
                 <Route
                   exact

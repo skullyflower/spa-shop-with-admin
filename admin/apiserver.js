@@ -1,5 +1,5 @@
 const express = require("express");
-const aboutRouter = require("./api/contentPageRouter")();
+const pageRouter = require("./api/contentPageRouter")();
 const blogRouter = require("./api/blogRouter")();
 const categoriesRouter = require("./api/categoriesRouter")();
 const configRouter = require("./api/configRouter")();
@@ -24,7 +24,6 @@ api.all("*", function (req, res, next) {
 
 api.use(
   "/api",
-  aboutRouter,
   blogRouter,
   categoriesRouter,
   configRouter,
@@ -32,6 +31,7 @@ api.use(
   galleryRouter,
   homeRouter,
   imagesRouter,
+  pageRouter,
   productsRouter,
   saleRouter,
 );

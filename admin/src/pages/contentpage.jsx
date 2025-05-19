@@ -11,9 +11,11 @@ import {
   Heading,
   Skeleton,
   Stack,
-  Textarea,
 } from "@chakra-ui/react";
 import InfoBubble from "../bits/info-bubble";
+import PageLayout from "../bits/PageLayout";
+import ReactQuill from "react-quill";
+import { modules } from "../bits/quillbits";
 
 const getPageData = (page, setLoading, setMessages, setPageData) => {
   setLoading(true);
@@ -84,17 +86,27 @@ function PageForm({ page, pageData, onSubmit }) {
         <HStack alignItems="top">
           <FormLabel w={48}>Page Content:</FormLabel>
           <Box
+            width={"100%"}
             flexGrow={3}
             minH={2}
             borderWidth={1}
             borderStyle="solid"
             borderRadius={5}
             className="content">
-            <Textarea
-              {...register("page_content")}
-              onBlur={handleTextChange}>
-              {wysiwygText}
-            </Textarea>
+            <Box
+              width={"100%"}
+              minH={2}
+              border="1px solid gray"
+              borderRadius={5}
+              className="content">
+              <ReactQuill
+                id="wysi_two"
+                value={wysiwygText}
+                theme="snow"
+                modules={modules}
+                onChange={handleTextChange("page_content")}
+              />
+            </Box>
           </Box>
         </HStack>
       </FormControl>
@@ -148,13 +160,10 @@ export default function PageContent() {
   };
 
   return (
-    <div className="content">
-      {messages && <p>{messages}</p>}
-      <Heading
-        textAlign="center"
-        size="md">
-        Manage {page} page
-      </Heading>
+    <PageLayout
+      title={`Manage ${page} page`}
+      messages={messages}
+      button={{ action: onSubmit, text: "Update", value: "" }}>
       {loading ? (
         <Stack>
           <Skeleton height="50px" />
@@ -167,6 +176,6 @@ export default function PageContent() {
           onSubmit={onSubmit}
         />
       )}
-    </div>
+    </PageLayout>
   );
 }

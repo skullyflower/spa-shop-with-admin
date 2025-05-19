@@ -14,6 +14,7 @@ import {
   HStack,
   Center,
   Heading,
+  InputRightAddon,
 } from "@chakra-ui/react";
 import FloatingFormWrapper from "../bits/floatingformwrap";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -138,8 +139,11 @@ export default function EditProduct({
       <FormControl p={4}>
         <HStack alignItems="center">
           <FormLabel w={40}>Price:</FormLabel>
-          <InputGroup>
-            <InputLeftAddon children="$" />
+          <InputGroup colorScheme="slate">
+            <InputLeftAddon
+              backgroundColor={"slate.500"}
+              children="$"
+            />
             <Input
               isInvalid={errors.price ? true : false}
               errorBorderColor="red.300"
@@ -153,6 +157,7 @@ export default function EditProduct({
         <HStack alignItems="top">
           <FormLabel w={40}>Product Image:</FormLabel>
           <Box
+            width={"100%"}
             flexGrow={3}
             borderWidth={1}
             borderStyle="solid"
@@ -181,8 +186,7 @@ export default function EditProduct({
                   {...register("img")}
                 />
                 <Image
-                  src={`http://localhost:3000/${thumb}`}
-                  alt={`http://localhost:3000/${thumb}`}
+                  src={`http://localhost:3000/shop/${thumb}`}
                   boxSize="100px"
                   fallbackSrc="http://localhost:3000/images/image-loading.svg"
                 />
@@ -201,11 +205,15 @@ export default function EditProduct({
                   type="text"
                   {...register(`altimgs.${index}`)}
                 />
-                <Button
-                  variant="shopButt"
-                  onClick={() => remove(index)}>
-                  X
-                </Button>
+                <InputRightAddon
+                  padding={"0"}
+                  backgroundColor={"slate.500"}>
+                  <Button
+                    variant="shopButt"
+                    onClick={() => remove(index)}>
+                    X
+                  </Button>
+                </InputRightAddon>
               </InputGroup>
             </span>
           ))}
@@ -222,7 +230,7 @@ export default function EditProduct({
         <HStack alignItems="top">
           <FormLabel w={40}>Description:</FormLabel>
           <Box
-            minW="80%"
+            width={"100%"}
             minH={2}
             border="1px solid gray"
             borderRadius={5}
@@ -246,7 +254,7 @@ export default function EditProduct({
         <HStack alignItems="top">
           <FormLabel w={40}>Detail:</FormLabel>
           <Box
-            minW="80%"
+            width={"100%"}
             minH={2}
             border="1px solid gray"
             borderRadius={5}
@@ -277,7 +285,7 @@ export default function EditProduct({
         <HStack alignItems="top">
           <FormLabel w={40}>Categories:</FormLabel>
           <HStack
-            width="80%"
+            width="100%"
             borderWidth={1}
             borderStyle="solid"
             p={5}
@@ -305,7 +313,7 @@ export default function EditProduct({
         <HStack alignItems="top">
           <FormLabel w={40}>subjects:</FormLabel>
           <HStack
-            width="80%"
+            width="100%"
             borderWidth={1}
             borderStyle="solid"
             p={5}

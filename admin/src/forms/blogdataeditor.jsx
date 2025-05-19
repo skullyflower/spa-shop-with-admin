@@ -85,7 +85,7 @@ const EditBlogData = ({ blogInfo, onSubmit }) => {
               <HStack alignItems="top">
                 <FormLabel w={40}>Blog page Content:</FormLabel>
                 <Box
-                  minW="80%"
+                  minW="100%"
                   minH={2}
                   border="1px solid gray"
                   borderRadius={5}

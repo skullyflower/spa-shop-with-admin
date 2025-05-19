@@ -5,6 +5,7 @@ const NavButton = ({ path, activepath, children }) => {
   return (
     <Button
       size={"xs"}
+      border={0}
       as={Link}
       to={path}
       className={activepath === path ? "active" : undefined}>
@@ -33,6 +34,12 @@ const NavBar = ({ activepath }) => {
       <NavButton
         size={"sm"}
         activepath={activepath}
+        path="/content">
+        Content Pages
+      </NavButton>
+      <NavButton
+        size={"sm"}
+        activepath={activepath}
         path="/gallery">
         Galleries
       </NavButton>
@@ -54,12 +61,12 @@ const NavBar = ({ activepath }) => {
         path="/categories">
         Categories
       </NavButton>
-      <NavButton
+      {/* <NavButton
         size={"sm"}
         activepath={activepath}
         path="/subjects">
         Subjects
-      </NavButton>
+      </NavButton> */}
       <NavButton
         size={"sm"}
         activepath={activepath}

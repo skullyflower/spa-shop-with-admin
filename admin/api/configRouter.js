@@ -1,9 +1,11 @@
 const express = require("express");
 const fs = require("fs");
-const configfilepath = `./public/data/config.json`;
+const getConfig = require("./pathData");
 
 function routes() {
   const configRouter = express.Router();
+  const { configfilepath } = getConfig();
+
   configRouter
     .route("/config")
     .post(async (req, res) => {

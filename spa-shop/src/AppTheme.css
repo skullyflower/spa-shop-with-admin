@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Varela+Round&family=Work+Sans:wght@400;700&display=swap');
 
 :root {
-  --forground:#fafafa;
-  --background:rgb(65, 64, 71);
+  --mainLight:#fafafa;
+  --mainDark:rgb(65, 64, 71);
   --bodybg:#fff;
   --bodyclr:#02244e;
 } 
@@ -17,11 +17,11 @@ body {
 }
 a {
   text-decoration: none;
-  color:var(--forground);
+  color:var(--mainLight);
 }
 #pagetop, #pagetop *{
-  background:var(--forground);
-  color:var(--background);
+  background:var(--mainLight);
+  color:var(--mainDark);
 }
 #content.about .content, #content.contact .content{
   max-width: 850px;

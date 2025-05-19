@@ -1,8 +1,10 @@
 import useUpdateHead from "../../shared/updateHead.js";
 import { blogData } from "../../state/pageData";
 import BlogEntryBox from "../../shared/blog/blogentrybox";
+import ComingSoon from "../../shared/coming-soon.jsx";
 
 export default function BlogPage() {
+  if (!blogData) return <ComingSoon />;
   const { page_title, page_description, page_content, entries } = blogData;
   useUpdateHead(page_title, page_description);
   return (

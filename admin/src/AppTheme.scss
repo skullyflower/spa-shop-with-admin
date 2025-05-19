@@ -17,3 +17,20 @@ body {
 #pagetop {
   background-color:black;
 }
+.quill
+ {
+  .ql-snow.ql-container {border-color: transparent;}
+  .ql-editor{
+    font-family: 'Pangolin', sans-serif;
+    font-size:medium;
+  }
+  .ql-snow.ql-toolbar{ 
+    border-color: transparent;
+    svg {
+  .ql-fill{    
+    fill:  var(--chakra-colors-slate-500)!important;
+  } 
+  .ql-stroke {
+    stroke: var(--chakra-colors-slate-500)!important;
+  }}}
+}

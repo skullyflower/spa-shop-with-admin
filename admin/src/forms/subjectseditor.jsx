@@ -114,6 +114,7 @@ export default function EditSubject({ catid, subjects, isOpen, toggleCatForm, on
         <HStack alignItems="top">
           <FormLabel w={40}>Description:</FormLabel>
           <Box
+            width={"100%"}
             flexGrow={3}
             minH={2}
             borderWidth={1}

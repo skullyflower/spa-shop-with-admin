@@ -1,24 +1,33 @@
 import { useState } from "react";
-import { Box, HStack, Image, Input } from "@chakra-ui/react";
+import { Box, CloseButton, HStack, Image, Input } from "@chakra-ui/react";
 
-function Preview({ data }) {
+function Preview({ images, updateImages }) {
+  const deleteImage = (image) => {
+    updateImages(images.filter((img) => img !== image));
+  };
   return (
     <>
-      {data.map((image) => (
-        <Image
-          className="image"
-          src={image}
-          alt=""
-          key={image}
-          width={150}
-          style={{ padding: "10px" }}
-        />
+      {images.map((image, i) => (
+        <HStack align={"start"}>
+          <Image
+            className="image"
+            src={image}
+            alt=""
+            key={`${image}${i}`}
+            width={150}
+            style={{ padding: "10px" }}
+          />
+          <CloseButton
+            size={"sm"}
+            onClick={() => deleteImage(image)}
+          />
+        </HStack>
       ))}
     </>
   );
 }
 
-export default function UploadInput({ name, register, multiple = true }) {
+export default function UploadInput({ name, register, setImageCount, multiple = true }) {
   const [previewImages, setPreviewImages] = useState([]);
 
   const addMultipleImages = (e) => {
@@ -27,7 +36,10 @@ export default function UploadInput({ name, register, multiple = true }) {
       if (!multiple) {
         setPreviewImages([]);
       }
-      setPreviewImages((prevImages) => prevImages.concat(imageArray));
+      setPreviewImages(imageArray);
+      if (setImageCount) {
+        setImageCount(imageArray.length);
+      }
     }
   };
 
@@ -40,8 +52,31 @@ export default function UploadInput({ name, register, multiple = true }) {
         multiple={multiple}
         name={name}
         onChange={addMultipleImages}
+        width={350}
+        height={previewImages?.length > 0 ? 50 : 150}
+        paddingTop={previewImages?.length > 0 ? 2 : 10}
+        paddingLeft={10}
+        backgroundImage={"/images/image-loading.svg"}
+        borderColor={"slate.800"}
+        borderWidth={2}
+        borderStyle={"solid"}
+        _before={
+          previewImages?.length > 0 && {
+            content: '"Remove and Select New"',
+            display: "block",
+            lineHeight: 2,
+            fontWeight: 700,
+          }
+        }
       />
-      <HStack>{previewImages.length > 0 && <Preview data={previewImages} />}</HStack>
+      <HStack>
+        {previewImages?.length > 0 && (
+          <Preview
+            images={previewImages}
+            updateImages={setPreviewImages}
+          />
+        )}
+      </HStack>
     </Box>
   );
 }

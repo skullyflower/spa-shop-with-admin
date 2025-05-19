@@ -16,6 +16,8 @@ const PageLayout = ({ messages, title, button, children }) => {
       borderWidth={2}
       borderStyle="solid"
       borderColor="slate.500"
+      backgroundColor="gray.800"
+      color="slate.100"
       w={["100%", "100%", "80%", "80%", "80%"]}
       marginInline={"auto"}>
       <CardHeader>
@@ -28,15 +30,13 @@ const PageLayout = ({ messages, title, button, children }) => {
               size="lg">
               {title}
             </Heading>
-            {button && (
-              <Button
-                variant="shopButt"
-                disabled={button.disabled}
-                value={button.value}
-                onClick={button.action}>
-                {button.text}
-              </Button>
-            )}
+            <Button
+              variant="shopButt"
+              disabled={button.disabled}
+              value={button.value}
+              onClick={button.action}>
+              {button.text}
+            </Button>
           </HStack>
           {messages && <Alert>{messages}</Alert>}
         </Stack>

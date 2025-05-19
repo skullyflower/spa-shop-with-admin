@@ -1,5 +1,6 @@
-import { Button, HStack, Image, useDisclosure, Stack } from "@chakra-ui/react";
+import { Button, HStack, Image, useDisclosure, Stack, IconButton } from "@chakra-ui/react";
 import ConfirmDelete from "./ConfirmDelete";
+import { DeleteIcon } from "@chakra-ui/icons";
 
 const OneProduct = ({ product, toggleForm, doDelete }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -17,10 +18,9 @@ const OneProduct = ({ product, toggleForm, doDelete }) => {
         align={"center"}
         gap={2}>
         <Image
-          src={`http://localhost:3000/${product.img}`}
+          src={`http://localhost:3000/shop/${product.img}`}
           boxSize="100px"
-          title={`${product.name} - http://localhost:3000/${product.img}`}
-          alt={`${product.name} - http://localhost:3000/${product.img}`}
+          alt={product.name}
           fallbackSrc="/images/image-loading.svg"
         />
         <div>{!!product.soldout ? "Sold Out" : `$${Number(product.price).toFixed(2)}`}</div>
@@ -43,13 +43,13 @@ const OneProduct = ({ product, toggleForm, doDelete }) => {
         />
       </div>
       <HStack gap={2}>
-        <Button
+        <IconButton
           size="sm"
+          icon={<DeleteIcon />}
           variant="shopButt"
           value={product.id}
-          onClick={onOpen}>
-          X
-        </Button>
+          onClick={onOpen}
+        />
         <Button
           size="sm"
           variant="shopButt"

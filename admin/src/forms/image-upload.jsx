@@ -2,8 +2,11 @@ import { useForm } from "react-hook-form";
 import UploadInput from "../bits/upload-input";
 import { Heading, HStack, Button, Stack } from "@chakra-ui/react";
 import FloatingFormWrapper from "../bits/floatingformwrap";
+import { useState } from "react";
 
 export default function ImageUpload({ isOpen, hideForm, setMessages }) {
+  const [imageCount, setImageCount] = useState(0);
+
   const onSubmit = (data) => {
     const imagesArr = Array.from(data.images);
     var formData = new FormData();
@@ -27,6 +30,7 @@ export default function ImageUpload({ isOpen, hideForm, setMessages }) {
   };
 
   const { register, handleSubmit } = useForm();
+
   return (
     <FloatingFormWrapper
       isOpen={isOpen}
@@ -42,10 +46,12 @@ export default function ImageUpload({ isOpen, hideForm, setMessages }) {
         </HStack>
         <UploadInput
           register={register}
+          setImageCount={setImageCount}
           name="images"
         />
         <Button
           variant="shopButt"
+          isDisabled={!imageCount}
           onClick={handleSubmit(onSubmit)}>
           Upload and Resize
         </Button>

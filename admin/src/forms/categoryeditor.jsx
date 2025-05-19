@@ -76,6 +76,7 @@ export default function EditCategory({ catid, categories, isOpen, toggleCatForm,
         <HStack alignItems="top">
           <FormLabel w={40}>Category Image:</FormLabel>
           <Box
+            width={"100%"}
             flexGrow={3}
             borderWidth={1}
             borderStyle="solid"
@@ -104,8 +105,7 @@ export default function EditCategory({ catid, categories, isOpen, toggleCatForm,
                   {...register("img")}
                 />
                 <Image
-                  src={`http://localhost:3000/${cat.img}`}
-                  alt={`http://localhost:3000/${cat.img}`}
+                  src={`http://localhost:3000/shop/GROUPS/${cat.img}`}
                   boxSize="100px"
                   fallbackSrc="http://localhost:3000/images/image-loading.svg"
                 />
@@ -118,6 +118,7 @@ export default function EditCategory({ catid, categories, isOpen, toggleCatForm,
         <HStack alignItems="top">
           <FormLabel w={40}>Description:</FormLabel>
           <Box
+            width={"100%"}
             flexGrow={3}
             minH={2}
             borderWidth={1}
@@ -145,7 +146,7 @@ export default function EditCategory({ catid, categories, isOpen, toggleCatForm,
             />
           </FormLabel>
           <HStack
-            width="80%"
+            width={"100%"}
             borderWidth={1}
             borderStyle="solid"
             p={5}

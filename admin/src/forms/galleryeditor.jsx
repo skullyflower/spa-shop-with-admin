@@ -126,6 +126,7 @@ export default function EditGallery({ selectedGallery, isOpen, toggleForm }) {
           <HStack alignItems="top">
             <FormLabel w={48}>Gallery Description Content:</FormLabel>
             <Box
+              width={"100%"}
               flexGrow={3}
               minH={2}
               borderWidth={1}
